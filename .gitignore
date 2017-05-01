@@ -1,0 +1,7 @@
+#IDE specifics
+out/
+.idea/
+*.iml
+
+# don't need compiled files
+*.class
