@@ -22,7 +22,8 @@ public class SokobanGrid implements Grid<Tile> {
 	private List<Box> boxes;
 	
 	/**
-	 * Constructs a Sokoban Grid with all empty tiles given a width and height
+	 * Constructs a Sokoban Grid with all empty tiles given a width and height. 
+	 * Player is at (0,0) and there are no boxes
 	 * @param width wanted width for this grid
 	 * @param height wanted height for this grid
 	 */
@@ -66,6 +67,7 @@ public class SokobanGrid implements Grid<Tile> {
 		
 		width = Integer.parseInt(sc.nextLine());
 		height = Integer.parseInt(sc.nextLine());
+		boxes = new ArrayList<>();
 		
 		Map<Character, Tile> m = new HashMap<>();
 		
@@ -73,16 +75,21 @@ public class SokobanGrid implements Grid<Tile> {
 		m.put('X', Tile.EMPTY);
 		m.put('O', Tile.GOAL);
 		m.put('F', Tile.FLOOR);
+		// for player and box
+		m.put('P', Tile.FLOOR);
+		m.put('B', Tile.FLOOR);
 		
 		String args[];
 		String line;
 		char c;
 		Tile t;
 		tiles = new ArrayList<>();
+		int y = 0;
 		while(sc.hasNext()) {
 			line = sc.nextLine();
 			
-			if (line.equals("") || Character.isWhitespace(line.charAt(0))) 
+			// ignore all lines beginning with # or empty
+			if (line.equals("") || Character.isWhitespace(line.charAt(0)) || line.charAt(0) == '#') 
 				continue;
 			
 			args = line.split(" ");
@@ -90,15 +97,27 @@ public class SokobanGrid implements Grid<Tile> {
 			for (int x = 0; x < width; x++) {
 				c = args[x].charAt(0);
 				t = m.get(c);
+				if (c == 'P') {
+					player = new Player(x, y);
+				} else if (c == 'B') {
+					boxes.add(new Box(x, y));
+				}
 				tiles.get(tiles.size()-1).add(t);
 			}
+			y++;
 		}
 	}
 	
+	/**
+	 * Get the Player object associated with this grid instance
+	 */
 	public Player getPlayer() {
 		return player;
 	}
 	
+	/**
+	 * Get a list of all boxes in this grid
+	 */
 	public List<Box> getBoxes() {
 		return boxes;
 	}

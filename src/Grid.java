@@ -1,5 +1,5 @@
 /**
- * 
+ * Interface representing a Grid with tiles of type T
  *
  */
 public interface Grid<T> {
