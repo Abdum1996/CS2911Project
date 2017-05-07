@@ -1,3 +1,4 @@
+package com;
 /**
  * Enum to represent a tile in a grid.
  *

@@ -1,32 +1,33 @@
+package com;
 import java.awt.Point;
 
 /**
- * Class representing a box to be used in a game grid
+ * Class to represent a player and encapsulates its location
  *
  */
-public class Box {
+public class Player {
 	
 	private Point position;
 	
 	/** 
-	 * Constructs a box given specific coordinates (x, y)
+	 * Constructs a player given specific coordinates (x, y)
 	 * @param x
 	 * @param y
 	 */
-	public Box(int x, int y) {
+	public Player(int x, int y) {
 		position = new Point(x, y);
 	}
 	
 	/**
-	 * Constructs a box given a Point object and uses its coordinates
+	 * Constructs a player given a Point object and uses its coordinates
 	 * @param p
 	 */
-	public Box(Point p) {
+	public Player(Point p) {
 		position = new Point(p.x, p.y);
 	}
 	
 	/**
-	 * Gives the coordinates of this box
+	 * Gives the coordinates of this player
 	 * @return Point object encapsulating position
 	 */
 	public Point getCoordinates() {
@@ -34,22 +35,22 @@ public class Box {
 	}
 	
 	/**
-	 * Get x coordinate of this box
+	 * Get x coordinate of this player
 	 */
 	public int x() {
 		return position.x;
 	}
 	
 	/**
-	 * Get y coordinate of this box
+	 * Get y coordinate of this player
 	 */
 	public int y() {
 		return position.y;
 	}
 	
 	/**
-	 * Moves the box in one of the major 4 direction
-	 * @param dir the direction the box is to be moved in
+	 * Moves the player in one of the major 4 direction
+	 * @param dir the direction the player is to move in
 	 */
 	public void move(Direction dir) {
 		switch (dir) {
@@ -67,4 +68,5 @@ public class Box {
 				break;
 		}
 	}
+	
 }

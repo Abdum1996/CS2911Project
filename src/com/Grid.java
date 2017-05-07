@@ -1,3 +1,4 @@
+package com;
 /**
  * Interface representing a Grid with tiles of type T
  *

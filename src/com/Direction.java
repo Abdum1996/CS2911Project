@@ -1,3 +1,4 @@
+package com;
 /**
  * Enum to represend direction mainly used to indicate a player's move.
  *
