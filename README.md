@@ -2,7 +2,7 @@
 
 //Please branch before doing your work, otherwise everything will break. TY
 
-##Making a map using a text file
+#Making a map using a text file
 
 Example file:
 2
