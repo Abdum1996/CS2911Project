@@ -1,41 +1,53 @@
 package com;
 
-import java.util.List;
+public class Node<T> implements Comparable<Node<T>> {
+	private final Node<T> parent;
+	private final State<T> state;
+	private final T action;
+	
+	private final int pcost;
+	private final int hcost;
+	
+	public Node(State<T> initState) {
+		parent = null;
+		action = null;
+		state  = initState;
+		pcost  = 0;
+		hcost  = 0;
+	}
+	
+	private Node(Node<T> parent, T action, Heuristic<T> strategy) {
+		this.parent = parent;
+		this.action = action;
+				
+		state = parent.state.applyAction(action);
+		pcost = parent.pcost + state.getStepCost(parent.state);
+		hcost = strategy.hcost(state);
+	}
+	
+	public State<T> getState() {
+		return state;
+	}
+	
 
-/**
- * Interface for node in a search space.
- * @param <S> - state in search space
- * @param <A> - action which can be performed on a state
- */
-public interface Node<S, A> {
-	/**
-	 * Get the node's state.
-	 * @return state
-	 */
-	public S getState();
-	
-	/**
-	 * Determine if a goal state has been reached or not.
-	 * @return true if the node contains a goal state
-	 */
-	public boolean isGoalState();
-	
-	/**
-	 *  Get the total cost of traveling to the node from the starting state.
-	 * @return path cost
-	 */
-	public int getCost();
+	public boolean isGoalState() {
+		return state.isGoalState();
+	}
 	
 	
-	/**
-	 * Generate a list of successors to the node by applying set of all valid actions to it.
-	 * @return list of successor nodes
-	 */
-	public List<Node<S, A>> getSuccessors();
+	public int getCost() {
+		return pcost + hcost;
+	}
 	
-	/**
-	 * Reconstruct the sequence of actions needed to produce this given node.
-	 * @return list of actions
-	 */
-	public List<A> getActionSequence();
+	public List<Node<T>> getSuccessors() {
+		
+	}
+	
+	public List<A> getActionSequence() {
+		
+	}
+	
+	public int compareTo(Node<T> other) {
+		
+	}
 }
