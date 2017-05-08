@@ -3,7 +3,7 @@ package com;
 /**
  * Generic weighted edge class.
  * @invariant (source != null) and (target != null)
- * @param <T>
+ * @param <T> - node over which edge is constructed
  */
 public class Edge<T> implements Comparable<Edge<T>> {
 	private final T   source;
