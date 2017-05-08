@@ -1,5 +1,4 @@
 package com;
-import java.awt.Point;
 
 /**
  * Class to represent a player and encapsulates its location
@@ -15,7 +14,7 @@ public class Player {
 	 * @param y
 	 */
 	public Player(int x, int y) {
-		position = new Point(x, y);
+		position = Point.at(x, y);
 	}
 	
 	/**
@@ -23,9 +22,9 @@ public class Player {
 	 * @param p
 	 */
 	public Player(Point p) {
-		position = new Point(p.x, p.y);
+		position = p;
 	}
-	
+
 	/**
 	 * Gives the coordinates of this player
 	 * @return Point object encapsulating position
@@ -38,14 +37,14 @@ public class Player {
 	 * Get x coordinate of this player
 	 */
 	public int x() {
-		return position.x;
+		return position.getX();
 	}
 	
 	/**
 	 * Get y coordinate of this player
 	 */
 	public int y() {
-		return position.y;
+		return position.getY();
 	}
 	
 	/**
@@ -53,20 +52,6 @@ public class Player {
 	 * @param dir the direction the player is to move in
 	 */
 	public void move(Direction dir) {
-		switch (dir) {
-			case DOWN:
-				position.y++;
-				break;
-			case UP:
-				position.y--;
-				break;
-			case RIGHT:
-				position.x++;
-				break;
-			case LEFT:
-				position.x--;
-				break;
-		}
+		position.move(dir);
 	}
-	
 }
