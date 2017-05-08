@@ -1,0 +1,10 @@
+7
+5
+W W W W W W W 
+W P B F O W W
+W F F W W W W 
+W F B F F O W
+W W W W W W W 
+
+//Simple map with 2 goals.
+//Considering making the map larger for more possible moves.
