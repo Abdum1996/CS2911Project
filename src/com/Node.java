@@ -1,5 +1,6 @@
 package com;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Node<T> implements Comparable<Node<T>> {
 	private Node(Node<T> parent, T action, Heuristic<T> strategy) {
 		this.parent = parent;
 		this.action = action;
-				
+		
 		state = parent.state.applyAction(action);
 		pcost = parent.pcost + state.getStepCost(parent.state);
 		hcost = strategy.hcost(state);
@@ -42,12 +43,21 @@ public class Node<T> implements Comparable<Node<T>> {
 		return pcost + hcost;
 	}
 	
-	public Node<T> getSuccessor(Heuristic<T> strategy, T action) {
+	public Node<T> getSuccessor(Heuristic<T> strategy, List<T> validActions) {
 		return new Node<>(this, action, strategy);
 	}
 	
 	public List<T> getActionSequence() {
+		ArrayList<T> sequence = new ArrayList<>();
+		Node<T> curr = this;
 		
+		while (curr.action != null) {
+			sequence.add(curr.action);
+			curr = curr.parent;
+		}
+		
+		Collections.reverse(sequence);
+		return sequence;
 	}
 	
 	public int compareTo(Node<T> other) {
