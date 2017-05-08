@@ -32,19 +32,21 @@ public class Node<T> implements Comparable<Node<T>> {
 	public State<T> getState() {
 		return state;
 	}
-	
 
 	public boolean isGoalState() {
 		return state.isGoalState();
 	}
 	
-	
 	public int getCost() {
 		return pcost + hcost;
 	}
 	
-	public Node<T> getSuccessor(Heuristic<T> strategy, List<T> validActions) {
-		return new Node<>(this, action, strategy);
+	public List<Node<T>> getSuccessor(Heuristic<T> strategy) {
+		List<Node<T>> successors = new ArrayList<>();
+		
+		for (T curr : state.getValidActions())
+			successors.add(new Node<>(this, curr, strategy));
+		return successors;
 	}
 	
 	public List<T> getActionSequence() {
