@@ -4,11 +4,7 @@ import java.util.PriorityQueue;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AStarSearch<S, A> {
-	/**
-	 * Perform an A* search on the set of all states.
-	 * @return node satisfying goal state, at the end of the optimal route
-	 */
+public class AStarSearch<T>> {
 	private Node<S, A> runAStarSearch() {
 		PriorityQueue<Node<S, A>> open = new PriorityQueue<>();
 		HashMap<S, Node<S, A>> closed = new HashMap<>();
