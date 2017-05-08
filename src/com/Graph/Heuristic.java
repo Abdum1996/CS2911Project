@@ -1,4 +1,4 @@
-package com;
+package com.Graph;
 
 /**
  * Heuristic strategy for a search algorithm.
