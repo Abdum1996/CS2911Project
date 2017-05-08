@@ -1,8 +1,27 @@
 package com;
 /**
- * Enum to represent a tile in a grid.
+ * Enumeration to represent a tile in a grid.
  *
  */
 public enum Tile {
-	GOAL, FLOOR, WALL, EMPTY
+	GOAL, FLOOR, WALL, EMPTY;
+	
+	public static Tile parse(String symbol) {
+		switch (symbol) {
+			case "W":
+				return WALL;
+			case "X":
+				return EMPTY;
+			case "O":
+				return GOAL;
+			case "F":
+				return FLOOR;
+			case "P":
+				return FLOOR;
+			case "B":
+				return FLOOR;
+			default:
+				return EMPTY;
+		}		
+	}
 }
