@@ -1,5 +1,5 @@
 package com;
 
-public class AStarSearch<Node<S, A>> {
+public class AStarSearch {
 	
 }
