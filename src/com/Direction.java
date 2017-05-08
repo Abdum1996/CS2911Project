@@ -1,8 +1,8 @@
 package com;
 /**
- * Enum to represend direction mainly used to indicate a player's move.
+ * Enumeration to represent direction mainly used to indicate a player's move.
  *
  */
 public enum Direction {
-	RIGHT, LEFT, UP, DOWN
+	UP, DOWN, LEFT, RIGHT;
 }
