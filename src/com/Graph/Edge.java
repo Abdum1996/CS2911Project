@@ -1,4 +1,4 @@
-package com;
+package com.Graph;
 
 /**
  * Generic weighted edge class.
