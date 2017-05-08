@@ -1,5 +1,8 @@
 package com;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Node<T> implements Comparable<Node<T>> {
 	private final Node<T> parent;
 	private final State<T> state;
@@ -39,11 +42,11 @@ public class Node<T> implements Comparable<Node<T>> {
 		return pcost + hcost;
 	}
 	
-	public List<Node<T>> getSuccessors() {
-		
+	public Node<T> getSuccessor(Heuristic<T> strategy, T action) {
+		return new Node<>(this, action, strategy);
 	}
 	
-	public List<A> getActionSequence() {
+	public List<T> getActionSequence() {
 		
 	}
 	
