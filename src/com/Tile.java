@@ -6,6 +6,11 @@ package com;
 public enum Tile {
 	GOAL, FLOOR, WALL, EMPTY;
 	
+	/**
+	 * Create a tile from a given symbol.
+	 * @param symbol - letter on ASCII board
+	 * @return new tile
+	 */
 	public static Tile parse(String symbol) {
 		switch (symbol) {
 			case "W":

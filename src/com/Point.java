@@ -1,9 +1,18 @@
 package com;
 
+/**
+ * Safe immutable point class with a built in move method.
+ */
 public class Point {
 	private final int x;
 	private final int y;
 	
+	/**
+	 * Generate point with coordinates (x, y).
+	 * @param x - x coordinate
+	 * @param y - y coordinate
+	 * @return new point
+	 */
 	public static Point at(int x, int y) {
 		return new Point(x, y);
 	}
@@ -13,14 +22,27 @@ public class Point {
 		this.y = y;
 	}
 	
+	/**
+	 * Get x coordinate.
+	 * @return x coordinate
+	 */
 	public int getX() {
 		return x;
 	}
 	
+	/**
+	 * Get y coordinate.
+	 * @return y coordinate.
+	 */
 	public int getY() {
 		return y;
 	}
 	
+	/**
+	 * Move point in a given direction.
+	 * @param dir - input direction
+	 * @return new point
+	 */
 	public Point move(Direction dir) {
 		switch (dir) {
 			case UP:
