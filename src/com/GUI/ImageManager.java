@@ -10,15 +10,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-/*
+/**
 *   ImageManager manages the image loading for all the graphics
  */
 public class ImageManager {
-    /*
+    /**
     * hash map of all images for tiles
      */
     private HashMap<Tile, BufferedImage> tileImgs;
-    /*
+    /**
     * hash map of all images for entities
      */
     private HashMap<EntityTypes, BufferedImage> entityImgs;
@@ -26,7 +26,7 @@ public class ImageManager {
     private final int imgWidth = 64;
     private final int imgHeight = 64;
 
-    /*
+    /**
     * folder directory of tile, entity and default image
     * @param tileImageSrc location of tile images
     * @param entityImageSrc location of entity images
