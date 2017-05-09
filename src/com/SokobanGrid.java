@@ -138,7 +138,8 @@ public class SokobanGrid implements Grid<Tile> {
 	 */
 	private boolean isValidMove(Direction dir) {
 		Point next1 = playerPosition.move(dir);
-		Point next2 = playerPosition.move(dir);
+		Point next2 = next1.move(dir);
+		
 		int x1 = next1.getX(), y1 = next1.getY();
 		int x2 = next2.getX(), y2 = next2.getY();
 
