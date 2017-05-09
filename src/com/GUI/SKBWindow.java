@@ -93,14 +93,18 @@ public class SKBWindow extends JFrame implements KeyListener {
 		// TODO
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_D:
 				grid.movePlayer(Direction.RIGHT);
 				break;
+			case KeyEvent.VK_A:
 			case KeyEvent.VK_LEFT:
 				grid.movePlayer(Direction.LEFT);
 				break;
+			case KeyEvent.VK_W:
 			case KeyEvent.VK_UP:
 				grid.movePlayer(Direction.UP);
 				break;
+			case KeyEvent.VK_S:
 			case KeyEvent.VK_DOWN:
 				grid.movePlayer(Direction.DOWN);
 				break;
