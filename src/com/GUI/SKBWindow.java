@@ -2,6 +2,8 @@ package com.GUI;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -13,7 +15,7 @@ import javax.swing.KeyStroke;
 import com.Direction;
 import com.SokobanGrid;
 
-public class SKBWindow extends JFrame {
+public class SKBWindow extends JFrame implements KeyListener {
     private JTextArea textArea1;
     private JButton btnStartGame;
     private JButton btnResetGame;
@@ -79,23 +81,37 @@ public class SKBWindow extends JFrame {
         btnStartGame.setFocusable(false);
         btnResetGame.setFocusable(false);
         
-        // This is a horrible hack (as I don't know swing) and I'm sure there
-        // is a better way to do this - Thomas Daniell
-        String[] moveNames = { "UP", "DOWN", "LEFT", "RIGHT"};
-        for (String move : moveNames) {
-        	canvas.getInputMap().put(KeyStroke.getKeyStroke(move), move);
-        	canvas.getActionMap().put(move, new AbstractAction() {
-        		@Override
-    			public void actionPerformed(ActionEvent e) {
-        			System.out.println(move);
-        			Direction dir = Direction.parse(move);
-        			grid.movePlayer(dir);
-        			if (grid.gameWon()) {
-        				textArea1.setText("Game won!");
-        			}
-        			canvas.repaint();
-    			}
-        	});
-        }
+        this.addKeyListener(this);
+        
     }
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT:
+				grid.movePlayer(Direction.RIGHT);
+				break;
+			case KeyEvent.VK_LEFT:
+				grid.movePlayer(Direction.LEFT);
+				break;
+			case KeyEvent.VK_UP:
+				grid.movePlayer(Direction.UP);
+				break;
+			case KeyEvent.VK_DOWN:
+				grid.movePlayer(Direction.DOWN);
+				break;
+		}
+		
+		if (grid.gameWon()) {
+			textArea1.setText("Game Won!");
+		}
+		canvas.repaint();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
 }
