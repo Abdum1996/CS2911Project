@@ -81,6 +81,7 @@ public class SKBWindow extends JFrame implements KeyListener {
         btnResetGame.setFocusable(false);
         
         this.addKeyListener(this);
+        this.pack();
         
     }
 
@@ -121,7 +122,7 @@ public class SKBWindow extends JFrame implements KeyListener {
 				resetGame();
 	        	break;
 			case KeyEvent.VK_2:
-				currentMap = "./maps/map3.txt";
+				currentMap = "./maps/map2.txt";
 				System.out.println("Switch to map 2");
 				resetGame();
 	        	break;
@@ -148,5 +149,6 @@ public class SKBWindow extends JFrame implements KeyListener {
     	textArea1.setText("Game in progress..");
     	canvas.replaceGrid(grid);
     	canvas.repaint();
+    	this.pack();
 	}
 }
