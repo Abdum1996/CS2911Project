@@ -6,9 +6,13 @@
 
 Example file:
 2
+
 3
+
 W W
+
 P B
+
 W W
 
 The first line is the width
