@@ -30,6 +30,15 @@ public class SKBCanvas extends JPanel {
         this.setPreferredSize(new Dimension(this.w*imgMan.getImgWidth(), this.h*imgMan.getImgHeight()));
         this.setLayout(new GridLayout(w, h));
     }
+    
+    public void replaceGrid(SokobanGrid grid) {
+    	this.grid = grid;
+
+        this.w = grid.getWidth();
+        this.h = grid.getHeight();
+        this.setPreferredSize(new Dimension(this.w*imgMan.getImgWidth(), this.h*imgMan.getImgHeight()));
+        this.setLayout(new GridLayout(w, h));
+    }
 
     @Override
     public void paintComponent(Graphics g) {
