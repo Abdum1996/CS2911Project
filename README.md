@@ -25,5 +25,7 @@ comments can only be placed at the end of the file
 
 # Licenses and attribution
 Textures and assets from Kenney.nl license: CC0 1.0 Universal (CC0 1.0) 
+
 Sounds from http://www.gameburp.com/ license: http://www.gameburp.com/license-free/
+
 Sad trombone sound Recorded by Joe Lamb from  http://soundbible.com/1830-Sad-Trombone.html  license: Attribution 3.0
