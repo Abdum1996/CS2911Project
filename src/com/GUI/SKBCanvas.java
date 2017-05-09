@@ -7,8 +7,10 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import com.EntityTypes;
 import com.Grid;
 import com.SokobanGrid;
+import com.Point;
 import com.Tile;
 
 
@@ -61,18 +63,17 @@ public class SKBCanvas extends JPanel {
             x = 0;
         }
 
-        BufferedImage box    = imgMan.getEntityImg(com.EntityTypes.BOX);
-        BufferedImage player = imgMan.getEntityImg(com.EntityTypes.PLAYER);
+        BufferedImage box    = imgMan.getEntityImg(EntityTypes.BOX);
+        BufferedImage player = imgMan.getEntityImg(EntityTypes.PLAYER);
         
-        for (com.Box curr : grid.getBoxes()) {
-        	x = curr.getCoordinates().getX()*box.getWidth();
-        	y = curr.getCoordinates().getY()*box.getHeight();
-        	
+        for (Point curr : grid.getBoxPositions()) {
+        	x = curr.getX()*box.getWidth();
+        	y = curr.getY()*box.getHeight();
         	g.drawImage(box, x, y, null);
         }
         
-        x = grid.getPlayer().x()*player.getWidth();
-        y = grid.getPlayer().y()*player.getHeight();
+        x = grid.getPlayerPos().getX()*player.getWidth();
+        y = grid.getPlayerPos().getY()*player.getHeight();
         
         g.drawImage(player, x, y, null);
         //JLabel picLabel = new JLabel();

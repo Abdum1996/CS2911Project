@@ -1,6 +1,9 @@
 package com;
+
+import java.util.NoSuchElementException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,15 +15,13 @@ public class SokobanGrid implements Grid<Tile> {
 	 * List of all tiles. Top left tile is (0,0).
 	 * As you go right, x increases and as you go down y increases.
 	 */
-	private List<List<Tile>> tiles;
 	
-	private int width;
+	private final Map<Point, Box> boxes;
+	private Point playerPosition;
 	
+	private Tile[][] tiles;
 	private int height;
-	
-	private Player player;
-	
-	private List<Box> boxes;
+	private int width;
 	
 	/**
 	 * Constructs a Sokoban Grid with all empty tiles given a width and height. 
@@ -29,22 +30,19 @@ public class SokobanGrid implements Grid<Tile> {
 	 * @param height wanted height for this grid
 	 */
 	public SokobanGrid(int width, int height) {
-		this.width = width;
+		playerPosition = Point.at(0, 0);
+		tiles  = new Tile[height][width];
+		boxes  = new HashMap<>();
+		
+		this.width  = width;
 		this.height = height;
-		tiles = new ArrayList<>();
 		
 		// initialize tiles to empty grid
 		for (int y = 0; y < height; y++) {
-			tiles.add(new ArrayList<Tile>());
 			for (int x = 0; x < width; x++) {
-				// add empty tile to last list added
-				tiles.get(tiles.size()-1).add(Tile.EMPTY);
+				tiles[y][x] = Tile.EMPTY;
 			}
 		}
-		
-		player = new Player(0, 0);
-		boxes = new ArrayList<>();
-		
 	}
 	
 	/**
@@ -52,79 +50,56 @@ public class SokobanGrid implements Grid<Tile> {
 	 * @param filename name of the txt file containing the map template
 	 */
 	public SokobanGrid(String filename) {
-		//TODO construct a grid from a file
-		// format for a file would be like this:
-		// first line is width, second is height. Then space separated
-		// tile letters or symbols just to make it easier to make puzzles
-		// from ASCII art
-		// UNDER DEVELOPMENT/Not yet tested
+		playerPosition = Point.at(0, 0);
+		boxes = new HashMap<>();
+		tiles = null;
+		
 		Scanner sc = null;
+		
 		try {
 			sc = new Scanner(new FileReader(filename));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		width = Integer.parseInt(sc.nextLine());
-		height = Integer.parseInt(sc.nextLine());
-		boxes = new ArrayList<>();
-		
-		Map<Character, Tile> m = new HashMap<>();
-		
-		m.put('W', Tile.WALL);
-		m.put('X', Tile.EMPTY);
-		m.put('O', Tile.GOAL);
-		m.put('F', Tile.FLOOR);
-		// for player and box
-		m.put('P', Tile.FLOOR);
-		m.put('B', Tile.FLOOR);
-		
-		String args[];
-		String line;
-		char c;
-		Tile t;
-		tiles = new ArrayList<>();
-		int y = 0;
-		while(sc.hasNext()) {
-			line = sc.nextLine();
 			
-			// ignore all lines beginning with # or empty
-			if (line.equals("") || Character.isWhitespace(line.charAt(0)) || line.charAt(0) == '#') 
-				continue;
+			width = Integer.parseInt(sc.nextLine());
+			height = Integer.parseInt(sc.nextLine());
+			tiles = new Tile[height][width];
 			
-			args = line.split(" ");
-			tiles.add(new ArrayList<Tile>());
-			for (int x = 0; x < width; x++) {
-				c = args[x].charAt(0);
-				t = m.get(c);
-				if (c == 'P') {
-					player = new Player(x, y);
-				} else if (c == 'B') {
-					boxes.add(new Box(x, y));
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					String symbol = sc.next();
+					tiles[y][x] = Tile.parse(symbol);
+					
+					if (symbol.equals("P")) {
+						playerPosition = Point.at(x, y);
+					} else if (symbol.equals("B")) {
+						boxes.put(Point.at(x, y), new Box());
+					}
 				}
-				tiles.get(tiles.size()-1).add(t);
 			}
-			y++;
+			
+		} catch (FileNotFoundException | NoSuchElementException e) {
+			e.printStackTrace();
+			
+		} finally {
+			if (sc != null) sc.close();
 		}
 	}
 	
 	/**
 	 * Get the Player object associated with this grid instance
 	 */
-	public Player getPlayer() {
-		return player;
+	public Point getPlayerPos() {
+		return playerPosition;
 	}
 	
 	/**
 	 * Get a list of all boxes in this grid
 	 */
-	public List<Box> getBoxes() {
-		return boxes;
+	public List<Point> getBoxPositions() {
+		return new ArrayList<>(boxes.keySet());
 	}
 	
 	public Tile get(int x, int y) {
-		return tiles.get(y).get(x);
+		return tiles[y][x];
 	}
 
 	public int getHeight() {
@@ -135,7 +110,9 @@ public class SokobanGrid implements Grid<Tile> {
 		return width;
 	}
 
-	public List<List<Tile>> getTiles() { return tiles; }
+	public Tile[][] getTiles() { 
+		return tiles; 
+	}
 	
 	/**
 	 * Attempts to move the player in a given direction
@@ -145,29 +122,12 @@ public class SokobanGrid implements Grid<Tile> {
 	public boolean movePlayer(Direction dir) {
 		if (!isValidMove(dir))
 			return false;
-		// perform move
-		int x = player.x();
-		int y = player.y();
-		switch(dir) {
-			case UP:
-				if (containsBox(x, y-1))
-					getBoxOn(x, y-1).move(dir);
-				break;
-			case DOWN:
-				if (containsBox(x, y+1))
-					getBoxOn(x, y+1).move(dir);
-				break;
-			case RIGHT:
-				if (containsBox(x+1, y))
-					getBoxOn(x+1, y).move(dir);
-				break;
-			case LEFT:
-				if (containsBox(x-1, y))
-					getBoxOn(x-1, y).move(dir);
-				break;
-		}
 		
-		player.move(dir);
+		playerPosition = playerPosition.move(dir);
+		Box old = boxes.remove(playerPosition);
+		
+		if (old != null) 
+			boxes.put(playerPosition.move(dir), old);
 		return true;
 	}
 	
@@ -178,12 +138,12 @@ public class SokobanGrid implements Grid<Tile> {
 	 */
 	private boolean isValidMove(Direction dir) {
 		boolean check = true;
-		int x = player.x();
-		int y = player.y();
+		int x = playerPosition.getX();
+		int y = playerPosition.getY();
 		switch (dir) {
 			case UP:
 				// no space to go
-				if (player.y() == 0) {
+				if (y == 0) {
 					check = false;
 				} else if (y > 1 && containsBox(x, y - 1) && containsBox(x, y - 2)) { 
 					// two boxes stacked after one another
@@ -199,7 +159,7 @@ public class SokobanGrid implements Grid<Tile> {
 				break;
 			case DOWN:
 				// no space to go
-				if (player.y() == height - 1) {
+				if (y == height - 1) {
 					check = false;
 				} else if (y < height - 2 && containsBox(x, y + 1) && containsBox(x, y + 2)) { 
 					// two boxes stacked after one another
@@ -215,7 +175,7 @@ public class SokobanGrid implements Grid<Tile> {
 				break;
 			case RIGHT:
 				// no space to go
-				if (player.x() == width - 1) {
+				if (y == width - 1) {
 					check = false;
 				} else if (x < width - 2 && containsBox(x + 1, y) && containsBox(x + 2, y)) { 
 					// two boxes stacked after one another
@@ -231,7 +191,7 @@ public class SokobanGrid implements Grid<Tile> {
 				break;
 			case LEFT:
 				// no space to go
-				if (player.x() == 0) {
+				if (y == 0) {
 					check = false;
 				} else if (x > 1 && containsBox(x - 1, y) && containsBox(x - 2, y)) { 
 					// two boxes stacked after one another
@@ -255,12 +215,7 @@ public class SokobanGrid implements Grid<Tile> {
 	 * checks if there's a box on specified position
 	 */
 	private boolean containsBox(int x, int y) {
-		for (Box b : boxes) {
-			if (x == b.x() && y == b.y()) {
-				return true;
-			}
-		}
-		return false;
+		return boxes.containsKey(Point.at(x, y));
 	}
 	
 	/**
@@ -268,23 +223,11 @@ public class SokobanGrid implements Grid<Tile> {
 	 * @return true if all boxes are on goals else false
 	 */
 	public boolean gameWon() {
-		for (Box b : boxes) {
-			if (get(b.x(), b.y()) != Tile.GOAL) {
-				return false;
-			}
+		for (Point boxPos : getBoxPositions()) {
+			Tile currTile = get(boxPos.getX(), boxPos.getY());
+			if (!currTile.equals(Tile.GOAL)) return false;
 		}
+		
 		return true;
-	}
-	
-	/**
-	 * Returns the box on the coordinates specified, if no box exists, return null
-	 */
-	private Box getBoxOn(int x, int y) {
-		for (Box b : boxes) {
-			if (x == b.x() && y == b.y()) {
-				return b;
-			}
-		}
-		return null;
 	}
 }
