@@ -24,10 +24,13 @@ public class SKBWindow extends JFrame implements KeyListener {
     private SKBCanvas canvas;
 
     private SokobanGrid grid;
+    
+    private String currentMap;
 
     public SKBWindow(ImageManager imgMan) {
         this.imgMan = imgMan;
-        grid = new SokobanGrid("./maps/map2.txt");
+        currentMap = "./maps/map2.txt";
+        grid = new SokobanGrid(currentMap);
 
         this.setTitle("Sokoban");
         this.setSize(800, 640);
@@ -48,11 +51,7 @@ public class SKBWindow extends JFrame implements KeyListener {
 
         btnResetGame = new JButton("Reset Game");
         btnResetGame.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
-        	System.out.println("Reset game, do stuff");
-        	this.grid = new SokobanGrid("./maps/map2.txt");
-        	textArea1.setText("Game in progress..");
-        	canvas.replaceGrid(grid);
-        	canvas.repaint();
+			resetGame();
         });
 
         //btnStartGame
@@ -108,6 +107,30 @@ public class SKBWindow extends JFrame implements KeyListener {
 			case KeyEvent.VK_DOWN:
 				grid.movePlayer(Direction.DOWN);
 				break;
+			case KeyEvent.VK_R:
+				// reset game
+				System.out.println("Reset game, do stuff");
+	        	this.grid = new SokobanGrid(currentMap);
+	        	textArea1.setText("Game in progress..");
+	        	canvas.replaceGrid(grid);
+	        	canvas.repaint();
+	        	break;
+			case KeyEvent.VK_1:
+				currentMap = "./maps/map1.txt";
+				System.out.println("Switch to map 1");
+				resetGame();
+	        	break;
+			case KeyEvent.VK_2:
+				currentMap = "./maps/map3.txt";
+				System.out.println("Switch to map 2");
+				resetGame();
+	        	break;
+			case KeyEvent.VK_3:
+				currentMap = "./maps/map3.txt";
+				System.out.println("Switch to map 3");
+				resetGame();
+	        	break;
+				
 		}
 		
 		if (grid.gameWon()) {
@@ -118,4 +141,12 @@ public class SKBWindow extends JFrame implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {}
+	
+	public void resetGame() {
+		System.out.println("reset game..");
+		this.grid = new SokobanGrid(currentMap);
+    	textArea1.setText("Game in progress..");
+    	canvas.replaceGrid(grid);
+    	canvas.repaint();
+	}
 }
