@@ -8,4 +8,4 @@ F F O W F F F W B F W F F
 W W W W F F F F F F W F F
 
 
-//Does not encapsulate map with walls
+#//Does not encapsulate map with walls

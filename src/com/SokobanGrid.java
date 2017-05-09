@@ -134,6 +134,8 @@ public class SokobanGrid implements Grid<Tile> {
 	public int getWidth() {
 		return width;
 	}
+
+	public List<List<Tile>> getTiles() { return tiles; }
 	
 	/**
 	 * Attempts to move the player in a given direction

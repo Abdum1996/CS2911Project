@@ -2,6 +2,10 @@
 out/
 .idea/
 *.iml
+.classpath
+.project
+.settings
+.settings/*
 
 # don't need compiled files
 *.class

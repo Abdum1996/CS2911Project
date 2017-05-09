@@ -1,8 +1,28 @@
 package com;
 /**
- * Enum to represend direction mainly used to indicate a player's move.
+ * Enumeration to represent direction mainly used to indicate a player's move.
  *
  */
 public enum Direction {
-	RIGHT, LEFT, UP, DOWN
+	UP, DOWN, LEFT, RIGHT;
+	
+	/**
+	 * Create a direction from a given name.
+	 * @param name - name of direction
+	 * @return new direction
+	 */
+	public static Direction parse(String name) {
+		switch (name) {
+			case "UP":
+				return UP;
+			case "DOWN":
+				return DOWN;
+			case "LEFT":
+				return LEFT;
+			case "RIGHT":
+				return RIGHT;
+			default:
+				return UP;
+		}
+	}
 }

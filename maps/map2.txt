@@ -8,5 +8,5 @@ W F W B F W F F W
 W O W F F W F O W
 W W W W W W W W W 
 
-//I am starting to think that we can autogenerate maps using an algorithm
-//The slots together predefined submaps or "rooms".
+#I am starting to think that we can autogenerate maps using an algorithm
+#The slots together predefined submaps or "rooms".
