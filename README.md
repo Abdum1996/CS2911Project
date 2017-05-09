@@ -2,7 +2,7 @@
 
 //Please branch before doing your work, otherwise everything will break. TY
 
-#Making a map using a text file
+# Making a map using a text file
 
 Example file:
 2
@@ -22,3 +22,10 @@ B stands for Box (makes it a floor tile and places a box on it)
 P stands for player (makes a floor tile and initializes the player on it)
 there should be as many B's as O's and only one P
 comments can only be placed at the end of the file
+
+# Licenses and attribution
+Textures and assets from Kenney.nl license: CC0 1.0 Universal (CC0 1.0) 
+
+Sounds from http://www.gameburp.com/ license: http://www.gameburp.com/license-free/
+
+Sad trombone sound Recorded by Joe Lamb from  http://soundbible.com/1830-Sad-Trombone.html  license: Attribution 3.0

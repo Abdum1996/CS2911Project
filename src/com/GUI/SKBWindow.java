@@ -1,11 +1,13 @@
 package com.GUI;
 
 
+import com.Direction;
 import com.SokobanGrid;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
 
 public class SKBWindow extends JFrame {
     private JTextArea textArea1;
@@ -63,5 +65,23 @@ public class SKBWindow extends JFrame {
 
         //this.pack();
         this.setVisible(true);
+        btnStartGame.setFocusable(false);
+        btnResetGame.setFocusable(false);
+        
+        // This is a horrible hack (as I don't know swing) and I'm sure there
+        // is a better way to do this - Thomas Daniell
+        String[] moveNames = { "UP", "DOWN", "LEFT", "RIGHT"};
+        for (String move : moveNames) {
+        	canvas.getInputMap().put(KeyStroke.getKeyStroke(move), move);
+        	canvas.getActionMap().put(move, new AbstractAction() {
+        		@Override
+    			public void actionPerformed(ActionEvent e) {
+        			System.out.println(move);
+        			Direction dir = Direction.parse(move);
+        			grid.movePlayer(dir);
+        			canvas.repaint();
+    			}
+        	});
+        }
     }
 }
