@@ -50,6 +50,16 @@ public class SKBCanvas extends JPanel {
             x = 0;
         }
 
+        for (com.Box curr : grid.getBoxes()) {
+        	com.Point pos = curr.getCoordinates();
+        	
+        	g.drawImage(imgMan.getEntityImg(com.EntityTypes.BOX), 
+        			pos.getX(), pos.getY(), null);
+        }
+        
+        com.Point playerPos = grid.getPlayer().getCoordinates();
+        g.drawImage(imgMan.getEntityImg(com.EntityTypes.PLAYER), 
+        		playerPos.getX(), playerPos.getY(), null);
         // paint entities over the tiles
 
         //JLabel picLabel = new JLabel();
