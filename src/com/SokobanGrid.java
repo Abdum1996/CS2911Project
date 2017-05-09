@@ -140,6 +140,7 @@ public class SokobanGrid implements Grid<Tile> {
 		boolean check = true;
 		int x = playerPosition.getX();
 		int y = playerPosition.getY();
+		
 		switch (dir) {
 			case UP:
 				// no space to go
@@ -159,7 +160,7 @@ public class SokobanGrid implements Grid<Tile> {
 				break;
 			case DOWN:
 				// no space to go
-				if (y == height - 1) {
+				if (y == (height - 1)) {
 					check = false;
 				} else if (y < height - 2 && containsBox(x, y + 1) && containsBox(x, y + 2)) { 
 					// two boxes stacked after one another
@@ -175,7 +176,7 @@ public class SokobanGrid implements Grid<Tile> {
 				break;
 			case RIGHT:
 				// no space to go
-				if (y == width - 1) {
+				if (x == (width - 1)) {
 					check = false;
 				} else if (x < width - 2 && containsBox(x + 1, y) && containsBox(x + 2, y)) { 
 					// two boxes stacked after one another
@@ -191,7 +192,7 @@ public class SokobanGrid implements Grid<Tile> {
 				break;
 			case LEFT:
 				// no space to go
-				if (y == 0) {
+				if (x == 0) {
 					check = false;
 				} else if (x > 1 && containsBox(x - 1, y) && containsBox(x - 2, y)) { 
 					// two boxes stacked after one another
@@ -207,7 +208,6 @@ public class SokobanGrid implements Grid<Tile> {
 				break;
 		}
 		
-		if (check == false) System.out.println("fail");
 		return check;
 	}
 	
