@@ -22,5 +22,3 @@ public interface WeightedGraph<T> {
 	public Set<T> getNeighbours(T source);
 	public Set<T> getNodeSet();	
 }
-
-// i will implement this tomorrow - Thomas
