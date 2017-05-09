@@ -41,17 +41,29 @@ public class SKBCanvas extends JPanel {
         int y=0;
 
         // paint all tiles
-        for (int i = 0; i < w; i++) {
-            for (int j = 0; j < h; j++) {
-                g.drawImage(imgMan.getTileImg(grid.get(i, j)), x, y, null);
-                x += this.imgMan.getImgWidth();
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                g.drawImage(imgMan.getTileImg(grid.get(j, i)), x, y, null);
+                x += this.imgMan.getImgHeight();
             }
-            y += this.imgMan.getImgHeight();
+            y += this.imgMan.getImgWidth();
             x = 0;
         }
 
-        // paint entities over the tiles
-
+        BufferedImage box    = imgMan.getEntityImg(com.EntityTypes.BOX);
+        BufferedImage player = imgMan.getEntityImg(com.EntityTypes.PLAYER);
+        
+        for (com.Box curr : grid.getBoxes()) {
+        	x = curr.getCoordinates().getX()*box.getWidth();
+        	y = curr.getCoordinates().getY()*box.getHeight();
+        	
+        	g.drawImage(box, x, y, null);
+        }
+        
+        x = grid.getPlayer().x()*player.getWidth();
+        y = grid.getPlayer().y()*player.getHeight();
+        
+        g.drawImage(player, x, y, null);
         //JLabel picLabel = new JLabel();
         //add(picLabel);
     }

@@ -46,9 +46,9 @@ public class Point {
 	public Point move(Direction dir) {
 		switch (dir) {
 			case UP:
-				return Point.at(x, y + 1);
-			case DOWN:
 				return Point.at(x, y - 1);
+			case DOWN:
+				return Point.at(x, y + 1);
 			case LEFT:
 				return Point.at(x - 1, y);
 			case RIGHT:
