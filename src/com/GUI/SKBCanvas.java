@@ -50,16 +50,20 @@ public class SKBCanvas extends JPanel {
             x = 0;
         }
 
-        /*for (com.Box curr : grid.getBoxes()) {
-        	com.Point pos = curr.getCoordinates();
-        	
-        	g.drawImage(imgMan.getEntityImg(com.EntityTypes.BOX), 
-        			pos.getX(), pos.getY(), null);
-        }*/
+        BufferedImage box    = imgMan.getEntityImg(com.EntityTypes.BOX);
+        BufferedImage player = imgMan.getEntityImg(com.EntityTypes.PLAYER);
         
-        com.Point playerPos = grid.getPlayer().getCoordinates();
-        g.drawImage(imgMan.getEntityImg(com.EntityTypes.PLAYER), 
-        		playerPos.getX(), playerPos.getY(), null);
+        for (com.Box curr : grid.getBoxes()) {
+        	x = curr.getCoordinates().getX()*box.getWidth();
+        	y = curr.getCoordinates().getY()*box.getHeight();
+        	
+        	g.drawImage(box, x, y, null);
+        }
+        
+        x = grid.getPlayer().x()*player.getWidth();
+        y = grid.getPlayer().y()*player.getHeight();
+        
+        g.drawImage(player, x, y, null);
         //JLabel picLabel = new JLabel();
         //add(picLabel);
     }
