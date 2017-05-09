@@ -5,6 +5,7 @@
 # Making a map using a text file
 
 Example file:
+
 2
 
 3
