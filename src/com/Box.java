@@ -1,5 +1,4 @@
 package com;
-import java.awt.Point;
 
 /**
  * Class representing a box to be used in a game grid
@@ -15,7 +14,7 @@ public class Box {
 	 * @param y
 	 */
 	public Box(int x, int y) {
-		position = new Point(x, y);
+		position = Point.at(x, y);
 	}
 	
 	/**
@@ -23,7 +22,7 @@ public class Box {
 	 * @param p
 	 */
 	public Box(Point p) {
-		position = new Point(p.x, p.y);
+		position = p;
 	}
 	
 	/**
@@ -38,14 +37,14 @@ public class Box {
 	 * Get x coordinate of this box
 	 */
 	public int x() {
-		return position.x;
+		return position.getX();
 	}
 	
 	/**
 	 * Get y coordinate of this box
 	 */
 	public int y() {
-		return position.y;
+		return position.getY();
 	}
 	
 	/**
@@ -53,19 +52,6 @@ public class Box {
 	 * @param dir the direction the box is to be moved in
 	 */
 	public void move(Direction dir) {
-		switch (dir) {
-			case DOWN:
-				position.y++;
-				break;
-			case UP:
-				position.y--;
-				break;
-			case RIGHT:
-				position.x++;
-				break;
-			case LEFT:
-				position.x--;
-				break;
-		}
+		position.move(dir);
 	}
 }
