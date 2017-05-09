@@ -68,6 +68,8 @@ public class SKBWindow extends JFrame {
         btnStartGame.setFocusable(false);
         btnResetGame.setFocusable(false);
         
+        // This is a horrible hack (as I don't know swing) and I'm sure there
+        // is a better way to do this - Thomas Daniell
         String[] moveNames = { "UP", "DOWN", "LEFT", "RIGHT"};
         for (String move : moveNames) {
         	canvas.getInputMap().put(KeyStroke.getKeyStroke(move), move);
@@ -75,6 +77,7 @@ public class SKBWindow extends JFrame {
         		@Override
     			public void actionPerformed(ActionEvent e) {
     				grid.movePlayer(Direction.parse(move));
+    				// paint component
     			}
         	});
         }
