@@ -6,5 +6,5 @@ W F F W W W W
 W F B F F O W
 W W W W W W W 
 
-//Simple map with 2 goals.
-//Considering making the map larger for more possible moves.
+#Simple map with 2 goals.
+#Considering making the map larger for more possible moves.
