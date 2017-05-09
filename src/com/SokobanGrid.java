@@ -274,5 +274,4 @@ public class SokobanGrid implements Grid<Tile> {
 		}
 		return null;
 	}
-	
 }

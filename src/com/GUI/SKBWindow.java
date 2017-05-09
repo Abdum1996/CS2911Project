@@ -19,9 +19,9 @@ public class SKBWindow extends JFrame {
 
     private SokobanGrid grid;
 
-    public SKBWindow(ImageManager imgMan, SokobanGrid grid) {
+    public SKBWindow(ImageManager imgMan) {
         this.imgMan = imgMan;
-        this.grid = grid;
+        grid = new SokobanGrid("./maps/map2.txt");
 
         this.setTitle("Sokoban");
         this.setSize(800, 640);
@@ -39,6 +39,7 @@ public class SKBWindow extends JFrame {
         btnResetGame.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
         	System.out.println("Reset game, do stuff");
         	this.grid = new SokobanGrid("./maps/map2.txt");
+        	canvas.replaceGrid(grid);
         	canvas.repaint();
         });
 
