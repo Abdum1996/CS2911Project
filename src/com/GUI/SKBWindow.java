@@ -77,8 +77,9 @@ public class SKBWindow extends JFrame {
         		@Override
     			public void actionPerformed(ActionEvent e) {
         			System.out.println(move);
-    				grid.movePlayer(Direction.parse(move));
-    				// paint component
+        			Direction dir = Direction.parse(move);
+        			grid.movePlayer(dir);
+        			canvas.repaint();
     			}
         	});
         }
