@@ -264,6 +264,19 @@ public class SokobanGrid implements Grid<Tile> {
 	}
 	
 	/**
+	 * Whether or not the game has been won.
+	 * @return true if all boxes are on goals else false
+	 */
+	public boolean gameWon() {
+		for (Box b : boxes) {
+			if (get(b.x(), b.y()) != Tile.GOAL) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * Returns the box on the coordinates specified, if no box exists, return null
 	 */
 	private Box getBoxOn(int x, int y) {

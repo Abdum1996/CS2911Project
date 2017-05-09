@@ -31,6 +31,11 @@ public class SKBWindow extends JFrame {
         this.setSize(800, 640);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new GridLayout());
+        
+        textArea1 = new JTextArea();
+        textArea1.setText("Game in progress..");
+        textArea1.setEditable(false);
+        textArea1.setFocusable(false);
 
         JPanel jp1 = new JPanel();
 
@@ -43,6 +48,7 @@ public class SKBWindow extends JFrame {
         btnResetGame.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
         	System.out.println("Reset game, do stuff");
         	this.grid = new SokobanGrid("./maps/map2.txt");
+        	textArea1.setText("Game in progress..");
         	canvas.replaceGrid(grid);
         	canvas.repaint();
         });
@@ -62,9 +68,7 @@ public class SKBWindow extends JFrame {
         //c.weighty = 1.0;
         //c.fill = GridBagConstraints.BOTH;
 
-        textArea1 = new JTextArea();
-        textArea1.setText("helloworld");
-        //jp1.add(textArea1);
+        jp1.add(textArea1);
         //jp3.add(textArea1, c);
 
         this.canvas = new SKBCanvas(imgMan, grid);
@@ -86,6 +90,9 @@ public class SKBWindow extends JFrame {
         			System.out.println(move);
         			Direction dir = Direction.parse(move);
         			grid.movePlayer(dir);
+        			if (grid.gameWon()) {
+        				textArea1.setText("Game won!");
+        			}
         			canvas.repaint();
     			}
         	});
