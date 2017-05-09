@@ -138,35 +138,32 @@ public class SokobanGrid implements Grid<Tile> {
 	 */
 	private boolean isValidMove(Direction dir) {
 		Point next1 = playerPosition.move(dir);
+		Point next2 = playerPosition.move(dir);
 		int x1 = next1.getX(), y1 = next1.getY();
+		int x2 = next2.getX(), y2 = next2.getY();
 
-		// Check if the next position is a map edge
-		if ((x1 < 0) || (x1 >= width) || 
-				(y1 < 0) || (y1 >= height)) return false;
-		
-		// Check if the next position is a wall
-		if (get(x1, y1).equals(Tile.EMPTY) || 
-				get(x1, y1).equals(Tile.WALL)) return false;
+		// Ensure the target position is not outside the map or a wall
+		if (!isValidEntityPos(x1, y1)) return false;
 		
 		// Handle case where the adjacent object is a box
 		if (containsBox(x1, y1)) {
-			Point next2 = next1.move(dir);
-			int x2 = next2.getX(), y2 = next2.getY();
-			
-			// Check if a second box is adjacent to the current box
-			if (containsBox(x2, y2)) return false; 
-			
-			// Check if the position after the box is a map edge
-			if ((x2 < 0) || (x2 >= width) || 
-					(y2 < 0) || (y2 >= height)) return false;
-			
-			// Check if the next position after the box is a wall
-			if (get(x2, y2).equals(Tile.EMPTY) || 
-					get(x2, y2).equals(Tile.WALL)) return false;
+			if (!isValidEntityPos(x2, y2)) return false;
+			if (containsBox(x2, y2)) return false;
 		}
+			
+		return true;
+	}
+	
+	public boolean isValidEntityPos(int x, int y) {
+		// Check the position outside of the map grid
+		if ((x < 0) || (x >= width) || (y < 0) || (y >= height)) return false;
+		
+		// Check if the position is inside a wall
+		if (get(x, y).equals(Tile.EMPTY) || get(x, y).equals(Tile.WALL)) return false;
 		
 		return true;
 	}
+	
 	
 	/**
 	 * checks if there's a box on specified position
