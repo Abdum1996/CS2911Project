@@ -137,78 +137,35 @@ public class SokobanGrid implements Grid<Tile> {
 	 * @return	true if the move is in a valid direction, false otherwise
 	 */
 	private boolean isValidMove(Direction dir) {
-		boolean check = true;
-		int x = playerPosition.getX();
-		int y = playerPosition.getY();
+		Point next1 = playerPosition.move(dir);
+		int x1 = next1.getX(), y1 = next1.getY();
+
+		// Check if the next position is a map edge
+		if ((x1 < 0) || (x1 >= width) || 
+				(y1 < 0) || (y1 >= height)) return false;
 		
-		switch (dir) {
-			case UP:
-				// no space to go
-				if (y == 0) {
-					check = false;
-				} else if (y > 1 && containsBox(x, y - 1) && containsBox(x, y - 2)) { 
-					// two boxes stacked after one another
-					check = false;
-				} else if(y == 1 && containsBox(x, 0)) { //box on map edge
-					check = false;
-				} else if (get(x, y - 1) == Tile.EMPTY || get(x, y - 1) == Tile.WALL) {// moving through a wall
-					check = false;
-				} else if (y > 1 && containsBox(x, y - 1) && (get(x, y - 2) == Tile.EMPTY || get(x, y - 2) == Tile.WALL)) {
-					// moving a box through a wall
-					check = false;
-				}
-				break;
-			case DOWN:
-				// no space to go
-				if (y == (height - 1)) {
-					check = false;
-				} else if (y < height - 2 && containsBox(x, y + 1) && containsBox(x, y + 2)) { 
-					// two boxes stacked after one another
-					check = false;
-				} else if(y == height - 2 && containsBox(x, height - 1)) { //box on map edge
-					check = false;
-				} else if (get(x, y + 1) == Tile.EMPTY || get(x, y + 1) == Tile.WALL) {// moving through a wall
-					check = false;
-				} else if (y < height - 2 && containsBox(x, y + 1) && (get(x, y + 2) == Tile.EMPTY || get(x, y + 2) == Tile.WALL)) {
-					// moving a box through a wall
-					check = false;
-				}
-				break;
-			case RIGHT:
-				// no space to go
-				if (x == (width - 1)) {
-					check = false;
-				} else if (x < width - 2 && containsBox(x + 1, y) && containsBox(x + 2, y)) { 
-					// two boxes stacked after one another
-					check = false;
-				} else if(x == width - 2 && containsBox(width - 1, y)) { //box on map edge
-					check = false;
-				} else if (get(x + 1, y) == Tile.EMPTY || get(x + 1, y) == Tile.WALL) {// moving through a wall
-					check = false;
-				} else if (x < width - 2 && containsBox(x + 1, y) && (get(x + 2, y) == Tile.EMPTY || get(x + 2, y) == Tile.WALL)) {
-					// moving a box through a wall
-					check = false;
-				}
-				break;
-			case LEFT:
-				// no space to go
-				if (x == 0) {
-					check = false;
-				} else if (x > 1 && containsBox(x - 1, y) && containsBox(x - 2, y)) { 
-					// two boxes stacked after one another
-					check = false;
-				} else if(x == 1 && containsBox(0, y)) { //box on map edge
-					check = false;
-				} else if (get(x - 1, y) == Tile.EMPTY || get(x - 1, y) == Tile.WALL) {// moving through a wall
-					check = false;
-				} else if (x > 1 && containsBox(x - 1, y) && (get(x - 2, y) == Tile.EMPTY || get(x - 2, y) == Tile.WALL)) {
-					// moving a box through a wall
-					check = false;
-				}
-				break;
+		// Check if the next position is a wall
+		if (get(x1, y1).equals(Tile.EMPTY) || 
+				get(x1, y1).equals(Tile.WALL)) return false;
+		
+		// Handle case where the adjacent object is a box
+		if (containsBox(x1, y1)) {
+			Point next2 = next1.move(dir);
+			int x2 = next2.getX(), y2 = next2.getY();
+			
+			// Check if a second box is adjacent to the current box
+			if (containsBox(x2, y2)) return false; 
+			
+			// Check if the position after the box is a map edge
+			if ((x2 < 0) || (x2 >= width) || 
+					(y2 < 0) || (y2 >= height)) return false;
+			
+			// Check if the next position after the box is a wall
+			if (get(x2, y2).equals(Tile.EMPTY) || 
+					get(x2, y2).equals(Tile.WALL)) return false;
 		}
 		
-		return check;
+		return true;
 	}
 	
 	/**
