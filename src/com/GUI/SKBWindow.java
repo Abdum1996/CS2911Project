@@ -76,6 +76,7 @@ public class SKBWindow extends JFrame {
         	canvas.getActionMap().put(move, new AbstractAction() {
         		@Override
     			public void actionPerformed(ActionEvent e) {
+        			System.out.println(move);
     				grid.movePlayer(Direction.parse(move));
     				// paint component
     			}
