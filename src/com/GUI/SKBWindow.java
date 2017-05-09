@@ -1,13 +1,17 @@
 package com.GUI;
 
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 
 import com.Direction;
 import com.SokobanGrid;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
 
 public class SKBWindow extends JFrame {
     private JTextArea textArea1;

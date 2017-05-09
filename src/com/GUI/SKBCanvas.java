@@ -1,14 +1,16 @@
 package com.GUI;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+
+import javax.swing.JPanel;
+
 import com.Grid;
 import com.SokobanGrid;
 import com.Tile;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.List;
 
 /**
  * Sokoban Canvas

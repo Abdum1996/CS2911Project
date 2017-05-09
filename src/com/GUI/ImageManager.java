@@ -1,14 +1,14 @@
 package com.GUI;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.HashMap;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 import com.EntityTypes;
 import com.Tile;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 
 /**
 *   ImageManager manages the image loading for all the graphics
