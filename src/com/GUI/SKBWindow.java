@@ -37,7 +37,9 @@ public class SKBWindow extends JFrame {
 
         btnResetGame = new JButton("Reset Game");
         btnResetGame.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
-            System.out.println("Reset game, do stuff");
+        	System.out.println("Reset game, do stuff");
+        	this.grid = new SokobanGrid("./maps/map2.txt");
+        	canvas.repaint();
         });
 
         //btnStartGame

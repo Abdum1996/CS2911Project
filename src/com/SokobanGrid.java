@@ -246,6 +246,8 @@ public class SokobanGrid implements Grid<Tile> {
 				}
 				break;
 		}
+		
+		if (check == false) System.out.println("fail");
 		return check;
 	}
 	

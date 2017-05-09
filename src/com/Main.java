@@ -16,7 +16,7 @@ public class Main {
         imgMan.loadEntityImg(EntityTypes.BOX, "./resources/box.png");
         imgMan.loadEntityImg(EntityTypes.PLAYER, "./resources/player.png");
 
-        SokobanGrid grid = new SokobanGrid("./maps/map1.txt");
+        SokobanGrid grid = new SokobanGrid("./maps/map2.txt");
 
         SKBWindow window = new SKBWindow(imgMan, grid);
     }
