@@ -1,15 +1,21 @@
 package com.GUI;
 
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 
 import com.Direction;
 import com.SokobanGrid;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
-
-public class SKBWindow extends JFrame {
+public class SKBWindow extends JFrame implements KeyListener {
     private JTextArea textArea1;
     private JButton btnStartGame;
     private JButton btnResetGame;
@@ -18,15 +24,23 @@ public class SKBWindow extends JFrame {
     private SKBCanvas canvas;
 
     private SokobanGrid grid;
+    
+    private String currentMap;
 
-    public SKBWindow(ImageManager imgMan, SokobanGrid grid) {
+    public SKBWindow(ImageManager imgMan) {
         this.imgMan = imgMan;
-        this.grid = grid;
+        currentMap = "./maps/map2.txt";
+        grid = new SokobanGrid(currentMap);
 
         this.setTitle("Sokoban");
         this.setSize(800, 640);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new GridLayout());
+        
+        textArea1 = new JTextArea();
+        textArea1.setText("Game in progress..");
+        textArea1.setEditable(false);
+        textArea1.setFocusable(false);
 
         JPanel jp1 = new JPanel();
 
@@ -37,7 +51,7 @@ public class SKBWindow extends JFrame {
 
         btnResetGame = new JButton("Reset Game");
         btnResetGame.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
-            System.out.println("Reset game, do stuff");
+			resetGame();
         });
 
         //btnStartGame
@@ -55,9 +69,7 @@ public class SKBWindow extends JFrame {
         //c.weighty = 1.0;
         //c.fill = GridBagConstraints.BOTH;
 
-        textArea1 = new JTextArea();
-        textArea1.setText("helloworld");
-        //jp1.add(textArea1);
+        jp1.add(textArea1);
         //jp3.add(textArea1, c);
 
         this.canvas = new SKBCanvas(imgMan, grid);
@@ -68,20 +80,75 @@ public class SKBWindow extends JFrame {
         btnStartGame.setFocusable(false);
         btnResetGame.setFocusable(false);
         
-        // This is a horrible hack (as I don't know swing) and I'm sure there
-        // is a better way to do this - Thomas Daniell
-        String[] moveNames = { "UP", "DOWN", "LEFT", "RIGHT"};
-        for (String move : moveNames) {
-        	canvas.getInputMap().put(KeyStroke.getKeyStroke(move), move);
-        	canvas.getActionMap().put(move, new AbstractAction() {
-        		@Override
-    			public void actionPerformed(ActionEvent e) {
-        			System.out.println(move);
-        			Direction dir = Direction.parse(move);
-        			grid.movePlayer(dir);
-        			canvas.repaint();
-    			}
-        	});
-        }
+        this.addKeyListener(this);
+        this.pack();
+        
     }
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_D:
+				grid.movePlayer(Direction.RIGHT);
+				break;
+			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:
+				grid.movePlayer(Direction.LEFT);
+				break;
+			case KeyEvent.VK_W:
+			case KeyEvent.VK_UP:
+				grid.movePlayer(Direction.UP);
+				break;
+			case KeyEvent.VK_S:
+			case KeyEvent.VK_DOWN:
+				grid.movePlayer(Direction.DOWN);
+				break;
+			case KeyEvent.VK_R:
+				// reset game
+				System.out.println("Reset game, do stuff");
+	        	this.grid = new SokobanGrid(currentMap);
+	        	textArea1.setText("Game in progress..");
+	        	canvas.replaceGrid(grid);
+	        	canvas.repaint();
+	        	break;
+			case KeyEvent.VK_1:
+				currentMap = "./maps/map1.txt";
+				System.out.println("Switch to map 1");
+				resetGame();
+	        	break;
+			case KeyEvent.VK_2:
+				currentMap = "./maps/map2.txt";
+				System.out.println("Switch to map 2");
+				resetGame();
+	        	break;
+			case KeyEvent.VK_3:
+				currentMap = "./maps/map3.txt";
+				System.out.println("Switch to map 3");
+				resetGame();
+	        	break;
+				
+		}
+		
+		if (grid.gameWon()) {
+			textArea1.setText("Game Won!");
+		}
+		canvas.repaint();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
+	
+	public void resetGame() {
+		System.out.println("reset game..");
+		this.grid = new SokobanGrid(currentMap);
+    	textArea1.setText("Game in progress..");
+    	canvas.replaceGrid(grid);
+    	canvas.repaint();
+    	this.pack();
+	}
 }

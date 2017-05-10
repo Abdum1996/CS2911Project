@@ -52,6 +52,6 @@ public class Box {
 	 * @param dir the direction the box is to be moved in
 	 */
 	public void move(Direction dir) {
-		position.move(dir);
+		position = position.move(dir);
 	}
 }

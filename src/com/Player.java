@@ -52,6 +52,6 @@ public class Player {
 	 * @param dir the direction the player is to move in
 	 */
 	public void move(Direction dir) {
-		position.move(dir);
+		position = position.move(dir);
 	}
 }
