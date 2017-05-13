@@ -66,4 +66,19 @@ public class SokobanBoard {
 		}
 	}
 	
+	/**
+	 * Get the player stored on this board.
+	 * @return stored player
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+	
+	/**
+	 * Get a list of boxes on this board.
+	 * @return list of boxes
+	 */
+	public List<Box> getBoxes() {
+		return new ArrayList<>(boxes);
+	}
 }

@@ -1,30 +1,55 @@
 package com;
 
 /**
- * Class representing a player entity on the game board.
+ * Class representing a player entity on a game board.
  */
-public class Player extends Entity {
-	/**
-	 * Construct a new player at the default position (0, 0).
-	 */
-	public Player() {
-		super(0, 0);
-	}
+public class Player implements Movable<Player> {
+	private final Point position;
 	
 	/**
-	 * Construct a new player at the given x and y coordinates.
+	 * Construct a player at the given x and y coordinates.
 	 * @param x - x coordinate
 	 * @param y - y coordinate
 	 */
 	public Player(int x, int y) {
-		super(x, y);
+		this(Point.at(x, y));
 	}
 	
 	/**
-	 * Construct a new player at the given point.
-	 * @param point - location of new box
+	 * Construct a player at the given point.
+	 * @param point - input point
 	 */
 	public Player(Point point) {
-		super(point);
+		position = point;
+	}
+	
+	@Override
+	public Point getPosition() {
+		return position;
+	}
+
+	@Override
+	public int getX() {
+		return position.getX();
+	}
+
+	@Override
+	public int getY() {
+		return position.getY();
+	}
+
+	@Override
+	public Player move(Direction dir) {
+		return moveTo(position.move(dir));
+	}
+
+	@Override
+	public Player moveTo(int x, int y) {
+		return moveTo(Point.at(x, y));
+	}
+
+	@Override
+	public Player moveTo(Point point) {
+		return new Player(point);
 	}
 }
