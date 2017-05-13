@@ -16,6 +16,19 @@ public class SokobanGrid implements Grid<Tile> {
 	 * As you go right, x increases and as you go down y increases.
 	 */
 	
+	/**
+	 * Returns the tile/component given a coordinate. (0,0) is top left, 
+	 * y increases as it goes down and x increases as you go to the right
+	 * @param x horizontal coordinate
+	 * @param y vertical coordinate
+	 * @return the tile object associated with position
+	 */
+	
+	 /*The top left of 
+	 * the grid is located at (0, 0) and the y coordinate increases as you move 
+	 * down the grid. The x coordinate increases when moving from left to right.
+	 * @param <T> - Type of cell stored in the grid.*/
+	
 	private final Map<Point, Box> boxes;
 	private Point playerPosition;
 	

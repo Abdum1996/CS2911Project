@@ -1,25 +1,46 @@
 package com;
+
 /**
- * Interface representing a Grid with tiles of type T
- *
+ * Generic interface representing a grid of cells.
  */
-public interface Grid<T> {
+public interface Grid<T> extends Iterable<T> {
 	/**
-	 * Returns the tile/component given a coordinate. (0,0) is top left, 
-	 * y increases as it goes down and x increases as you go to the right
-	 * @param x horizontal coordinate
-	 * @param y vertical coordinate
-	 * @return the tile object associated with position
+	 * Get the cell at the given (x, y) coordinate.
+	 * @param x - cell's x coordinate
+	 * @param y - cell's y coordinate
+	 * @return cell located at that coordinate
 	 */
 	public T get(int x, int y);
 	
 	/**
-	 * Returns the height of the grid.
+	 * Get the cell at the given point.
+	 * @param point - point specifying cell's location
+	 * @return cell located at that point
+	 */
+	public T get(Point point);
+	
+	/**
+	 * Set the value of the cell at the given (x, y) coordinate.
+	 * @param value - new value for cell
+	 * @param x     - x coordinate
+	 * @param y     - y coordinate
+	 */
+	public void set(T value, int x, int y);
+	
+	/**
+	 * Set the value of the cell at the given point.
+	 * @param value - new value for cell
+	 * @param point - point specifying cell's location
+	 */
+	public void set(T value, Point point);
+	
+	/**
+	 * Get the height of the grid.
 	 */
 	public int getHeight();
 	
 	/**
-	 * Returns the with of the grid.
+	 * Get the width of the grid.
 	 */
 	public int getWidth();
 }
