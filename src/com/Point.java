@@ -1,7 +1,8 @@
 package com;
 
 /**
- * Safe immutable point class with a built in move method.
+ * Safe immutable point class with a built in move method. Its 
+ * primary purpose is for information passing.
  */
 public class Point {
 	private final int x;
@@ -36,26 +37,6 @@ public class Point {
 	 */
 	public int getY() {
 		return y;
-	}
-	
-	/**
-	 * Move point in a given direction.
-	 * @param dir - input direction
-	 * @return new point
-	 */
-	public Point move(Direction dir) {
-		switch (dir) {
-			case UP:
-				return Point.at(x, y - 1);
-			case DOWN:
-				return Point.at(x, y + 1);
-			case LEFT:
-				return Point.at(x - 1, y);
-			case RIGHT:
-				return Point.at(x + 1, y);
-			default:
-				return this;
-		}
 	}
 
 	@Override

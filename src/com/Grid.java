@@ -36,11 +36,13 @@ public interface Grid<T> extends Iterable<T> {
 	
 	/**
 	 * Get the height of the grid.
+	 * @return number of rows in the grid
 	 */
 	public int getHeight();
 	
 	/**
 	 * Get the width of the grid.
+	 * @return number of columns in the grid
 	 */
 	public int getWidth();
 }

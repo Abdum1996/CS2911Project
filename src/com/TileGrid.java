@@ -7,24 +7,31 @@ import java.util.Arrays;
  * 2D coordinate grid of tiles. The top left of the grid is located at (0, 0).
  * As you move from left to right the grid's x coordinate increases, and the
  * y coordinate increases when moving down the grid.
+ * @invariant tile values are never null
  */
 public class TileGrid implements Grid<Tile> {
 	private final Tile[] tiles;
-	private final int height;
 	private final int width;
+	private final int height;
 	
-	public TileGrid(int height, int width) {
-		tiles = new Tile[height*width];
+	/**
+	 * Construct a new tile grid.
+	 * @param width  - number of columns in the grid
+	 * @param height - number of rows in the grid
+	 * @pre (width > 0) and (height > 0)
+	 */
+	public TileGrid(int width, int height) {
+		tiles = new Tile[width*height];
 		
-		this.height = height;
 		this.width  = width;
+		this.height = height;
 		
 		Arrays.fill(tiles, Tile.EMPTY);
 	}
 	
 	@Override
 	public Tile get(int x, int y) {
-		return tiles[height*y + x];
+		return tiles[x + y*height];
 	}
 
 	@Override
@@ -34,7 +41,8 @@ public class TileGrid implements Grid<Tile> {
 
 	@Override
 	public void set(Tile value, int x, int y) {
-		tiles[height*y + x] = value; 
+		if (value != null)
+			tiles[x + y*height] = value; 
 	}
 
 	@Override

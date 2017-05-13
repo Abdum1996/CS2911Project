@@ -1,56 +1,30 @@
 package com;
 
 /**
- * Class to represent a player and encapsulates its location
- *
+ * Class representing a player entity on the game board.
  */
-public class Player {
-	private Point position;
+public class Player extends Entity {
+	/**
+	 * Construct a new player at the default position (0, 0).
+	 */
+	public Player() {
+		super(0, 0);
+	}
 	
-	/** 
-	 * Constructs a player given specific coordinates (x, y)
-	 * @param x
-	 * @param y
+	/**
+	 * Construct a new player at the given x and y coordinates.
+	 * @param x - x coordinate
+	 * @param y - y coordinate
 	 */
 	public Player(int x, int y) {
-		position = Point.at(x, y);
+		super(x, y);
 	}
 	
 	/**
-	 * Constructs a player given a Point object and uses its coordinates
-	 * @param p
+	 * Construct a new player at the given point.
+	 * @param point - location of new box
 	 */
-	public Player(Point p) {
-		position = p;
-	}
-
-	/**
-	 * Gives the coordinates of this player
-	 * @return Point object encapsulating position
-	 */
-	public Point getCoordinates() {
-		return position;
-	}
-	
-	/**
-	 * Get x coordinate of this player
-	 */
-	public int getX() {
-		return position.getX();
-	}
-	
-	/**
-	 * Get y coordinate of this player
-	 */
-	public int getY() {
-		return position.getY();
-	}
-	
-	/**
-	 * Moves the player in one of the major 4 direction
-	 * @param dir the direction the player is to move in
-	 */
-	public void move(Direction dir) {
-		position = position.move(dir);
+	public Player(Point point) {
+		super(point);
 	}
 }
