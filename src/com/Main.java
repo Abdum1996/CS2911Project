@@ -17,5 +17,6 @@ public class Main {
         imgMan.loadEntityImg(EntityTypes.PLAYER, "./resources/player.png");
 
         SKBWindow window = new SKBWindow(imgMan);
+        System.out.print(window.getHeight()); // get rid of annoying unused warning
     }
 }

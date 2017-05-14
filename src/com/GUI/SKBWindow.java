@@ -94,7 +94,7 @@ public class SKBWindow extends JFrame implements KeyListener {
 				break;
 			case KeyEvent.VK_A:
 			case KeyEvent.VK_LEFT:
-				board.applyAction(Action.MOVE_RIGHT);
+				board.applyAction(Action.MOVE_LEFT);
 				break;
 			case KeyEvent.VK_W:
 			case KeyEvent.VK_UP:
