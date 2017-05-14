@@ -1,0 +1,16 @@
+12 
+13
+W W W W W W W W W W W W W
+W W W W W F F W W W W W W
+W W W W W F F W W W W W W
+W F F F W F F F F B F W W
+W F B F W F F F F F O W W
+W F F F W F P F F W W W W
+W F B F F F F F F W W W W
+W W W W W W F F F F F F W
+W W W W W W F F F F F F W
+W W W W W W F F W F O F W
+W W W W W W F O W F F F W
+W W W W W W W W W W W W W
+
+// push even a step too far and there's no turning back
