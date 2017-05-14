@@ -49,8 +49,8 @@ public class SKBCanvas extends JPanel {
 
         g.drawString("Grid", 0, 0);
 
-        int x=0;
-        int y=0;
+        int x = 0;
+        int y = 0;
 
         // paint all tiles
         for (int i = 0; i < h; i++) {
@@ -58,9 +58,9 @@ public class SKBCanvas extends JPanel {
             	Point pos = Point.at(j, i);
             	
                 g.drawImage(imgMan.getTileImg(board.getTile(pos)), x, y, null);
-                x += this.imgMan.getImgHeight();
+                x += imgMan.getImgHeight();
             }
-            y += this.imgMan.getImgWidth();
+            y += imgMan.getImgWidth();
             x = 0;
         }
 

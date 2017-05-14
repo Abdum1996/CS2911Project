@@ -33,22 +33,23 @@ public class SokobanBoard implements GameBoard {
 			
 			int width = Integer.parseInt(sc.nextLine());
 			int height = Integer.parseInt(sc.nextLine());
-			GameBoard.Builder builder = new Builder(width, height);
+			Builder builder = new Builder(width, height);
 			
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
 					String symbol = sc.next();
-					Tile value = Tile.parse(symbol);
+					Tile tile = Tile.parse(symbol);
 					Point pos = Point.at(x, y);
 					
-					builder.setTile(value, pos);
-					
+					builder.setTile(tile, pos);
 					if (symbol.equals("P")) {
 						builder.setPlayerPos(pos);
 					} else if (symbol.equals("B")) {
 						builder.addBox(pos);
 					}
 				}
+				
+				System.out.println();
 			}
 			
 			board = builder.build();

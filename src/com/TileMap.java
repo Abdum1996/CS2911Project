@@ -17,7 +17,7 @@ public class TileMap implements Grid<Tile> {
 	 */
 	public static class Builder implements Grid.Builder<Tile> {
 		private final Tile[] tiles;
-		private final int height;
+		private final int width;
 		
 		/**
 		 * Construct a map builder of a given width and height.
@@ -26,19 +26,19 @@ public class TileMap implements Grid<Tile> {
 		 */
 		public Builder(int width, int height) {
 			tiles = new Tile[width*height];
-			this.height = height;
+			this.width = width;
 			
 			Arrays.fill(tiles, Tile.EMPTY);
 		}
 		
 		@Override
 		public void set(Tile value, Point point) {
-			tiles[point.getX() + point.getY()*height] = value;
+			tiles[point.getX() + point.getY()*width] = value;
 		}
 
 		@Override
 		public Grid<Tile> build() {
-			int width = tiles.length/height;
+			int height = tiles.length/width;
 			return new TileMap(tiles, width, height);
 		}
 	}
@@ -57,7 +57,7 @@ public class TileMap implements Grid<Tile> {
 	
 	@Override
 	public Tile get(Point point) {
-		return tiles[point.getX() + point.getY()*height];
+		return tiles[point.getX() + point.getY()*width];
 	}
 	
 	@Override
