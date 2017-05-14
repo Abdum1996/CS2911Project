@@ -3,7 +3,9 @@ package com;
 import com.GUI.ImageManager;
 import com.GUI.SKBWindow;
 
-public class Main {
+public class GameController {
+	
+	
     public static void main(String[] args) {
 
         // load the images

@@ -95,4 +95,10 @@ public interface GameBoard {
 	 * @return true if the player has won the game
 	 */
 	public boolean gameWon();
+	
+	/**
+	 * Create optimal list of actions needed to solve the board.
+	 * @return list of actions to solve the board
+	 */
+	public List<Action> solve();
 }
