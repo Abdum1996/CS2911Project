@@ -1,5 +1,11 @@
 package com;
 
+import java.io.FileNotFoundException;
+import java.util.NoSuchElementException;
+
+import java.io.FileReader;
+import java.util.Scanner;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +20,50 @@ public class SokobanBoard implements GameBoard {
 	private Player player;
 	
 	/**
+	 * Generate a Sokoban board from an input map file.
+	 * @param filename - name of text file
+	 * @return new Sokoban board
+	 */
+	public static GameBoard readFile(String filename) {
+		GameBoard board = null;
+		Scanner sc = null;
+		
+		try {
+			sc = new Scanner(new FileReader(filename));
+			
+			int width = Integer.parseInt(sc.nextLine());
+			int height = Integer.parseInt(sc.nextLine());
+			GameBoard.Builder builder = new Builder(width, height);
+			
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					String symbol = sc.next();
+					Tile value = Tile.parse(symbol);
+					Point pos = Point.at(x, y);
+					
+					builder.setTile(value, pos);
+					
+					if (symbol.equals("P")) {
+						builder.setPlayerPos(pos);
+					} else if (symbol.equals("B")) {
+						builder.addBox(pos);
+					}
+				}
+			}
+			
+			board = builder.build();
+			
+		} catch (FileNotFoundException | NoSuchElementException e) {
+			e.printStackTrace();
+			
+		} finally {
+			if (sc != null) sc.close();
+		}
+		
+		return board;
+	}
+	
+	/**
 	 * Builder class for generating a game board.
 	 */
 	public static class Builder implements GameBoard.Builder {
@@ -23,14 +73,13 @@ public class SokobanBoard implements GameBoard {
 		
 		/**
 		 * Construct a board builder.
-		 * @param start  - start position for the player
 		 * @param width  - width of the board (in rows) to be generated
 		 * @param height - height of the board (in columns) to be generated 
 		 */
-		public Builder(Point start, int width, int height) {
+		public Builder(int width, int height) {
 			mapBuilder = new TileMap.Builder(width, height);
+			player  = new Player(Point.at(0, 0));
 			boxList = new ArrayList<>();
-			player = new Player(start);
 		}
 		
 		@Override
@@ -41,6 +90,11 @@ public class SokobanBoard implements GameBoard {
 		@Override
 		public void addBox(Point point) {
 			boxList.add(new Box(point));
+		}
+		
+		@Override
+		public void setPlayerPos(Point point) {
+			player = player.moveTo(point);
 		}
 
 		@Override

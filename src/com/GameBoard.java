@@ -26,6 +26,12 @@ public interface GameBoard {
 		public void addBox(Point point);
 		
 		/**
+		 * Set the position of the player to a given point.
+		 * @param point - new location of the player
+		 */
+		public void setPlayerPos(Point point);
+		
+		/**
 		 * Construct finalized game board from the builder.
 		 * @return new game board
 		 */
