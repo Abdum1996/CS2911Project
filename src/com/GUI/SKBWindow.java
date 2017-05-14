@@ -12,8 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
+import com.SokobanBoard;
+import com.GameBoard;
 import com.Direction;
-import com.SokobanGrid;
 
 public class SKBWindow extends JFrame implements KeyListener {
     private JTextArea textArea1;
@@ -23,14 +24,14 @@ public class SKBWindow extends JFrame implements KeyListener {
     private ImageManager imgMan;
     private SKBCanvas canvas;
 
-    private SokobanGrid grid;
+    private GameBoard board;
     
     private String currentMap;
 
     public SKBWindow(ImageManager imgMan) {
         this.imgMan = imgMan;
         currentMap = "./maps/map2.txt";
-        grid = new SokobanGrid(currentMap);
+        board = SokobanBoard.readFile(currentMap);
 
         this.setTitle("Sokoban");
         this.setSize(800, 640);
