@@ -1,38 +1,47 @@
 package com;
 
+import java.util.ArrayList;
+import com.Graph.State;
 import java.util.List;
 
-import com.Graph.State;
-
-public class BoardState implements State<Direction> {
-	public 
+/**
+ * This class keeps track of the state of a game board.
+ */
+public class BoardState implements State<Action> {
+	public final GameBoard board;
 	
+	/**
+	 * Create a board state from a given game board.
+	 * @param board - board which is presumably in an unsolved state
+	 */
 	public BoardState(GameBoard board) {
-		
+		this.board = board;
 	}
 	
 	@Override
-	public int getStepCost(State<Direction> prev) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getStepCost(State<Action> prev) {
+		return 1; // Move costs are uniform for now
 	}
 
 	@Override
-	public State<Direction> applyAction(Direction action) {
-		// TODO Auto-generated method stub
-		return null;
+	public State<Action> applyAction(Action action) {
+		return new BoardState(board.genSuccessor(action));
 	}
 
 	@Override
-	public List<Direction> getValidActions() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Action> getValidActions() {
+		List<Action> actions = new ArrayList<>();
+		
+		for (Action curr : Action.values()) {
+			if (board.isValidAction(curr))
+				actions.add(curr);
+		}
+		
+		return actions;
 	}
 
 	@Override
 	public boolean isGoalState() {
-		// TODO Auto-generated method stub
-		return false;
+		return board.gameWon();
 	}
-
 }
