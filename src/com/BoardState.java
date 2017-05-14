@@ -5,6 +5,11 @@ import java.util.List;
 import com.Graph.State;
 
 public class BoardState implements State<Direction> {
+	public 
+	
+	public BoardState(GameBoard board) {
+		
+	}
 	
 	@Override
 	public int getStepCost(State<Direction> prev) {

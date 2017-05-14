@@ -84,6 +84,13 @@ public interface GameBoard {
 	public boolean applyAction(Action action);
 	
 	/**
+	 * Create a copy of the board with the applied action
+	 * @param action - action applied to board after it is copied
+	 * @return new board with action applied to it
+	 */
+	public GameBoard genSuccessor(Action action);
+	
+	/**
 	 * Determine if the game is in a winning state.
 	 * @return true if the player has won the game
 	 */

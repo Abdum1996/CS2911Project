@@ -187,7 +187,14 @@ public class SokobanBoard implements GameBoard {
 		
 		return true;
 	}
-
+	
+	@Override 
+	public GameBoard genSuccessor(Action action) {
+		GameBoard successor = new SokobanBoard(new HashMap<>(boxMap), tileMap, player);
+		successor.applyAction(action);
+		return successor;
+	}
+	
 	@Override
 	public boolean gameWon() {
 		for (Point point : boxMap.keySet()) {
