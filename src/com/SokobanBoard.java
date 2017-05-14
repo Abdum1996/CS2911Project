@@ -1,84 +1,130 @@
 package com;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.Map;
 
 /**
- * Class representing Sokoban board, which stores the player and the boxes in the 
- * tile grid, as well as the values of the tiles themselves. It is responsible for
- * validating 
+ * Implementation of a Sokoban board.
  */
-public class SokobanBoard {
-	private final TileGrid  tiles;
-	private final List<Box> boxes;
-	private final Player player;
+public class SokobanBoard implements GameBoard {
+	private final Map<Point, Box> boxMap;
+	private final Grid<Tile> tileMap;
+	private Player player;
 	
-	/**
-	 * Construct a Sokoban board filled with empty tiles. The player is located at
-	 * (0, 0) and there are no boxes in the grid.
-	 * @param width  - width of the tile grid
-	 * @param height - height of the tile grid
-	 * @pre (width > 0) and (height > 0)
-	 */
-	public SokobanBoard(int width, int height) {
-		tiles = new TileGrid(width, height);
-		boxes = new ArrayList<>();
-		player = new Player();
-	}
-	
-	/**
-	 * Given an input map file, construct a new Sokoban grid.
-	 * @param filename - name of file containing template map
-	 * @param width    - width of the map
-	 * @param height   - height of the map
-	 * @pre (width > 0) and (height > 0)
-	 * @pre map is in a 'valid format'
-	 */
-	public SokobanBoard(String filename, int width, int height) {
-		this(width, height);
+	public static class Builder implements GameBoard.Builder {
+		private final Grid.Builder<Tile> mapBuilder;
+		private final List<Box>  boxList;
+		private Player player;
 		
-		Scanner sc = null;
-		try {
-			sc = new Scanner(new FileReader(filename));
+		public Builder(Point start, int width, int height) {
+			mapBuilder = new TileMap.Builder(width, height);
+			boxList = new ArrayList<>();
+			player = new Player(start);
+		}
+		
+		@Override
+		public void setTile(Tile value, Point point) {
+			mapBuilder.set(value, point);	
+		}
+
+		@Override
+		public void addBox(Point point) {
+			boxList.add(new Box(point));
+		}
+
+		@Override
+		public GameBoard build() {
+			Grid<Tile> tileMap = mapBuilder.build();
+			Map<Point, Box> boxMap = new HashMap<>();
 			
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					String symbol = sc.next();
-					tiles.set(Tile.parse(symbol), x, y);
-					
-					if (symbol.equals("P")) {
-						player.moveTo(x, y);
-					} else if (symbol.equals("B")) {
-						boxes.add(new Box(x, y));
-					}
-				}
+			for (Box curr : boxList) {
+				Point pos = curr.getPosition();
+				if (tileMap.isValidPoint(pos))
+					boxMap.put(pos, curr);
 			}
 			
-		} catch (FileNotFoundException | NoSuchElementException e) {
-			e.printStackTrace();
-			
-		} finally {
-			if (sc != null) sc.close();
+			Point pos = player.getPosition();
+			if (!tileMap.isValidPoint(pos) || boxMap.containsKey(pos)) return null;
+			return new SokobanBoard(boxMap, tileMap, player);
 		}
 	}
+
+	private SokobanBoard(Map<Point, Box> boxMap, 
+			Grid<Tile> tileMap, Player player) {
+		this.boxMap  = boxMap;
+		this.tileMap = tileMap;
+		this.player  = player;
+	}
 	
-	/**
-	 * Get the player stored on this board.
-	 * @return stored player
-	 */
+	@Override
+	public Tile getTile(Point point) {
+		return tileMap.get(point);
+	}
+
+	@Override
+	public List<Box> getBoxes() {
+		return new ArrayList<>(boxMap.values());
+	}
+
+	@Override
 	public Player getPlayer() {
 		return player;
 	}
-	
-	/**
-	 * Get a list of boxes on this board.
-	 * @return list of boxes
-	 */
-	public List<Box> getBoxes() {
-		return new ArrayList<>(boxes);
+
+	@Override
+	public int getMapWidth() {
+		return tileMap.getWidth();
+	}
+
+	@Override
+	public int getMapHeight() {
+		return tileMap.getHeight();
+	}
+
+	@Override
+	public boolean isValidAction(Action action) {
+		Direction dir = Direction.readAction(action);
+		
+		// Ensure player is not moving outside of the map or
+		// into a tile that is either empty or a wall
+		Point next1 = player.getPosition().move(dir);
+		if (!tileMap.isValidPoint(next1)) return false;
+		
+		// If next position is a box, then the box must be movable
+		if (boxMap.containsKey(next1)) {
+			Point next2 = next1.move(dir);
+			if (!tileMap.isValidPoint(next2)) return false;
+			if (boxMap.containsKey(next2)) return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public boolean applyAction(Action action) {
+		if (!isValidAction(action)) return false; 
+		
+		Direction dir = Direction.readAction(action);
+		player = player.move(dir);
+		
+		Box old = boxMap.remove(player.getPosition());
+		if (old != null) {
+			old = old.move(dir);
+			boxMap.put(old.getPosition(), old);
+		}
+		
+		return true;
+	}
+
+	@Override
+	public boolean gameWon() {
+		for (Point point : boxMap.keySet()) {
+			Tile tile = tileMap.get(point);
+			if (!tile.equals(Tile.GOAL)) return false;
+		}
+		
+		return true;
 	}
 }

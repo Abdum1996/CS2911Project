@@ -7,19 +7,19 @@ public enum Direction {
 	UP, DOWN, LEFT, RIGHT;
 	
 	/**
-	 * Create a direction from a given name.
-	 * @param name - name of direction
-	 * @return new direction
+	 * Determine the direction of movement from an action.
+	 * @param action - input action
+	 * @return direction in which action is applied
 	 */
-	public static Direction parse(String name) {
-		switch (name) {
-			case "UP":
+	public static Direction readAction(Action action) {
+		switch (action) {
+			case MOVE_UP:
 				return UP;
-			case "DOWN":
+			case MOVE_DOWN:
 				return DOWN;
-			case "LEFT":
+			case MOVE_LEFT:
 				return LEFT;
-			case "RIGHT":
+			case MOVE_RIGHT:
 				return RIGHT;
 			default:
 				return UP;
