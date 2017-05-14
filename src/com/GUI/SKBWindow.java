@@ -5,31 +5,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
 
 import com.SokobanBoard;
 import com.GameBoard;
-import com.Direction;
+import com.Action;
 
 public class SKBWindow extends JFrame implements KeyListener {
-    private JTextArea textArea1;
+	private static final long serialVersionUID = 1L;
+	private JTextArea textArea1;
     private JButton btnStartGame;
     private JButton btnResetGame;
 
-    private ImageManager imgMan;
     private SKBCanvas canvas;
-
     private GameBoard board;
-    
     private String currentMap;
 
     public SKBWindow(ImageManager imgMan) {
-        this.imgMan = imgMan;
         currentMap = "./maps/map2.txt";
         board = SokobanBoard.readFile(currentMap);
 
@@ -73,7 +68,7 @@ public class SKBWindow extends JFrame implements KeyListener {
         jp1.add(textArea1);
         //jp3.add(textArea1, c);
 
-        this.canvas = new SKBCanvas(imgMan, grid);
+        this.canvas = new SKBCanvas(imgMan, board);
         this.add(canvas);
 
         //this.pack();
@@ -95,26 +90,26 @@ public class SKBWindow extends JFrame implements KeyListener {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_RIGHT:
 			case KeyEvent.VK_D:
-				grid.movePlayer(Direction.RIGHT);
+				board.applyAction(Action.MOVE_RIGHT);
 				break;
 			case KeyEvent.VK_A:
 			case KeyEvent.VK_LEFT:
-				grid.movePlayer(Direction.LEFT);
+				board.applyAction(Action.MOVE_RIGHT);
 				break;
 			case KeyEvent.VK_W:
 			case KeyEvent.VK_UP:
-				grid.movePlayer(Direction.UP);
+				board.applyAction(Action.MOVE_UP);
 				break;
 			case KeyEvent.VK_S:
 			case KeyEvent.VK_DOWN:
-				grid.movePlayer(Direction.DOWN);
+				board.applyAction(Action.MOVE_DOWN);
 				break;
 			case KeyEvent.VK_R:
 				// reset game
 				System.out.println("Reset game, do stuff");
-	        	this.grid = new SokobanGrid(currentMap);
+	        	this.board = SokobanBoard.readFile(currentMap);
 	        	textArea1.setText("Game in progress..");
-	        	canvas.replaceGrid(grid);
+	        	canvas.replaceGrid(board);
 	        	canvas.repaint();
 	        	break;
 			case KeyEvent.VK_1:
@@ -135,7 +130,7 @@ public class SKBWindow extends JFrame implements KeyListener {
 				
 		}
 		
-		if (grid.gameWon()) {
+		if (board.gameWon()) {
 			textArea1.setText("Game Won!");
 		}
 		canvas.repaint();
@@ -146,9 +141,9 @@ public class SKBWindow extends JFrame implements KeyListener {
 	
 	public void resetGame() {
 		System.out.println("reset game..");
-		this.grid = new SokobanGrid(currentMap);
+		board =  SokobanBoard.readFile(currentMap);
     	textArea1.setText("Game in progress..");
-    	canvas.replaceGrid(grid);
+    	canvas.replaceGrid(board);
     	canvas.repaint();
     	this.pack();
 	}
