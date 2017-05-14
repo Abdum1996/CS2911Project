@@ -13,11 +13,20 @@ public class SokobanBoard implements GameBoard {
 	private final Grid<Tile> tileMap;
 	private Player player;
 	
+	/**
+	 * Builder class for generating a game board.
+	 */
 	public static class Builder implements GameBoard.Builder {
 		private final Grid.Builder<Tile> mapBuilder;
 		private final List<Box>  boxList;
 		private Player player;
 		
+		/**
+		 * Construct a board builder.
+		 * @param start  - start position for the player
+		 * @param width  - width of the board (in rows) to be generated
+		 * @param height - height of the board (in columns) to be generated 
+		 */
 		public Builder(Point start, int width, int height) {
 			mapBuilder = new TileMap.Builder(width, height);
 			boxList = new ArrayList<>();
@@ -51,6 +60,12 @@ public class SokobanBoard implements GameBoard {
 		}
 	}
 
+	/**
+	 * Construct Sokoban board from a map of tiles and entities.
+	 * @param boxMap  - set of boxes and their corresponding positions
+	 * @param tileMap - underlying tile map
+	 * @param player  - player stored on the map
+	 */
 	private SokobanBoard(Map<Point, Box> boxMap, 
 			Grid<Tile> tileMap, Player player) {
 		this.boxMap  = boxMap;
