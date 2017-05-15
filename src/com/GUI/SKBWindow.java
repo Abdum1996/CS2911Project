@@ -131,7 +131,17 @@ public class SKBWindow extends JFrame implements KeyListener {
 				System.out.println("Switch to map 3");
 				resetGame();
 	        	break;
-				
+/*			case KeyEvent.VK_4:
+				currentMap = "./maps/map4.txt";
+				System.out.println("Switch to map 4");
+				resetGame();
+	        	break;
+			case KeyEvent.VK_5:
+				currentMap = "./maps/map5.txt";
+				System.out.println("Switch to map 5");
+				resetGame();
+	        	break;
+*/				
 		}
 		
 		if (board.gameWon()) {
