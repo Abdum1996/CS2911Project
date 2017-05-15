@@ -35,8 +35,8 @@ public class SokobanBoard implements GameBoard {
 		try {
 			sc = new Scanner(new FileReader(filename));
 			
-			int width = Integer.parseInt(sc.nextLine());
-			int height = Integer.parseInt(sc.nextLine());
+			int width = sc.nextInt();
+			int height = sc.nextInt();
 			Builder builder = new Builder(width, height);
 			
 			for (int y = 0; y < height; y++) {
