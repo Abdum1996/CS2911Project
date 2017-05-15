@@ -1,14 +1,14 @@
 package com;
 
-import java.io.FileNotFoundException;
-import java.util.NoSuchElementException;
-
-import java.io.FileReader;
-import java.util.Scanner;
-
 import com.Graph.AStarSearch;
 import com.Graph.Heuristic;
 import com.Graph.State;
+
+import java.util.NoSuchElementException;
+import java.io.FileNotFoundException;
+
+import java.io.FileReader;
+import java.util.Scanner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -211,14 +211,14 @@ public class SokobanBoard implements GameBoard {
 
 	@Override
 	public List<Action> solve() {
-		Heuristic<Action> strategy = new Heuristic<Action>() {
+		AStarSearch<Action> searchAlgo = new AStarSearch<>(
+				new Heuristic<Action>() {
 			@Override
 			public int hcost(State<Action> state) {
 				return 0;
 			}
-		};
+		});
 		
-		AStarSearch<Action> searchAlgo = new AStarSearch<>(strategy);
 		return searchAlgo.runAStarSearch(new BoardState(this));
 	}
 }

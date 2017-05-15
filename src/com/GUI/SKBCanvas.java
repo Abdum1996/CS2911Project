@@ -34,8 +34,8 @@ public class SKBCanvas extends JPanel {
         this.setLayout(new GridLayout(w, h));
     }
     
-    public void replaceGrid(GameBoard board) {
-    	this.board = board;
+    public void replaceGrid(GameBoard newBoard) {
+    	this.board = newBoard;
 
         this.w = board.getMapWidth();
         this.h = board.getMapHeight();

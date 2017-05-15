@@ -82,7 +82,11 @@ public class SKBWindow extends JFrame implements KeyListener {
     }
 
 	@Override
-	public void keyTyped(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) { 
+		/**
+		 * Do nothing
+		 */
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -137,7 +141,11 @@ public class SKBWindow extends JFrame implements KeyListener {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {
+		/**
+		 * Do nothing.
+		 */
+	}
 	
 	public void resetGame() {
 		System.out.println("reset game..");
