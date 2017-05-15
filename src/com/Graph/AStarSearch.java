@@ -16,9 +16,8 @@ public class AStarSearch<T> {
 	/**
 	 * Creates a new A* search class with a given heuristic strategy.
 	 * @param strategy  - heuristic evaluation strategy
-	 * @param initState - initial state of the search space
 	 */
-	public AStarSearch(Heuristic<T> strategy, State<T> initState) {
+	public AStarSearch(Heuristic<T> strategy) {
 		this.strategy  = strategy;
 	} 
 	

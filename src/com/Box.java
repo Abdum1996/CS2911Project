@@ -1,57 +1,31 @@
 package com;
 
 /**
- * Class representing a box to be used in a game grid
- *
+ * Class representing a box entity on a game board.
  */
-public class Box {
-	
-	private Point position;
-	
-	/** 
-	 * Constructs a box given specific coordinates (x, y)
-	 * @param x
-	 * @param y
-	 */
-	public Box(int x, int y) {
-		position = Point.at(x, y);
-	}
+public class Box implements Movable<Box> {
+	private final Point position;
 	
 	/**
-	 * Constructs a box given a Point object and uses its coordinates
-	 * @param p
+	 * Construct a box at the given point.
+	 * @param point - input point
 	 */
-	public Box(Point p) {
-		position = p;
+	public Box(Point point) {
+		position = point;
 	}
 	
-	/**
-	 * Gives the coordinates of this box
-	 * @return Point object encapsulating position
-	 */
-	public Point getCoordinates() {
+	@Override
+	public Point getPosition() {
 		return position;
 	}
-	
-	/**
-	 * Get x coordinate of this box
-	 */
-	public int x() {
-		return position.getX();
+
+	@Override
+	public Box move(Direction dir) {
+		return moveTo(position.move(dir));
 	}
-	
-	/**
-	 * Get y coordinate of this box
-	 */
-	public int y() {
-		return position.getY();
-	}
-	
-	/**
-	 * Moves the box in one of the major 4 direction
-	 * @param dir the direction the box is to be moved in
-	 */
-	public void move(Direction dir) {
-		position = position.move(dir);
+
+	@Override
+	public Box moveTo(Point point) {
+		return new Box(point);
 	}
 }

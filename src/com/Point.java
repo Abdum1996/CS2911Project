@@ -17,7 +17,11 @@ public class Point {
 		return new Point(x, y);
 	}
 	
-	public Point(int x, int y) {
+	/** Construct a point with coordinates (x, y).
+	 * @param x - x coordinate
+	 * @param y - y coordinate
+	 */
+	private Point(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}

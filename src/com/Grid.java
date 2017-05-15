@@ -1,25 +1,52 @@
 package com;
+
 /**
- * Interface representing a Grid with tiles of type T
- *
+ * Generic interface representing a fixed 2D coordinate grid of cells.
+ * @param <T> - type of cell stored in the grid
  */
 public interface Grid<T> {
 	/**
-	 * Returns the tile/component given a coordinate. (0,0) is top left, 
-	 * y increases as it goes down and x increases as you go to the right
-	 * @param x horizontal coordinate
-	 * @param y vertical coordinate
-	 * @return the tile object associated with position
+	 * Builder interface for setting up a new grid.
+	 * @param <T> - type of cell stored in the grid
 	 */
-	public T get(int x, int y);
+	public interface Builder<T> {
+		/**
+		 * Set the cell at the given point to a new value.
+		 * @param value - new value of cell
+		 * @param point - location of cell
+		 */
+		public void set(T value, Point point);
+		
+		/**
+		 * Generate grid from its builder object.
+		 * @return newly generated grid
+		 */
+		public Grid<T> build();
+	}
 	
 	/**
-	 * Returns the height of the grid.
+	 * Get the cell at the given point.
+	 * @param point - point specifying cell's location
+	 * @return cell located at that point
+	 */
+	public T get(Point point);
+	
+	/**
+	 * Get the width of the grid in columns.
+	 * @return number of columns in the grid
+	 */
+	public int getWidth();
+	
+	/**
+	 * Get the height of the grid in rows.
+	 * @return number of rows in the grid
 	 */
 	public int getHeight();
 	
 	/**
-	 * Returns the with of the grid.
+	 * Determine if a point on the grid is 'valid'. (implementation defined)
+	 * @param point - specified point
+	 * @return true if the point is 'valid'
 	 */
-	public int getWidth();
+	public boolean isValidPoint(Point point);
 }
