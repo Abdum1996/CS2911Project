@@ -7,37 +7,38 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import com.Grid;
-import com.SokobanGrid;
-import com.Tile;
-
+import com.EntityTypes;
+import com.GameBoard;
+import com.Point;
+import com.Box;
 
 /**
  * Sokoban Canvas
  * custom canvas for drawing
  */
 public class SKBCanvas extends JPanel {
-    private ImageManager imgMan;
-    private SokobanGrid grid;
+	private static final long serialVersionUID = 1L;
+	private ImageManager imgMan;
+    private GameBoard board;
 
     private int w;
     private int h;
 
-    public SKBCanvas(ImageManager imgMan, SokobanGrid grid) {
+    public SKBCanvas(ImageManager imgMan, GameBoard board) {
         this.imgMan = imgMan;
-        this.grid = grid;
+        this.board = board;
 
-        this.w = grid.getWidth();
-        this.h = grid.getHeight();
+        this.w = board.getMapWidth();
+        this.h = board.getMapHeight();
         this.setPreferredSize(new Dimension(this.w*imgMan.getImgWidth(), this.h*imgMan.getImgHeight()));
         this.setLayout(new GridLayout(w, h));
     }
     
-    public void replaceGrid(SokobanGrid grid) {
-    	this.grid = grid;
+    public void replaceGrid(GameBoard newBoard) {
+    	this.board = newBoard;
 
-        this.w = grid.getWidth();
-        this.h = grid.getHeight();
+        this.w = board.getMapWidth();
+        this.h = board.getMapHeight();
         this.setPreferredSize(new Dimension(this.w*imgMan.getImgWidth(), this.h*imgMan.getImgHeight()));
         this.setLayout(new GridLayout(w, h));
     }
@@ -48,34 +49,36 @@ public class SKBCanvas extends JPanel {
 
         g.drawString("Grid", 0, 0);
 
-        int x=0;
-        int y=0;
+        int x = 0;
+        int y = 0;
 
         // paint all tiles
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                g.drawImage(imgMan.getTileImg(grid.get(j, i)), x, y, null);
-                x += this.imgMan.getImgHeight();
+            	Point pos = Point.at(j, i);
+            	
+                g.drawImage(imgMan.getTileImg(board.getTile(pos)), x, y, null);
+                x += imgMan.getImgHeight();
             }
-            y += this.imgMan.getImgWidth();
+            y += imgMan.getImgWidth();
             x = 0;
         }
 
-        BufferedImage box    = imgMan.getEntityImg(com.EntityTypes.BOX);
-        BufferedImage player = imgMan.getEntityImg(com.EntityTypes.PLAYER);
+        BufferedImage box    = imgMan.getEntityImg(EntityTypes.BOX);
+        BufferedImage player = imgMan.getEntityImg(EntityTypes.PLAYER);
         
-        for (com.Box curr : grid.getBoxes()) {
-        	x = curr.getCoordinates().getX()*box.getWidth();
-        	y = curr.getCoordinates().getY()*box.getHeight();
+        for (Box curr : board.getBoxes()) {
+        	Point pos = curr.getPosition();
         	
+        	x = pos.getX()*box.getWidth();
+        	y = pos.getY()*box.getHeight();
         	g.drawImage(box, x, y, null);
         }
         
-        x = grid.getPlayer().x()*player.getWidth();
-        y = grid.getPlayer().y()*player.getHeight();
+        Point playerPos = board.getPlayer().getPosition();
+        x = playerPos.getX()*player.getWidth();
+        y = playerPos.getY()*player.getHeight();
         
         g.drawImage(player, x, y, null);
-        //JLabel picLabel = new JLabel();
-        //add(picLabel);
     }
 }
