@@ -1,7 +1,7 @@
 package com;
 
 import com.GUI.ImageManager;
-import com.GUI.SKBWindow;
+import com.GUI.SceneManager;
 
 public class GameController {
 	
@@ -17,7 +17,7 @@ public class GameController {
         imgMan.loadEntityImg(EntityTypes.BOX, "./resources/box.png");
         imgMan.loadEntityImg(EntityTypes.PLAYER, "./resources/player.png");
 
-        SKBWindow window = new SKBWindow(imgMan);
+        SceneManager window = new SceneManager(imgMan);
         System.out.print(window.getHeight()); // get rid of annoying unused warning
     }
 }
