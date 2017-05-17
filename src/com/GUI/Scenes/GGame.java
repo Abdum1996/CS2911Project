@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 /**
  * Sokoban Canvas
@@ -61,7 +62,6 @@ public class GGame extends GScene implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         System.out.println("keyPressed: " + e);
-
         int kc = e.getKeyCode();
         if (kc == KeyEvent.VK_D || kc == KeyEvent.VK_RIGHT) {
             applyAction(Action.MOVE_RIGHT);
@@ -74,7 +74,9 @@ public class GGame extends GScene implements KeyListener {
         } else if (kc == KeyEvent.VK_R) {
             reset();
         }
-
+        
+        File sound = new File("./sound_files/walking.wav");
+        playSound(sound);
         if (gameWon()) {
             System.out.println("Game Won!");
         }
