@@ -108,7 +108,8 @@ public class GGame extends GScene implements KeyListener {
             x = 0;
         }
 
-        BufferedImage box = imgMan.getBoxImg();
+        int idCount = 0;
+        BufferedImage box = imgMan.getBoxImg(0);
         BufferedImage player = imgMan.getPlayerImg(board.getPlayer().getOrientation());
 
         for (Box curr : board.getBoxes()) {
@@ -116,7 +117,7 @@ public class GGame extends GScene implements KeyListener {
 
             x = pos.getX() * box.getWidth();
             y = pos.getY() * box.getHeight();
-            g.drawImage(box, x, y, null);
+            g.drawImage(imgMan.getBoxImg(idCount++), x, y, null);
         }
 
         Point playerPos = board.getPlayer().getPosition();

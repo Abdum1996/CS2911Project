@@ -1,5 +1,7 @@
 package com;
 
+import java.util.Random;
+
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
 
@@ -19,8 +21,15 @@ public class GameController {
         imgMan.loadPlayerImg(Direction.UP, "./resources/playerU.png");
         imgMan.loadPlayerImg(Direction.DOWN, "./resources/playerD.png");
         
-        imgMan.loadBoxImg("./resources/box.png");
+        for (int i = 0; i < GameConstants.BOX_LIMIT; i++) {
+        	Random rand = new Random();
 
+            // nextInt is normally exclusive of the top value,
+            // so add 1 to make it inclusive
+            int r = rand.nextInt((3) + 1);
+			imgMan.loadBoxImg(i, "./resources/box" + r + ".png");
+			
+		}
         SceneManager window = new SceneManager(imgMan);
         System.out.print(window.getHeight()); // get rid of annoying unused warning
     }

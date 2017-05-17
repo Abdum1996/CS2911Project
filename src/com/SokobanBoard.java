@@ -94,7 +94,7 @@ public class SokobanBoard implements GameBoard {
 
 		@Override
 		public void addBox(Point point) {
-			boxList.add(new Box(point));
+			boxList.add(new Box(point, boxList.size()));
 		}
 		
 		@Override

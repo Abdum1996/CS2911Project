@@ -21,9 +21,9 @@ public class ImageManager {
      */
     private HashMap<Tile, BufferedImage> tileImgs;
     /**
-    * hash map of all images for entities
+    * hash map of all images for boxes
      */
-    private HashMap<EntityTypes, BufferedImage> boxImgs;
+    private HashMap<Integer, BufferedImage> boxImgs;
     
     /**
      * hash map of all images for the player 
@@ -57,11 +57,11 @@ public class ImageManager {
         }
     }
     
-    public void loadBoxImg (String path) {
+    public void loadBoxImg (int boxId, String path) {
         BufferedImage boxImage;
         try {
             boxImage = ImageIO.read(new File(path));
-            boxImgs.put(EntityTypes.BOX, boxImage);
+            boxImgs.put(boxId, boxImage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,8 +86,8 @@ public class ImageManager {
     public BufferedImage getTileImg (Tile type) {
         return this.tileImgs.get(type);
     }
-    public BufferedImage getBoxImg () {
-        return this.boxImgs.get(EntityTypes.BOX);
+    public BufferedImage getBoxImg (int id) {
+        return this.boxImgs.get(id);
     }
 
     public BufferedImage getPlayerImg (Direction dir) {
