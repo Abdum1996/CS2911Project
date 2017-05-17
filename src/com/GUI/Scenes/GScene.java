@@ -7,6 +7,7 @@ import java.io.File;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 
 /**
@@ -31,6 +32,9 @@ public class GScene extends JPanel {
     	try {
 			Clip clip = AudioSystem.getClip();
 			clip.open(AudioSystem.getAudioInputStream(soundFile));
+			// lower volume a bit
+			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-16.0f);
 			clip.start();
 			//Thread.sleep(clip.getMicrosecondLength()/1000);
 		} catch (Exception e) {
