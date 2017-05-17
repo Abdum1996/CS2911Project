@@ -24,21 +24,24 @@ public class GScene extends JPanel {
         //this.setPreferredSize(new Dimension(width, height));
     }
     
-    /**
-     * Plays the specified sound file
-     * @param soundFile
-     */
     public void playSound(File soundFile) {
-    	try {
-			Clip clip = AudioSystem.getClip();
-			clip.open(AudioSystem.getAudioInputStream(soundFile));
-			// lower volume a bit
-			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-16.0f);
-			clip.start();
-			//Thread.sleep(clip.getMicrosecondLength()/1000);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    	Thread soundThread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					Clip clip = AudioSystem.getClip();
+					clip.open(AudioSystem.getAudioInputStream(soundFile));
+					FloatControl volControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+					volControl.setValue(-16.0f);
+					clip.start();					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+    		
+    	});
+    	soundThread.start();
+    	
     }
 }

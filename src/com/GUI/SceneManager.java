@@ -19,7 +19,7 @@ public class SceneManager extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //this.setLayout(new GridLayout());
 
-
+        
         this.add(this.getScene());
 
         this.setVisible(true);
