@@ -163,6 +163,7 @@ public class SokobanBoard implements GameBoard {
 		
 		// Ensure player is not moving outside of the map or
 		// into a tile that is either empty or a wall
+		if (dir != player.getOrientation()) return true; //changing orientation always valid
 		Point next1 = player.getPosition().move(dir);
 		if (!tileMap.isValidPoint(next1)) return false;
 		
