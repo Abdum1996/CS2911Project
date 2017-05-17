@@ -23,8 +23,8 @@ public class ImageManager {
      */
     private HashMap<EntityTypes, BufferedImage> entityImgs;
 
-    private final int imgWidth = 64;
-    private final int imgHeight = 64;
+    private final int imgWidth = 16;
+    private final int imgHeight = 16;
 
     /**
     * folder directory of tile, entity and default image
