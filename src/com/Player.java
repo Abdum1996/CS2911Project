@@ -16,6 +16,17 @@ public class Player implements Movable<Player> {
 		orientation = Direction.DOWN;
 	}
 	
+	/**
+	 * Construct a player at the given point facing the given direction
+	 * @param point - input point
+	 * @param dir the direction the player is initially facing
+	 */
+	public Player(Point point, Direction dir) {
+		position = point;
+		orientation = dir;
+	}
+	
+	
 	@Override
 	public Point getPosition() {
 		return position;
@@ -23,7 +34,7 @@ public class Player implements Movable<Player> {
 
 	@Override
 	public Player move(Direction dir) {
-		if(orientation != dir) {
+		if (orientation != dir) {
 			orientation = dir;
 			return this;
 		}
@@ -32,6 +43,14 @@ public class Player implements Movable<Player> {
 
 	@Override
 	public Player moveTo(Point point) {
-		return new Player(point);
+		return new Player(point, orientation);
+	}
+
+	/**
+	 * What direction is the player facing
+	 * @return The orientation of this player
+	 */
+	public Direction getOrientation() {
+		return orientation;
 	}
 }

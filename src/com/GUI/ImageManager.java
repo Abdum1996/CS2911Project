@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+
+import com.Direction;
 import com.EntityTypes;
 import com.Tile;
 
@@ -21,7 +23,12 @@ public class ImageManager {
     /**
     * hash map of all images for entities
      */
-    private HashMap<EntityTypes, BufferedImage> entityImgs;
+    private HashMap<EntityTypes, BufferedImage> boxImgs;
+    
+    /**
+     * hash map of all images for the player 
+     */
+    private HashMap<Direction, BufferedImage> playerImgs;
 
     private final int imgWidth = 16;
     private final int imgHeight = 16;
@@ -34,7 +41,8 @@ public class ImageManager {
      */
     public ImageManager () {
         this.tileImgs = new HashMap<>();
-        this.entityImgs = new HashMap<>();
+        this.boxImgs = new HashMap<>();
+        this.playerImgs = new HashMap<>();
     }
 
     public void loadTileImg (Tile type, String path) {
@@ -48,11 +56,28 @@ public class ImageManager {
             e.printStackTrace();
         }
     }
-    public void loadEntityImg (EntityTypes type, String path) {
-        BufferedImage tileImage;
+    
+    public void loadBoxImg (String path) {
+        BufferedImage boxImage;
         try {
-            tileImage = ImageIO.read(new File(path));
-            entityImgs.put(type, tileImage);
+            boxImage = ImageIO.read(new File(path));
+            boxImgs.put(EntityTypes.BOX, boxImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * 
+     * @param type The entity type of the image
+     * @param dir The direction the entity is facing
+     * @param path the path to the image file
+     */
+    public void loadPlayerImg (Direction dir, String path) {
+        BufferedImage pImage;
+        try {
+            pImage = ImageIO.read(new File(path));
+            playerImgs.put(dir, pImage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,10 +86,14 @@ public class ImageManager {
     public BufferedImage getTileImg (Tile type) {
         return this.tileImgs.get(type);
     }
-    public BufferedImage getEntityImg (EntityTypes type) {
-        return this.entityImgs.get(type);
+    public BufferedImage getBoxImg () {
+        return this.boxImgs.get(EntityTypes.BOX);
     }
 
+    public BufferedImage getPlayerImg (Direction dir) {
+        return this.playerImgs.get(dir);
+    }
+    
     public int getImgHeight () {
         return this.imgHeight;
     }

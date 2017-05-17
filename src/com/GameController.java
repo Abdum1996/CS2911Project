@@ -14,8 +14,12 @@ public class GameController {
         imgMan.loadTileImg(Tile.WALL, "./resources/wall.png");
         imgMan.loadTileImg(Tile.EMPTY, "./resources/empty.png");
 
-        imgMan.loadEntityImg(EntityTypes.BOX, "./resources/box.png");
-        imgMan.loadEntityImg(EntityTypes.PLAYER, "./resources/player.png");
+        imgMan.loadPlayerImg(Direction.RIGHT, "./resources/playerR.png");
+        imgMan.loadPlayerImg(Direction.LEFT, "./resources/playerL.png");
+        imgMan.loadPlayerImg(Direction.UP, "./resources/playerU.png");
+        imgMan.loadPlayerImg(Direction.DOWN, "./resources/playerD.png");
+        
+        imgMan.loadBoxImg("./resources/box.png");
 
         SceneManager window = new SceneManager(imgMan);
         System.out.print(window.getHeight()); // get rid of annoying unused warning
