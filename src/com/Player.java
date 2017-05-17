@@ -5,6 +5,7 @@ package com;
  */
 public class Player implements Movable<Player> {
 	private final Point position;
+	private Direction orientation;
 	
 	/**
 	 * Construct a player at the given point.
@@ -12,6 +13,7 @@ public class Player implements Movable<Player> {
 	 */
 	public Player(Point point) {
 		position = point;
+		orientation = Direction.DOWN;
 	}
 	
 	@Override
@@ -21,6 +23,10 @@ public class Player implements Movable<Player> {
 
 	@Override
 	public Player move(Direction dir) {
+		if(orientation != dir) {
+			orientation = dir;
+			return this;
+		}
 		return moveTo(position.move(dir));
 	}
 
