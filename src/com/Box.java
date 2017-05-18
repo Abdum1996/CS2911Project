@@ -44,4 +44,8 @@ public class Box implements Movable<Box> {
 	public Box moveTo(Point point) {
 		return new Box(point, id);
 	}
+
+	public int getId() {
+		return id;
+	}
 }

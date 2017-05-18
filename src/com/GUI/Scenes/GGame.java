@@ -117,7 +117,7 @@ public class GGame extends GScene implements KeyListener {
 
             x = pos.getX() * box.getWidth();
             y = pos.getY() * box.getHeight();
-            g.drawImage(imgMan.getBoxImg(idCount++), x, y, null);
+            g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
         }
 
         Point playerPos = board.getPlayer().getPosition();
