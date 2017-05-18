@@ -50,8 +50,8 @@ public class GGame extends GScene implements KeyListener {
         this.sceneManager.setScene(new GGame(this.sceneManager, this.imgMan, this.map));
     }
 
-    private void applyAction(Action action) {
-        this.board.applyAction(action);
+    private boolean applyAction(Action action) {
+        return this.board.applyAction(action);
     }
 
     private boolean gameWon() {
@@ -67,22 +67,27 @@ public class GGame extends GScene implements KeyListener {
     public void keyPressed(KeyEvent e) {
         System.out.println("keyPressed: " + e);
         int kc = e.getKeyCode();
+        boolean validStep = false;
         if (kc == KeyEvent.VK_D || kc == KeyEvent.VK_RIGHT) {
-            applyAction(Action.MOVE_RIGHT);
+            validStep = applyAction(Action.MOVE_RIGHT);
         } else if (kc == KeyEvent.VK_A || kc ==KeyEvent.VK_LEFT) {
-            applyAction(Action.MOVE_LEFT);
+        	validStep = applyAction(Action.MOVE_LEFT);
         } else if (kc == KeyEvent.VK_W || kc ==KeyEvent.VK_UP) {
-            applyAction(Action.MOVE_UP);
+        	validStep = applyAction(Action.MOVE_UP);
         } else if (kc ==KeyEvent.VK_S || kc == KeyEvent.VK_DOWN) {
-            applyAction(Action.MOVE_DOWN);
+        	validStep = applyAction(Action.MOVE_DOWN);
         } else if (kc == KeyEvent.VK_R) {
             reset();
         }
         
-        File sound = new File("./sound_files/walking.wav");
-        playSound(sound);
+        if(validStep) {
+	        File footstep = new File("./sound_files/walking.wav");
+	        playSound(footstep);
+        }
         if (gameWon()) {
             System.out.println("Game Won!");
+            File winSound = new File("./sound_files/goalplacement.wav");
+            playSound(winSound);
         }
 
         repaint();

@@ -34,7 +34,8 @@ public class GScene extends JPanel {
 					clip.open(AudioSystem.getAudioInputStream(soundFile));
 					FloatControl volControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 					volControl.setValue(-16.0f);
-					clip.start();					
+					clip.start();
+					Thread.sleep(clip.getMicrosecondLength()/1000);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
