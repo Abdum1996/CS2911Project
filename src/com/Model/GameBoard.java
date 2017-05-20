@@ -79,9 +79,17 @@ public interface GameBoard {
 	/**
 	 * Get player to apply an action to the board.
 	 * @param action - action applied to the board
-	 * @return true if the action is legal
+	 * @return the ActionResult of action
 	 */
-	public boolean applyAction(Action action);
+	public ActionResult applyAction(Action action);
+	
+	/**
+	 * Get the ActionResult that would follow 
+	 * from action without applying it
+	 * @param action the action to checked
+	 * @return the ActionResult resulting from action
+	 */
+	public ActionResult getActionResult(Action action);
 	
 	/**
 	 * Create a copy of the board with the applied action

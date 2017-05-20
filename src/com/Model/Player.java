@@ -35,8 +35,7 @@ public class Player implements Movable<Player> {
 	@Override
 	public Player move(Direction dir) {
 		if (orientation != dir) {
-			orientation = dir;
-			return this;
+			return new Player(position, dir);
 		}
 		return moveTo(position.move(dir));
 	}

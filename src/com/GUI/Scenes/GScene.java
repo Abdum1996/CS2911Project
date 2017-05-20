@@ -4,10 +4,13 @@ import com.GUI.ImageManager;
 import com.GUI.SceneManager;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
 /**
@@ -36,7 +39,7 @@ public class GScene extends JPanel {
 					volControl.setValue(-16.0f);
 					clip.start();
 					Thread.sleep(clip.getMicrosecondLength()/1000);
-				} catch (Exception e) {
+				} catch (InterruptedException | LineUnavailableException | IOException | UnsupportedAudioFileException e) {
 					e.printStackTrace();
 				}
 			}
