@@ -1,25 +1,9 @@
 echo './compile has to be run in the root folder of the project'
 # clean all .class files first
-if [ ! -d "bin" ]; then
-	mkdir bin
-fi
 
-echo 'now deleting all previous class files...'
-cd bin
-for D in `find . -type d`
-do
-	rm $D/*.class 2> /dev/null
-done
+echo 'deleting all previous class files...'
+./clean
 
-# extraneous in submission helpful while writing this
-cd ../src
-for D in `find . -type d`
-do
-	rm $D/*.class 2> /dev/null
-done
-
-echo 'now compiling...'
-for D in `find . -type d`
-do
-	javac -d ../bin/$D $D/*.java
-done
+cd src
+echo 'compiling...'
+javac -d .. com/Model/GameController.java

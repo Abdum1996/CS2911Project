@@ -1,3 +1,2 @@
-echo 'now running... (WIP)'
-cd bin/com/Model
+echo 'running... (WIP)'
 java com.Model.GameController
