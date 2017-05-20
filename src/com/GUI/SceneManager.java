@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 
 import com.GUI.Scenes.GMainMenu;
 import com.GUI.Scenes.GScene;
-import com.GameBoard;
 
 public class SceneManager extends JFrame {
     private static final long serialVersionUID = 1L;

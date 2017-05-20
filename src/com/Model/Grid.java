@@ -1,4 +1,4 @@
-package com;
+package com.Model;
 
 /**
  * Generic interface representing a fixed 2D coordinate grid of cells.

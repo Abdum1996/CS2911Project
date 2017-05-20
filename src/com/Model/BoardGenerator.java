@@ -1,7 +1,4 @@
-package com;
-
-import java.util.ArrayList;
-import java.util.Random;
+package com.Model;
 
 /**
  * Factory class responsible for procedurally generating a game board.

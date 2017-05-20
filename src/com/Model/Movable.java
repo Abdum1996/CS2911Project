@@ -1,4 +1,4 @@
-package com;
+package com.Model;
 
 /**
  * Interface representing movable entities which keep track

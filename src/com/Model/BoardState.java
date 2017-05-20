@@ -1,4 +1,4 @@
-package com;
+package com.Model;
 
 import java.util.ArrayList;
 import com.Graph.State;

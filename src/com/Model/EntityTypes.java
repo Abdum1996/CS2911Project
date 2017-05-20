@@ -1,4 +1,4 @@
-package com;
+package com.Model;
 
 /**
  *  types of entities, e.g. player and box

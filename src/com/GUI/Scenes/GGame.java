@@ -1,9 +1,9 @@
 package com.GUI.Scenes;
 
-import com.*;
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
-import com.Point;
+import com.Model.*;
+import com.Model.Point;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
