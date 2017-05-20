@@ -1,1 +1,3 @@
 echo 'now running... (WIP)'
+cd bin
+java com/Model/GameController

@@ -1,1 +1,6 @@
 echo 'now compiling... (WIP)'
+cd src
+for D in `find . -type d`
+do
+	javac -d ../bin/$D $D/*.java
+done
