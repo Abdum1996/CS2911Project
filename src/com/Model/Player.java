@@ -1,4 +1,4 @@
-package com;
+package com.Model;
 
 /**
  * Class representing a player entity on a game board.

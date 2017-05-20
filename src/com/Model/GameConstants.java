@@ -1,4 +1,4 @@
-package com;
+package com.Model;
 
 
 public class GameConstants {

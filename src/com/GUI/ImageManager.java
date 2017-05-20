@@ -7,9 +7,8 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import com.Direction;
-import com.EntityTypes;
-import com.Tile;
+import com.Model.Direction;
+import com.Model.Tile;
 
 
 /**

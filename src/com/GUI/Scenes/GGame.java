@@ -1,19 +1,15 @@
 package com.GUI.Scenes;
 
-import com.*;
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
-import com.Point;
+import com.Model.*;
+import com.Model.Point;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 
 /**
  * Sokoban Canvas

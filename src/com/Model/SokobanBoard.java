@@ -1,4 +1,4 @@
-package com;
+package com.Model;
 
 import com.Graph.AStarSearch;
 import com.Graph.Heuristic;

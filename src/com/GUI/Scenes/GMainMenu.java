@@ -2,7 +2,7 @@ package com.GUI.Scenes;
 
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
-import com.GameConstants;
+import com.Model.GameConstants;
 
 import javax.swing.*;
 import java.awt.*;

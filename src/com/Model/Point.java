@@ -1,4 +1,4 @@
-package com;
+package com.Model;
 
 /**
  * Safe immutable point class with a built in move method.
