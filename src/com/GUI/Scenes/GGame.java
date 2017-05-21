@@ -60,7 +60,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         this.setPreferredSize(new Dimension(this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight()));
         this.setLayout(new GridLayout(w, h));
 
-        System.out.println("listner");
+        System.out.println("listener");
         this.addKeyListener(this);
         
     }
@@ -91,7 +91,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         	return;
         }
         
-        if(ar == ActionResult.PLAYER_MOVE || ar == ActionResult.BOX_MOVE) {
+        if (ar == ActionResult.PLAYER_MOVE || ar == ActionResult.BOX_MOVE) {
 	        File footstep = new File("./sound_files/walking.wav");
 	        playSound(footstep);
 	        lastViableAction = action;
@@ -126,9 +126,37 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         System.out.println("keyPressed: " + e);
         // animation ain't done yet
         int kc = e.getKeyCode();
+        
         if (kc == KeyEvent.VK_R) {
             reset();
         } 
+        boolean validStep = false;
+        if (kc == KeyEvent.VK_D || kc == KeyEvent.VK_RIGHT) {
+            applyAction(Action.MOVE_RIGHT);
+        } else if (kc == KeyEvent.VK_A || kc == KeyEvent.VK_LEFT) {
+            applyAction(Action.MOVE_LEFT);
+        } else if (kc == KeyEvent.VK_W || kc == KeyEvent.VK_UP) {
+            applyAction(Action.MOVE_UP);
+        } else if (kc == KeyEvent.VK_S || kc == KeyEvent.VK_DOWN) {
+            applyAction(Action.MOVE_DOWN);
+        } else if (kc == KeyEvent.VK_R) {
+            reset();
+        } else if (kc == KeyEvent.VK_1) {
+        	this.sceneManager.setScene(new GGame(sceneManager, imgMan, "./maps/map1.txt"));
+        } else if (kc == KeyEvent.VK_2) {
+        	this.sceneManager.setScene(new GGame(sceneManager, imgMan, "./maps/map2.txt"));
+        } else if (kc == KeyEvent.VK_3) {
+        	this.sceneManager.setScene(new GGame(sceneManager, imgMan, "./maps/map3.txt"));
+        } else if (kc == KeyEvent.VK_4) {
+        	this.sceneManager.setScene(new GGame(sceneManager, imgMan, "./maps/map4.txt"));
+        } else if (kc == KeyEvent.VK_5) {
+        	this.sceneManager.setScene(new GGame(sceneManager, imgMan, "./maps/map5.txt"));
+        }
+        
+        if(validStep) {
+	        File footstep = new File("./sound_files/walking.wav");
+	        playSound(footstep);
+        }
         if (gameWon()) {
             System.out.println("Game Won!");
             File winSound = new File("./sound_files/goalplacement.wav");
