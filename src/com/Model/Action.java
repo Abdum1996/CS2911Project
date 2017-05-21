@@ -13,8 +13,10 @@ public enum Action {
             return MOVE_LEFT;
         } else if (kc == KeyEvent.VK_W || kc ==KeyEvent.VK_UP) {
             return MOVE_UP;
-        } else {
+        } else if ((kc == KeyEvent.VK_S || kc ==KeyEvent.VK_DOWN)) {
             return MOVE_DOWN;
         }
+		
+		return null;
 	}
 }
