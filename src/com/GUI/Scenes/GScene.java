@@ -5,6 +5,8 @@ import com.GUI.SceneManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -28,24 +30,21 @@ public class GScene extends JPanel {
     }
     
     public void playSound(File soundFile) {
-    	Thread soundThread = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
+    	Executor executor = Executors.newSingleThreadExecutor();
+    	executor.execute(new Runnable() { 
+    		public void run() { 
+	    		try {
 					Clip clip = AudioSystem.getClip();
 					clip.open(AudioSystem.getAudioInputStream(soundFile));
 					FloatControl volControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 					volControl.setValue(-16.0f);
 					clip.start();
-					Thread.sleep(clip.getMicrosecondLength()/1000);
+					Thread.sleep(clip.getMicrosecondLength());
 				} catch (InterruptedException | LineUnavailableException | IOException | UnsupportedAudioFileException e) {
 					e.printStackTrace();
 				}
-			}
-    		
+    		} 
     	});
-    	soundThread.start();
     	
     }
 }

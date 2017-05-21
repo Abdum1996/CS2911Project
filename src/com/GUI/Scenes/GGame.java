@@ -58,7 +58,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 
         System.out.println("listner");
         this.addKeyListener(this);
-
+        
     }
 
     public void reset() {
