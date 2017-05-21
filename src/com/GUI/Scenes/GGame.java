@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.swing.Timer;
 
@@ -44,6 +46,8 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     
     private Direction newDirection;
 
+	private Queue<Action> pendingActions = new LinkedList<Action>();
+
     public GGame(SceneManager sceneManager, ImageManager imgMan, String map) {
         super(sceneManager, imgMan);
 
@@ -65,10 +69,43 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         this.sceneManager.setScene(new GGame(this.sceneManager, this.imgMan, this.map));
     }
 
-    private ActionResult applyAction(Action action) {
-        return this.board.applyAction(action);
+    /**
+     * Applies the action specified to the board and processes animation
+     * @param action - the action to be carried out
+     */
+    private void applyAction(Action action) {
+    	ActionResult ar = board.getActionResult((action));
+    	System.out.println(action);
+        System.out.println(ar);
+        
+        // if there's an animation running
+        if (timer.isRunning()) {
+        	pendingActions.add(action);
+			System.out.println("put into pending: " + action);
+        	return;
+        }
+        
+        if(ar == ActionResult.PLAYER_MOVE || ar == ActionResult.BOX_MOVE) {
+	        File footstep = new File("./sound_files/walking.wav");
+	        playSound(footstep);
+	        lastViableAction = action;
+	        newDirection = Direction.readAction(action);
+	        timer.start();
+        } else if (ar == ActionResult.CHANGE_ORIENTATION) {
+        	board.applyAction(action);
+        	repaint();
+        	if (!pendingActions.isEmpty()) {
+        		action = pendingActions.poll();
+				this.applyAction(action);
+				System.out.println("pulled from pending: " + action);
+        	}
+        }
     }
-
+    
+    /**
+     * Checks whether the game displayed has been won
+     * @return true if the game has been won, false otherwise
+     */
     private boolean gameWon() {
         return this.board.gameWon();
     }
@@ -82,32 +119,18 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     public void keyPressed(KeyEvent e) {
         System.out.println("keyPressed: " + e);
         // animation ain't done yet
-    	if (timer.isRunning()) 
-    		return;
-    	
         int kc = e.getKeyCode();
         if (kc == KeyEvent.VK_R) {
             reset();
-        }
-        
-        ActionResult ar = board.getActionResult((lastViableAction = Action.readKeyEvent(e)));
-        System.out.println(lastViableAction);
-        System.out.println(ar);
-        if(ar == ActionResult.PLAYER_MOVE || ar == ActionResult.BOX_MOVE) {
-	        File footstep = new File("./sound_files/walking.wav");
-	        playSound(footstep);
-	        newDirection = Direction.readAction(lastViableAction);
-	        timer.start();
-        } else if (ar == ActionResult.CHANGE_ORIENTATION) {
-        	applyAction(lastViableAction);
-        	repaint();
-        }
-        
+        } 
         if (gameWon()) {
             System.out.println("Game Won!");
             File winSound = new File("./sound_files/goalplacement.wav");
             playSound(winSound);
         }
+        
+        applyAction(Action.readKeyEvent(e));     
+        
         //repaint();
     }
 
@@ -207,7 +230,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Direction dir = newDirection;
+		Direction dir = Direction.readAction(lastViableAction);
 		int magnitude = (currShifts+1)*GameConstants.IMAGE_DIMENSION/nshifts;
 		switch (dir) {
 			case UP:
@@ -231,7 +254,12 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 			timer.stop();
 			yshift = 0;
 			xshift = 0;
-			applyAction(lastViableAction);
+			board.applyAction(lastViableAction);
+			if(!pendingActions.isEmpty()) {
+				Action a = pendingActions.poll();
+				this.applyAction(a);
+				System.out.println("pulled from pending: " + a);
+			}
 		}
 		
 		repaint();
