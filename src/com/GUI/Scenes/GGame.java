@@ -74,6 +74,12 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      * @param action - the action to be carried out
      */
     private void applyAction(Action action) {
+    	
+    	// no board action should be done after winning
+    	if (gameWon()) {
+    		return;
+    	}
+    	
     	ActionResult ar = board.getActionResult((action));
     	System.out.println(action);
         System.out.println(ar);
