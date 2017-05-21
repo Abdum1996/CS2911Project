@@ -24,7 +24,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     
     private ImageManager imgMan;
     
-    private Timer timer = new Timer(30, this);
+    private Timer timer = new Timer(15, this);
     
     private int xshift = 0;
     private int yshift = 0;
@@ -32,8 +32,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     private int nshifts = 11;
     private int currShifts = 0;
     
-    private Direction prevOrientation;
-
     private int w;
     
     private int h;
@@ -164,8 +162,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     }
     
     public void paintChangingComponent(Graphics g) {
-        super.paintComponent(g);
-
+    	
         g.drawString("Grid", 0, 0);
 
         int x = 0;
@@ -192,6 +189,12 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 
             x = pos.getX() * box.getWidth();
             y = pos.getY() * box.getHeight();
+            
+            // This box is the one that's moving right now
+            if(curr.getPosition().equals(board.getPlayer().getPosition().move(newDirection))) {
+            	x = x + xshift;
+            	y = y + yshift;
+            }
             g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
         }
 
