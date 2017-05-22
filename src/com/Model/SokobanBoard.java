@@ -255,7 +255,8 @@ public class SokobanBoard implements GameBoard {
 		if (ar == ActionResult.PLAYER_MOVE) {
 			dir = Direction.oppositeDirection(dir);
 			action = Action.readDirection(dir);
-			applyAction(action); // change orientation
+			if (Direction.readAction(action) != player.getOrientation())
+				applyAction(action); // change orientation
 			applyAction(action); // move back
 			//change orientation back
 			applyAction(Action.readDirection(Direction.oppositeDirection(dir)));
@@ -267,7 +268,8 @@ public class SokobanBoard implements GameBoard {
 			boxMap.put(moved.getPosition(), moved);
 			
 			action = Action.readDirection(dir);
-			applyAction(action); // change orientation
+			if (Direction.readAction(action) != player.getOrientation())
+				applyAction(action); // change orientation
 			applyAction(action); // move back
 			//change orientation back
 			applyAction(Action.readDirection(Direction.oppositeDirection(dir)));
