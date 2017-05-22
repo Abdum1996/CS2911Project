@@ -97,7 +97,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 	        lastViableAction = action;
 	        newDirection = Direction.readAction(action);
 	        timer.start();
-        } else if (ar == ActionResult.CHANGE_ORIENTATION) {
+        } else if (ar == ActionResult.CHANGE_ORIENTATION || ar == ActionResult.NONE) {
         	board.applyAction(action);
         	repaint();
         	if (!pendingActions.isEmpty()) {
