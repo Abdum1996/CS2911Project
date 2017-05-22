@@ -5,7 +5,7 @@ package com.Model;
  */
 public class Player implements Movable<Player> {
 	private final Point position;
-	private Direction orientation;
+	private final Direction orientation;
 	
 	/**
 	 * Construct a player at the given point.
