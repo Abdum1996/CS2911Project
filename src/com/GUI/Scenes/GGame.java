@@ -24,29 +24,78 @@ import javax.swing.Timer;
 public class GGame extends GScene implements KeyListener, ActionListener {
     private static final long serialVersionUID = 1L;
     
+    /**
+     * Image manager of this instance
+     */
     private ImageManager imgMan;
     
+    /**
+     * timer to initiate animation sequence
+     */
     private Timer timer = new Timer(15, this);
     
+    /**
+     * the initial x shift for the walking animation
+     */
     private int xshift = 0;
+    
+    /**
+     * the initial x shift for the walking animation
+     */
     private int yshift = 0;
     
+    /**
+     * the number of different shifts of the sprite in one walk
+     */
     private int nshifts = 11;
+    
+    /**
+     * keeps track of the current shift (never exceeds nshifts)
+     */
     private int currShifts = 0;
     
+    /**
+     * width of this grid
+     */
     private int w;
     
+    /**
+     * height of this grid
+     */
     private int h;
 
+    /**
+     * the gameboard containing the game data
+     */
     private GameBoard board;
     
+    /**
+     * the path to this map
+     */
     private String map;
     
+    /**
+     * the last viable action to be used in between animations
+     */
     private Action lastViableAction;
+    
     
     private Direction newDirection;
 
+    /**
+     * a queue that stores the pending actions applied by the player in between animations
+     */
 	private Queue<Action> pendingActions = new LinkedList<Action>();
+	
+	/**
+	 * the last actions made by the user, used for undoing actions
+	 */
+	private SizedStack<Action> recentActions = new SizedStack<>(3);
+	
+	/**
+	 * the last action results made by the user, used for undoing
+	 */
+	private SizedStack<ActionResult> recentActionResults = new SizedStack<>(3);
 
     public GGame(SceneManager sceneManager, ImageManager imgMan, String map) {
         super(sceneManager, imgMan);
@@ -92,8 +141,18 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         }
         
         if (ar == ActionResult.PLAYER_MOVE || ar == ActionResult.BOX_MOVE) {
+        	// for undo
+        	System.out.println("pushing...");
+        	recentActions.push(action);
+        	recentActionResults.push(ar);
+//        	System.out.println(recentActions.pop());
+//        	System.out.println(recentActions.peek());
+        	
+        	//  play sound
 	        File footstep = new File("./sound_files/walking.wav");
 	        playSound(footstep);
+	        
+	        // --------------
 	        lastViableAction = action;
 	        newDirection = Direction.readAction(action);
 	        timer.start();
@@ -106,6 +165,20 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 				System.out.println("pulled from pending: " + action);
         	}
         }
+    }
+    
+    /**
+     * Undoes the last action made by the user
+     */
+    public void undoLastMove() {
+    	System.out.println(recentActions.peek());
+    	if (recentActions.peek() == null) 
+    		return; //empty or too many undos
+    	
+    	// undo 
+    	System.out.println("now reverting...");
+    	board.revertAction(recentActions.pop(), recentActionResults.pop());
+    	repaint();
     }
     
     /**
@@ -129,15 +202,18 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         if (kc == KeyEvent.VK_R) {
             reset();
         } 
+        // ctrl z
+        if ((kc == KeyEvent.VK_Z) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+        	undoLastMove();
+        	return;
+        }
         if (gameWon()) {
             System.out.println("Game Won!");
             File winSound = new File("./sound_files/goalplacement.wav");
             playSound(winSound);
         }
         
-        applyAction(Action.readKeyEvent(e));     
-        
-        //repaint();
+        applyAction(Action.readKeyEvent(e));
     }
 
     @Override
