@@ -1,28 +1,16 @@
 package com.Model;
 
 /**
- * Generic interface representing a fixed 2D coordinate grid of cells.
+ * Generic interface representing a 2D coordinate grid of cells.
  * @param <T> - type of cell stored in the grid
  */
-public interface Grid<T> {
+public interface Grid<T> extends Iterable<T> {	
 	/**
-	 * Builder interface for setting up a new grid.
-	 * @param <T> - type of cell stored in the grid
+	 * Set the cell at the given point to a new value.
+	 * @param value - new value of cell
+	 * @param point - location of cell
 	 */
-	public interface Builder<T> {
-		/**
-		 * Set the cell at the given point to a new value.
-		 * @param value - new value of cell
-		 * @param point - location of cell
-		 */
-		public void set(T value, Point point);
-		
-		/**
-		 * Generate grid from its builder object.
-		 * @return newly generated grid
-		 */
-		public Grid<T> build();
-	}
+	public void set(T value, Point point);
 	
 	/**
 	 * Get the cell at the given point.
@@ -44,9 +32,9 @@ public interface Grid<T> {
 	public int getHeight();
 	
 	/**
-	 * Determine if a point on the grid is 'valid'. (implementation defined)
+	 * Determine if a point is contained on the grid.
 	 * @param point - specified point
-	 * @return true if the point is 'valid'
+	 * @return true if the point within the grid's range
 	 */
-	public boolean isValidPoint(Point point);
+	public boolean hasPoint(Point point);
 }
