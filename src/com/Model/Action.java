@@ -19,4 +19,19 @@ public enum Action {
 		
 		return null;
 	}
+	
+	public static Action readDirection(Direction dir) {
+		switch (dir) {
+			case UP:
+				return MOVE_UP;
+			case DOWN:
+				return MOVE_DOWN;
+			case LEFT:
+				return MOVE_LEFT;
+			case RIGHT:
+				return MOVE_RIGHT;
+			default:
+				return null;
+		}
+	}
 }

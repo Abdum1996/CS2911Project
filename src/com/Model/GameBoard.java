@@ -111,8 +111,8 @@ public interface GameBoard {
 	public List<Action> solve();
 	
 	/**
-	 * Revert the action specified
+	 * Revert the action given the action and the result of that action
 	 * @return whether or not this revert was successful
 	 */
-	public boolean revertAction(Action action);
+	public boolean revertAction(Action action, ActionResult ar);
 }

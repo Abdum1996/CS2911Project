@@ -245,8 +245,34 @@ public class SokobanBoard implements GameBoard {
 	}
 
 	@Override
-	public boolean revertAction(Action action) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean revertAction(Action action, ActionResult ar) {
+		// this function doesn't change orientation (trivial), it only moves things back
+		if (ar == ActionResult.CHANGE_ORIENTATION || ar == ActionResult.NONE) 
+			return true;
+		
+		Direction dir = Direction.readAction(action);
+		// reverting player moves
+		if (ar == ActionResult.PLAYER_MOVE) {
+			dir = Direction.oppositeDirection(dir);
+			action = Action.readDirection(dir);
+			applyAction(action); // change orientation
+			applyAction(action); // move back
+			//change orientation back
+			applyAction(Action.readDirection(Direction.oppositeDirection(dir)));
+			
+		} else if (ar == ActionResult.BOX_MOVE) {
+			Box moved = boxMap.remove(player.getPosition().move(dir));
+			dir = Direction.oppositeDirection(dir);
+			moved = moved.move(dir);// move the box back
+			boxMap.put(moved.getPosition(), moved);
+			
+			action = Action.readDirection(dir);
+			applyAction(action); // change orientation
+			applyAction(action); // move back
+			//change orientation back
+			applyAction(Action.readDirection(Direction.oppositeDirection(dir)));
+			
+		}
+		return true;
 	}
 }

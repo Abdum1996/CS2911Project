@@ -21,7 +21,22 @@ public enum Direction {
 			case MOVE_RIGHT:
 				return RIGHT;
 			default:
-				return UP;
+				return null;
+		}
+	}
+	
+	public static Direction oppositeDirection(Direction dir) {
+		switch (dir) {
+		case UP:
+			return DOWN;
+		case DOWN:
+			return UP;
+		case LEFT:
+			return RIGHT;
+		case RIGHT:
+			return LEFT;
+		default:
+			return null;
 		}
 	}
 }
