@@ -243,4 +243,10 @@ public class SokobanBoard implements GameBoard {
 		
 		return searchAlgo.runAStarSearch(new BoardState(this));
 	}
+
+	@Override
+	public boolean revertAction(Action action) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

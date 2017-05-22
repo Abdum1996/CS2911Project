@@ -14,7 +14,7 @@ public class LimitedQueue<T> extends LinkedList<T> {
 	
 	/**
 	 * Constructs the queue given an integer limit
-	 * @param limit
+	 * @param limit - the max number of items this queue is to hold at any time
 	 */
 	public LimitedQueue(int limit) {
 		super();

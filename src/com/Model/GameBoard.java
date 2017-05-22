@@ -109,4 +109,10 @@ public interface GameBoard {
 	 * @return list of actions to solve the board
 	 */
 	public List<Action> solve();
+	
+	/**
+	 * Revert the action specified
+	 * @return whether or not this revert was successful
+	 */
+	public boolean revertAction(Action action);
 }
