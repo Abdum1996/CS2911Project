@@ -1,5 +1,6 @@
 package com.Model;
 
+import java.util.Iterator;
 import java.util.Arrays;
 
 /**
@@ -13,46 +14,51 @@ public class TileMap implements Grid<Tile> {
 	private final int height;
 	
 	/**
-	 * Builder class for constructing a tile map.
+	 * Construct a new tile map and add tiles to the map, in order of left to 
+	 * right, top to bottom, from the input iterator.
+	 * @param it     - iterator providing tiles
+	 * @param width  - width of map in columns
+	 * @param height - height of map in rows
 	 */
-	public static class Builder implements Grid.Builder<Tile> {
-		private final Tile[] tiles;
-		private final int width;
+	public TileMap(Iterator<Tile> it, int width, int height) {
+		this(width, height);
 		
-		/**
-		 * Construct a map builder of a given width and height.
-		 * @param width  - width of map in columns
-		 * @param height - height of map in rows
-		 */
-		public Builder(int width, int height) {
-			tiles = new Tile[width*height];
-			this.width = width;
-			
-			Arrays.fill(tiles, Tile.EMPTY);
-		}
-		
-		@Override
-		public void set(Tile value, Point point) {
-			tiles[point.getX() + point.getY()*width] = value;
-		}
-
-		@Override
-		public Grid<Tile> build() {
-			int height = tiles.length/width;
-			return new TileMap(tiles, width, height);
+		int index = 0;
+		while (it.hasNext() && (index < tiles.length)) {
+			tiles[index++] = it.next();
 		}
 	}
 	
 	/**
-	 * Construct a tile map from a list of tiles.
-	 * @param tiles  - input list of tiles
+	 * Construct a new tile map.
 	 * @param width  - width of map in columns
 	 * @param height - height of map in rows
 	 */
-	private TileMap(Tile[] tiles, int width, int height) {
-		this.tiles  = tiles;
+	public TileMap(int width, int height) {
+		tiles = new Tile[width*height];
 		this.width  = width;
 		this.height = height;
+		
+		Arrays.fill(tiles, Tile.EMPTY);
+	}
+	
+	/**
+	 * Determine if an entity (box or player) can be placed at a given
+	 * point in the map. The point is valid if it lies inside the grid
+	 * and the corresponding tile is not empty or a wall of some sort.
+	 * @param point - point being checked
+	 * @return true if entities can be placed at that point
+	 */
+	public boolean isValidEntityPos(Point point) {
+		if (!hasPoint(point)) return false;
+		
+		Tile tile = get(point);
+		return !tile.equals(Tile.EMPTY) && !tile.equals(Tile.WALL);
+	}
+	
+	@Override
+	public void set(Tile value, Point point) {
+		tiles[point.getX() + point.getY()*width] = value;
 	}
 	
 	@Override
@@ -71,13 +77,26 @@ public class TileMap implements Grid<Tile> {
 	}
 
 	@Override
-	// A point is defined to be valid if it lies inside the grid
-	// and it is not an empty tile or a wall of some sort
-	public boolean isValidPoint(Point point) {
+	public boolean hasPoint(Point point) {
 		if ((point.getX() < 0) || (point.getX() >= width)) return false;
 		if ((point.getY() < 0) || (point.getY() >= height)) return false;
-		
-		Tile tile = get(point);
-		return !tile.equals(Tile.EMPTY) && !tile.equals(Tile.WALL);
+		return true;
+	}
+
+	@Override
+	public Iterator<Tile> iterator() {
+		return new Iterator<Tile>() {
+			private int index = 0;
+			
+			@Override
+			public boolean hasNext() {
+				return (index < tiles.length);
+			}
+
+			@Override
+			public Tile next() {
+				return tiles[index++];
+			}
+		};
 	}
 }
