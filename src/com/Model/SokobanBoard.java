@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +76,19 @@ public class SokobanBoard implements GameBoard {
 		private final List<Box>  boxList;
 		private final TileMap tileMap;
 		private Player player;
+		
+		/**
+		 * Construct a board builder and add tiles to the map, in order of left to 
+		 * right, top to bottom, from the input iterator.
+		 * @param it     - iterator providing tiles for the map
+		 * @param width  - width of the board (in rows) to be generated
+		 * @param height - height of the board (in columns) to be generated 
+		 */
+		public Builder(Iterator<Tile> it, int width, int height) {
+			tileMap = new TileMap(it, width, height);
+			player  = new Player(Point.at(0, 0));
+			boxList = new ArrayList<>();
+		}
 		
 		/**
 		 * Construct a board builder.
