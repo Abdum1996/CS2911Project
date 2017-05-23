@@ -250,9 +250,11 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         int kc = e.getKeyCode();
         if (kc == KeyEvent.VK_R) {
             reset();
-        }  else if (kc == KeyEvent.VK_P) {
+        }  else if (kc == KeyEvent.VK_P && !paused) {
         	pauseGame();
         	return;
+        } else if (kc == KeyEvent.VK_P){
+        	resumeGame();
         }
         // ctrl z
         if ((kc == KeyEvent.VK_Z) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
