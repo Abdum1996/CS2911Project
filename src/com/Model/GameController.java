@@ -5,6 +5,11 @@ import java.util.Random;
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
 
+/**
+ * The driver class for the game, sets up the graphics and runs it
+ * @author Abdulrahman Alhomayany
+ *
+ */
 public class GameController {
 	
     public static void main(String[] args) {

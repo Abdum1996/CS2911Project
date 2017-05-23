@@ -2,19 +2,27 @@ package com.Model;
 
 import java.util.Stack;
 
+/**
+ * A limited sized stack that holds the n most recently pushed items as specified by the user
+ * @author Abdulrahman Alhomayany
+ *
+ * @param <T> - The type of items this stack holds
+ */
 @SuppressWarnings("serial")
 public class SizedStack<T> extends Stack<T> {
-    private int maxSize;
+	/**
+	 * The maximum number of items this stack holds
+	 */
+    private int limit;
 
     public SizedStack(int size) {
         super();
-        this.maxSize = size;
+        this.limit = size;
     }
 
     @Override
     public T push(T object) {
-        //If the stack is too big, remove elements until it's the right size.
-        while (this.size() >= maxSize) {
+        while (this.size() >= limit) {
             this.remove(0);
         }
         return super.push(object);

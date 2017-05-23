@@ -45,6 +45,10 @@ public class Box implements Movable<Box> {
 		return new Box(point, id);
 	}
 
+	/**
+	 * Returns the integer id of this box
+	 * @return id of (this)
+	 */
 	public int getId() {
 		return id;
 	}

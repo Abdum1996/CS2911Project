@@ -100,12 +100,21 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 	 */
 	private SizedStack<ActionResult> recentActionResults = new SizedStack<>(3);
 
+	/**
+	 * Checks whether the game is pause or not, default is unpaused
+	 */
     private boolean paused = false; // is the game paused?
     private JPanel pauseMenu;
     private JLabel pauseScrLabel;
     private JButton pauseScrResumeBtn;
     private JButton pauseScrRQuitBtn;
 
+    /**
+     * Constructs a GameScene with the puzzle loadeds
+     * @param sceneManager - The sceneManager managing this GScene
+     * @param imgMan - The ImageManager associated with this SceneManager
+     * @param map - The map to be loaded on the GameBoard and displayed
+     */
     public GGame(SceneManager sceneManager, ImageManager imgMan, String map) {
         super(sceneManager, imgMan);
 
@@ -143,6 +152,9 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         pauseMenu.add(pauseScrRQuitBtn);
     }
 
+    /**
+     * Resumes the game from a paused state
+     */
     private void resumeGame() {
         this.paused = false;
 //        this.remove(pauseScrLabel);
@@ -152,6 +164,10 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         this.repaint();
         this.sceneManager.setVisible(true); // refresh at the level JFrame
     }
+    
+    /**
+     * Pauses the game and displays a menu
+     */
     private void pauseGame() {
         this.paused = true;
 //        this.add(pauseScrLabel);
@@ -321,6 +337,10 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         }
     }
     
+    /**
+     * Paints the board while an object is moving on the screen
+     * @param g
+     */
     public void paintChangingComponent(Graphics g) {
     	
         g.drawString("Grid", 0, 0);
