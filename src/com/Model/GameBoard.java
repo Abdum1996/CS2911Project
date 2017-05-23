@@ -1,5 +1,6 @@
 package com.Model;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public interface GameBoard {
 	 * Get all the boxes in the game map.
 	 * @return list of boxes in the map
 	 */
-	public List<Box> getBoxes();
+	public Iterator<Box> getBoxes();
 	
 	/**
 	 * Get the current state of the player.
