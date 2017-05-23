@@ -82,6 +82,11 @@ public interface GameBoard {
 	public List<Action> solve();
 	
 	/**
+	 * Determine if the board is solvable.
+	 */
+	public boolean isSolvable();
+	
+	/**
 	 * Revert the action given the action and the result of that action
 	 * @return whether or not this revert was successful
 	 */

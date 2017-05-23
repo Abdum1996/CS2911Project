@@ -25,8 +25,9 @@ public class SokobanBoard implements GameBoard {
 	private Player player;
 	
 	/**
-	 * Construct a new Sokoban board, adding tiles to the map in order of left
-	 * to right, top to bottom, from the tile iterator. Boxes are placed according
+	 * Construct a new Sokoban board 
+	 * 
+	 * Boxes are placed according
 	 * to the input positions and the player is placed at the specified spot.
 	 * @param tiles        - iterator providing new tiles to place on the board
 	 * @param boxPositions - iterator providing positions to place boxes
@@ -35,10 +36,10 @@ public class SokobanBoard implements GameBoard {
 	 * @param height       - height of the board in rows
 	 * @pre specified player and box positions are valid
 	 */
-	public SokobanBoard(Iterator<Tile> tiles, Iterator<Point> boxPositions, 
+	public SokobanBoard(TileMap map, Iterator<Point> boxPositions, 
 			Point playerPos, int width, int height) {
-		tileMap = new TileMap(tiles, width, height);
 		boxMap  = new HashMap<>();
+		tileMap = map;
 		
 		while (boxPositions.hasNext()) {
 			Point pos = boxPositions.next();
@@ -158,6 +159,13 @@ public class SokobanBoard implements GameBoard {
 		});
 		
 		return searchAlgo.runAStarSearch(new BoardState(this));
+	}
+	
+	@Override
+	public boolean isSolvable() {
+		List<Action> actions = solve();
+		if (actions == null) return false;
+		return true;
 	}
 
 	@Override
