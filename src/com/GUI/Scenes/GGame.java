@@ -21,8 +21,7 @@ import java.util.Queue;
 import javax.swing.Timer;
 
 /**
- * Sokoban Canvas
- * custom canvas for drawing
+ * A GScene panel that displays the relevant Gameboard
  */
 public class GGame extends GScene implements KeyListener, ActionListener {
     private static final long serialVersionUID = 1L;
@@ -103,7 +102,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 	/**
 	 * Checks whether the game is pause or not, default is unpaused
 	 */
-    private boolean paused = false; // is the game paused?
     private JPanel pauseMenu;
     private JLabel pauseScrLabel;
     private JButton pauseScrResumeBtn;
@@ -143,7 +141,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         pauseScrResumeBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         pauseScrRQuitBtn = new JButton("Quit To Main Menu");
         pauseScrRQuitBtn.addActionListener((ActionEvent ae) -> {
-            this.sceneManager.setScene(new GMainMenu(sceneManager, imgMan));
+            this.sceneManager.setScene(SceneManager.MAIN_MENU_ID, new GMainMenu(sceneManager, imgMan));
         });
         pauseScrRQuitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -156,31 +154,30 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      * Resumes the game from a paused state
      */
     private void resumeGame() {
-        this.paused = false;
 //        this.remove(pauseScrLabel);
 //        this.remove(pauseScrResumeBtn);
 //        this.remove(pauseScrRQuitBtn);
-        this.remove(pauseMenu);
-        this.repaint();
-        this.sceneManager.setVisible(true); // refresh at the level JFrame
+        remove(pauseMenu);
+        repaint();
+        sceneManager.setVisible(true); // refresh at the level JFrame
     }
     
     /**
      * Pauses the game and displays a menu
      */
     private void pauseGame() {
-        this.paused = true;
 //        this.add(pauseScrLabel);
 //        this.add(pauseScrResumeBtn);
 //        this.add(pauseScrRQuitBtn);
-        this.add(pauseMenu);
-        this.repaint();
-        this.sceneManager.setVisible(true); // refresh at the level JFrame
+        this.setFocusable(false);
+        sceneManager.setScene(SceneManager.PAUSE_ID, new GPauseMenu(sceneManager, imgMan, board));
+//        repaint();
+        sceneManager.setVisible(true); // refresh at the level JFrame
 
     }
 
     public void reset() {
-        this.sceneManager.setScene(new GGame(this.sceneManager, this.imgMan, this.map));
+        sceneManager.setScene(SceneManager.GAME_ID, new GGame(sceneManager, imgMan, map));
     }
 
     /**
@@ -236,8 +233,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      * Undoes the last action made by the user
      */
     public void undoLastMove() {
-    	System.out.println(recentActions.peek());
-    	if (recentActions.peek() == null) 
+    	if (recentActions.empty()) 
     		return; //empty or too many undos
     	
     	// undo 
@@ -266,11 +262,9 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         int kc = e.getKeyCode();
         if (kc == KeyEvent.VK_R) {
             reset();
-        }  else if (kc == KeyEvent.VK_P && !paused) {
+        }  else if (kc == KeyEvent.VK_P) {
         	pauseGame();
         	return;
-        } else if (kc == KeyEvent.VK_P){
-        	resumeGame();
         }
         // ctrl z
         if ((kc == KeyEvent.VK_Z) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
@@ -299,42 +293,40 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         	return;
         }
 
-        if (!paused) {
-            g.drawString("Grid", 0, 0);
+        g.drawString("Grid", 0, 0);
 
-            int x = 0;
-            int y = 0;
+        int x = 0;
+        int y = 0;
 
-            // paint all tiles
-            for (int i = 0; i < h; i++) {
-                for (int j = 0; j < w; j++) {
-                    Point pos = Point.at(j, i);
+        // paint all tiles
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                Point pos = Point.at(j, i);
 
-                    g.drawImage(imgMan.getTileImg(board.getTile(pos)), x, y, null);
-                    x += imgMan.getImgHeight();
-                }
-                y += imgMan.getImgWidth();
-                x = 0;
+                g.drawImage(imgMan.getTileImg(board.getTile(pos)), x, y, null);
+                x += imgMan.getImgHeight();
             }
-
-            BufferedImage box = imgMan.getBoxImg(0);
-            BufferedImage player = imgMan.getPlayerImg(board.getPlayer().getOrientation());
-
-            for (Box curr : board.getBoxes()) {
-                Point pos = curr.getPosition();
-
-                x = pos.getX() * box.getWidth();
-                y = pos.getY() * box.getHeight();
-                g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
-            }
-
-            Point playerPos = board.getPlayer().getPosition();
-            x = playerPos.getX() * player.getWidth();
-            y = playerPos.getY() * player.getHeight();
-
-            g.drawImage(player, x, y, null);
-        } else {
+            y += imgMan.getImgWidth();
+            x = 0;
         }
+
+        BufferedImage box = imgMan.getBoxImg(0);
+        BufferedImage player = imgMan.getPlayerImg(board.getPlayer().getOrientation());
+
+        for (Box curr : board.getBoxes()) {
+            Point pos = curr.getPosition();
+
+            x = pos.getX() * box.getWidth();
+            y = pos.getY() * box.getHeight();
+            g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
+        }
+
+        Point playerPos = board.getPlayer().getPosition();
+        x = playerPos.getX() * player.getWidth();
+        y = playerPos.getY() * player.getHeight();
+
+        g.drawImage(player, x, y, null);
+        
     }
     
     /**
