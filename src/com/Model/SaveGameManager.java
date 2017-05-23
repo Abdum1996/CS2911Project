@@ -45,7 +45,7 @@ public class SaveGameManager {
 	 * @param playerName
 	 * @return the last level unlocked, if no such save exists then return -1
 	 */
-	public int getSaveGame(String playerName) {
+	public int loadGame(String playerName) {
 		try{
 		    Scanner reader = new Scanner(savefilesPath + playerName + savefileExtension);
 		    int lvl = reader.nextInt();
