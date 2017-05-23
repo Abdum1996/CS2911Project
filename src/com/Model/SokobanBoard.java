@@ -4,13 +4,6 @@ import com.Graph.AStarSearch;
 import com.Graph.Heuristic;
 import com.Graph.State;
 
-import java.util.NoSuchElementException;
-import java.io.FileNotFoundException;
-
-import java.io.FileReader;
-import java.util.Scanner;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,10 +18,8 @@ public class SokobanBoard implements GameBoard {
 	private Player player;
 	
 	/**
-	 * Construct a new Sokoban board 
-	 * 
-	 * Boxes are placed according
-	 * to the input positions and the player is placed at the specified spot.
+	 * Construct a new Sokoban board. Boxes are placed according to the
+	 * input positions and the player is placed at the specified spot.
 	 * @param tiles        - iterator providing new tiles to place on the board
 	 * @param boxPositions - iterator providing positions to place boxes
 	 * @param playerPos    - starting location of the player
@@ -47,6 +38,16 @@ public class SokobanBoard implements GameBoard {
 		}
 		
 		player = new Player(playerPos);
+	}
+	
+	/**
+	 * Copy constructor for a Sokoban board.
+	 * @param original - board being copied
+	 */
+	private SokobanBoard(SokobanBoard original) {
+		boxMap = new HashMap<>(original.boxMap);
+		player  = original.player;
+		tileMap = original.tileMap;
 	}
 	
 	@Override
@@ -133,7 +134,7 @@ public class SokobanBoard implements GameBoard {
 	
 	@Override 
 	public GameBoard genSuccessor(Action action) {
-		GameBoard successor = new SokobanBoard(new HashMap<>(boxMap), tileMap, player);
+		GameBoard successor = new SokobanBoard(this);
 		successor.applyAction(action);
 		return successor;
 	}
