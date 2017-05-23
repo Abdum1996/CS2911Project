@@ -1,1 +1,2 @@
-echo 'now running... (WIP)'
+echo 'running...'
+java com.Model.GameController

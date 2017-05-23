@@ -5,6 +5,11 @@ import java.util.Random;
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
 
+/**
+ * The driver class for the game, sets up the graphics and runs it
+ * @author Abdulrahman Alhomayany
+ *
+ */
 public class GameController {
 	
     public static void main(String[] args) {
@@ -15,18 +20,10 @@ public class GameController {
         imgMan.loadTileImg(Tile.FLOOR, "./resources/floor.png");
         imgMan.loadTileImg(Tile.WALL, "./resources/wall.png");
         imgMan.loadTileImg(Tile.EMPTY, "./resources/empty.png");
-
-        imgMan.loadPlayerImg(Direction.RIGHT, "./resources/playerR.png");
-        imgMan.loadPlayerImg(Direction.LEFT, "./resources/playerL.png");
-        imgMan.loadPlayerImg(Direction.UP, "./resources/playerU.png");
-        imgMan.loadPlayerImg(Direction.DOWN, "./resources/playerD.png");
         
         for (int i = 0; i < GameConstants.BOX_LIMIT; i++) {
         	Random rand = new Random();
-
-            // nextInt is normally exclusive of the top value,
-            // so add 1 to make it inclusive
-            int r = rand.nextInt((3) + 1);
+            int r = rand.nextInt(GameConstants.NUM_BOX_TEXTURES);
 			imgMan.loadBoxImg(i, "./resources/box" + r + ".png");
 			
 		}

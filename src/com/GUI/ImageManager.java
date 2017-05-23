@@ -8,6 +8,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 import com.Model.Direction;
+import com.Model.GameConstants;
 import com.Model.Tile;
 
 
@@ -25,12 +26,12 @@ public class ImageManager {
     private HashMap<Integer, BufferedImage> boxImgs;
     
     /**
-     * hash map of all images for the player 
+     * spritesheet object for the player
      */
-    private HashMap<Direction, BufferedImage> playerImgs;
-
-    private final int imgWidth = 16;
-    private final int imgHeight = 16;
+    private GSpritesheet sheet;
+    
+    private final int imgWidth = GameConstants.IMAGE_DIMENSION;
+    private final int imgHeight = GameConstants.IMAGE_DIMENSION;
 
     /**
     * folder directory of tile, entity and default image
@@ -41,7 +42,7 @@ public class ImageManager {
     public ImageManager () {
         this.tileImgs = new HashMap<>();
         this.boxImgs = new HashMap<>();
-        this.playerImgs = new HashMap<>();
+        this.sheet = new GSpritesheet();
     }
 
     public void loadTileImg (Tile type, String path) {
@@ -65,22 +66,6 @@ public class ImageManager {
             e.printStackTrace();
         }
     }
-    
-    /**
-     * 
-     * @param type The entity type of the image
-     * @param dir The direction the entity is facing
-     * @param path the path to the image file
-     */
-    public void loadPlayerImg (Direction dir, String path) {
-        BufferedImage pImage;
-        try {
-            pImage = ImageIO.read(new File(path));
-            playerImgs.put(dir, pImage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public BufferedImage getTileImg (Tile type) {
         return this.tileImgs.get(type);
@@ -90,7 +75,7 @@ public class ImageManager {
     }
 
     public BufferedImage getPlayerImg (Direction dir) {
-        return this.playerImgs.get(dir);
+        return sheet.getNextSprite(dir);
     }
     
     public int getImgHeight () {

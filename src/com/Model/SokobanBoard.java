@@ -178,19 +178,40 @@ public class SokobanBoard implements GameBoard {
 	}
 
 	@Override
-	public boolean applyAction(Action action) {
-		if (!isValidAction(action)) return false; 
+	public ActionResult applyAction(Action action) {
+		if (!isValidAction(action)) return ActionResult.NONE; 
 		
 		Direction dir = Direction.readAction(action);
+		
+		Player oldPlayer = player;
 		player = player.move(dir);
+		if (player.getOrientation() != oldPlayer.getOrientation()) return ActionResult.CHANGE_ORIENTATION;
 		
 		Box old = boxMap.remove(player.getPosition());
 		if (old != null) {
 			old = old.move(dir);
 			boxMap.put(old.getPosition(), old);
+			return ActionResult.BOX_MOVE;
 		}
 		
-		return true;
+		return ActionResult.PLAYER_MOVE;
+	}
+	
+	@Override
+	public ActionResult getActionResult(Action action) {
+		if (!isValidAction(action)) return ActionResult.NONE;
+		
+		Direction dir = Direction.readAction(action);
+		
+		if (player.getOrientation() != player.move(dir).getOrientation()) return ActionResult.CHANGE_ORIENTATION;
+		Player np = player.move(dir);
+		
+		Box old = boxMap.get(np.getPosition());
+		
+		if (old != null) return ActionResult.BOX_MOVE;
+		
+		return ActionResult.PLAYER_MOVE;
+		
 	}
 	
 	@Override 
@@ -221,5 +242,39 @@ public class SokobanBoard implements GameBoard {
 		});
 		
 		return searchAlgo.runAStarSearch(new BoardState(this));
+	}
+
+	@Override
+	public boolean revertAction(Action action, ActionResult ar) {
+		// this function doesn't change orientation (trivial), it only moves things back
+		if (ar == ActionResult.CHANGE_ORIENTATION || ar == ActionResult.NONE) 
+			return true;
+		
+		Direction dir = Direction.readAction(action);
+		// reverting player moves
+		if (ar == ActionResult.PLAYER_MOVE) {
+			dir = Direction.oppositeDirection(dir);
+			action = Action.readDirection(dir);
+			if (Direction.readAction(action) != player.getOrientation())
+				applyAction(action); // change orientation
+			applyAction(action); // move back
+			//change orientation back
+			applyAction(Action.readDirection(Direction.oppositeDirection(dir)));
+			
+		} else if (ar == ActionResult.BOX_MOVE) {
+			Box moved = boxMap.remove(player.getPosition().move(dir));
+			dir = Direction.oppositeDirection(dir);
+			moved = moved.move(dir);// move the box back
+			boxMap.put(moved.getPosition(), moved);
+			
+			action = Action.readDirection(dir);
+			if (Direction.readAction(action) != player.getOrientation())
+				applyAction(action); // change orientation
+			applyAction(action); // move back
+			//change orientation back
+			applyAction(Action.readDirection(Direction.oppositeDirection(dir)));
+			
+		}
+		return true;
 	}
 }

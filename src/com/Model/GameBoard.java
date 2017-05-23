@@ -79,9 +79,17 @@ public interface GameBoard {
 	/**
 	 * Get player to apply an action to the board.
 	 * @param action - action applied to the board
-	 * @return true if the action is legal
+	 * @return the ActionResult of action
 	 */
-	public boolean applyAction(Action action);
+	public ActionResult applyAction(Action action);
+	
+	/**
+	 * Get the ActionResult that would follow 
+	 * from action without applying it
+	 * @param action the action to checked
+	 * @return the ActionResult resulting from action
+	 */
+	public ActionResult getActionResult(Action action);
 	
 	/**
 	 * Create a copy of the board with the applied action
@@ -101,4 +109,10 @@ public interface GameBoard {
 	 * @return list of actions to solve the board
 	 */
 	public List<Action> solve();
+	
+	/**
+	 * Revert the action given the action and the result of that action
+	 * @return whether or not this revert was successful
+	 */
+	public boolean revertAction(Action action, ActionResult ar);
 }

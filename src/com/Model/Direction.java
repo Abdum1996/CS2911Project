@@ -21,7 +21,27 @@ public enum Direction {
 			case MOVE_RIGHT:
 				return RIGHT;
 			default:
+				return null;
+		}
+	}
+	
+	/**
+	 * Returns the opposite direction of the direction specified
+	 * @param dir - the direction you want the opposite of 
+	 * @return the opposite direction of dir
+	 */
+	public static Direction oppositeDirection(Direction dir) {
+		switch (dir) { // this function is used mainly in the undo process
+			case UP:
+				return DOWN;
+			case DOWN:
 				return UP;
+			case LEFT:
+				return RIGHT;
+			case RIGHT:
+				return LEFT;
+			default:
+				return null;
 		}
 	}
 }
