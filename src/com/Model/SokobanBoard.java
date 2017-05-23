@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class SokobanBoard implements GameBoard {
 	private final Map<Point, Box> boxMap;
-	private final Grid<Tile> tileMap;
+	private final TileMap tileMap;
 	private Player player;
 	
 	/**
@@ -72,8 +72,8 @@ public class SokobanBoard implements GameBoard {
 	 * Builder class for generating a game board.
 	 */
 	public static class Builder implements GameBoard.Builder {
-		private final Grid.Builder<Tile> mapBuilder;
 		private final List<Box>  boxList;
+		private final TileMap tileMap;
 		private Player player;
 		
 		/**
@@ -82,14 +82,14 @@ public class SokobanBoard implements GameBoard {
 		 * @param height - height of the board (in columns) to be generated 
 		 */
 		public Builder(int width, int height) {
-			mapBuilder = new TileMap.Builder(width, height);
+			tileMap = new TileMap(width, height);
 			player  = new Player(Point.at(0, 0));
 			boxList = new ArrayList<>();
 		}
 		
 		@Override
 		public void setTile(Tile value, Point point) {
-			mapBuilder.set(value, point);	
+			tileMap.set(value, point);	
 		}
 
 		@Override
@@ -104,17 +104,16 @@ public class SokobanBoard implements GameBoard {
 
 		@Override
 		public GameBoard build() {
-			Grid<Tile> tileMap = mapBuilder.build();
 			Map<Point, Box> boxMap = new HashMap<>();
 			
 			for (Box curr : boxList) {
 				Point pos = curr.getPosition();
-				if (tileMap.isValidPoint(pos))
+				if (tileMap.isValidEntityPos(pos))
 					boxMap.put(pos, curr);
 			}
 			
 			Point pos = player.getPosition();
-			if (!tileMap.isValidPoint(pos) || boxMap.containsKey(pos)) return null;
+			if (!tileMap.isValidEntityPos(pos) || boxMap.containsKey(pos)) return null;
 			return new SokobanBoard(boxMap, tileMap, player);
 		}
 	}
@@ -126,7 +125,7 @@ public class SokobanBoard implements GameBoard {
 	 * @param player  - player stored on the map
 	 */
 	private SokobanBoard(Map<Point, Box> boxMap, 
-			Grid<Tile> tileMap, Player player) {
+			TileMap tileMap, Player player) {
 		this.boxMap  = boxMap;
 		this.tileMap = tileMap;
 		this.player  = player;
@@ -165,12 +164,12 @@ public class SokobanBoard implements GameBoard {
 		// into a tile that is either empty or a wall
 		if (dir != player.getOrientation()) return true; //changing orientation always valid
 		Point next1 = player.getPosition().move(dir);
-		if (!tileMap.isValidPoint(next1)) return false;
+		if (!tileMap.isValidEntityPos(next1)) return false;
 		
 		// If next position is a box, then the box must be movable
 		if (boxMap.containsKey(next1)) {
 			Point next2 = next1.move(dir);
-			if (!tileMap.isValidPoint(next2)) return false;
+			if (!tileMap.isValidEntityPos(next2)) return false;
 			if (boxMap.containsKey(next2)) return false;
 		}
 		
