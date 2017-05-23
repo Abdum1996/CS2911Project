@@ -26,7 +26,6 @@ public class Player implements Movable<Player> {
 		orientation = dir;
 	}
 	
-	
 	@Override
 	public Point getPosition() {
 		return position;

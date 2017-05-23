@@ -40,16 +40,6 @@ public class SokobanBoard implements GameBoard {
 		player = new Player(playerPos);
 	}
 	
-	/**
-	 * Copy constructor for a Sokoban board.
-	 * @param original - board being copied
-	 */
-	private SokobanBoard(SokobanBoard original) {
-		boxMap = new HashMap<>(original.boxMap);
-		player  = original.player;
-		tileMap = original.tileMap;
-	}
-	
 	@Override
 	public Tile getTile(Point point) {
 		return tileMap.get(point);
@@ -132,13 +122,6 @@ public class SokobanBoard implements GameBoard {
 		
 	}
 	
-	@Override 
-	public GameBoard genSuccessor(Action action) {
-		GameBoard successor = new SokobanBoard(this);
-		successor.applyAction(action);
-		return successor;
-	}
-	
 	@Override
 	public boolean gameWon() {
 		for (Point point : boxMap.keySet()) {
@@ -159,7 +142,8 @@ public class SokobanBoard implements GameBoard {
 			}
 		});
 		
-		return searchAlgo.runAStarSearch(new BoardState(this));
+		BoardState start = new BoardState(tileMap, player, getBoxes());
+		return searchAlgo.runAStarSearch(start);
 	}
 	
 	@Override
