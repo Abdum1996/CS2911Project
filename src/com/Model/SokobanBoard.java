@@ -25,124 +25,27 @@ public class SokobanBoard implements GameBoard {
 	private Player player;
 	
 	/**
-	 * Generate a Sokoban board from an input map file.
-	 * @param filename - name of text file
-	 * @return new Sokoban board
+	 * Construct a new Sokoban board, adding tiles to the map in order of left
+	 * to right, top to bottom, from the tile iterator. Boxes are placed according
+	 * to the input positions and the player is placed at the specified spot.
+	 * @param tiles        - iterator providing new tiles to place on the board
+	 * @param boxPositions - iterator providing positions to place boxes
+	 * @param playerPos    - starting location of the player
+	 * @param width        - width of the board in columns
+	 * @param height       - height of the board in rows
+	 * @pre specified player and box positions are valid
 	 */
-	public static GameBoard readFile(String filename) {
-		GameBoard board = null;
-		Scanner sc = null;
+	public SokobanBoard(Iterator<Tile> tiles, Iterator<Point> boxPositions, 
+			Point playerPos, int width, int height) {
+		tileMap = new TileMap(tiles, width, height);
+		boxMap  = new HashMap<>();
 		
-		try {
-			sc = new Scanner(new FileReader(filename));
-			
-			int width = sc.nextInt();
-			int height = sc.nextInt();
-			Builder builder = new Builder(width, height);
-			
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					String symbol = sc.next();
-					Tile tile = Tile.parse(symbol);
-					Point pos = Point.at(x, y);
-					
-					builder.setTile(tile, pos);
-					if (symbol.equals("P")) {
-						builder.setPlayerPos(pos);
-					} else if (symbol.equals("B")) {
-						builder.addBox(pos);
-					}
-				}
-				
-				System.out.println();
-			}
-			
-			board = builder.build();
-			
-		} catch (FileNotFoundException | NoSuchElementException e) {
-			e.printStackTrace();
-			
-		} finally {
-			if (sc != null) sc.close();
+		while (boxPositions.hasNext()) {
+			Point pos = boxPositions.next();
+			boxMap.put(pos, new Box(pos));
 		}
 		
-		return board;
-	}
-	
-	/**
-	 * Builder class for generating a game board.
-	 */
-	public static class Builder implements GameBoard.Builder {
-		private final List<Box>  boxList;
-		private final TileMap tileMap;
-		private Player player;
-		
-		/**
-		 * Construct a board builder and add tiles to the map, in order of left to 
-		 * right, top to bottom, from the input iterator.
-		 * @param it     - iterator providing tiles for the map
-		 * @param width  - width of the board (in rows) to be generated
-		 * @param height - height of the board (in columns) to be generated 
-		 */
-		public Builder(Iterator<Tile> it, int width, int height) {
-			tileMap = new TileMap(it, width, height);
-			player  = new Player(Point.at(0, 0));
-			boxList = new ArrayList<>();
-		}
-		
-		/**
-		 * Construct a board builder.
-		 * @param width  - width of the board (in rows) to be generated
-		 * @param height - height of the board (in columns) to be generated 
-		 */
-		public Builder(int width, int height) {
-			tileMap = new TileMap(width, height);
-			player  = new Player(Point.at(0, 0));
-			boxList = new ArrayList<>();
-		}
-		
-		@Override
-		public void setTile(Tile value, Point point) {
-			tileMap.set(value, point);	
-		}
-
-		@Override
-		public void addBox(Point point) {
-			boxList.add(new Box(point, boxList.size()));
-		}
-		
-		@Override
-		public void setPlayerPos(Point point) {
-			player = player.moveTo(point);
-		}
-
-		@Override
-		public GameBoard build() {
-			Map<Point, Box> boxMap = new HashMap<>();
-			
-			for (Box curr : boxList) {
-				Point pos = curr.getPosition();
-				if (tileMap.isValidEntityPos(pos))
-					boxMap.put(pos, curr);
-			}
-			
-			Point pos = player.getPosition();
-			if (!tileMap.isValidEntityPos(pos) || boxMap.containsKey(pos)) return null;
-			return new SokobanBoard(boxMap, tileMap, player);
-		}
-	}
-
-	/**
-	 * Construct Sokoban board from a map of tiles and entities.
-	 * @param boxMap  - set of boxes and their corresponding positions
-	 * @param tileMap - underlying tile map
-	 * @param player  - player stored on the map
-	 */
-	private SokobanBoard(Map<Point, Box> boxMap, 
-			TileMap tileMap, Player player) {
-		this.boxMap  = boxMap;
-		this.tileMap = tileMap;
-		this.player  = player;
+		player = new Player(playerPos);
 	}
 	
 	@Override
@@ -151,8 +54,8 @@ public class SokobanBoard implements GameBoard {
 	}
 
 	@Override
-	public List<Box> getBoxes() {
-		return new ArrayList<>(boxMap.values());
+	public Iterator<Box> getBoxes() {
+		return boxMap.values().iterator();
 	}
 
 	@Override
@@ -264,12 +167,13 @@ public class SokobanBoard implements GameBoard {
 			return true;
 		
 		Direction dir = Direction.readAction(action);
+		
 		// reverting player moves
 		if (ar == ActionResult.PLAYER_MOVE) {
 			dir = Direction.oppositeDirection(dir);
-			action = Action.readDirection(dir);
-			applyAction(action); // change orientation
-			applyAction(action); // move back
+			Action undo = Action.readDirection(dir);
+			applyAction(undo); // change orientation
+			applyAction(undo); // move back
 			//change orientation back
 			applyAction(Action.readDirection(Direction.oppositeDirection(dir)));
 			
@@ -279,9 +183,9 @@ public class SokobanBoard implements GameBoard {
 			moved = moved.move(dir);// move the box back
 			boxMap.put(moved.getPosition(), moved);
 			
-			action = Action.readDirection(dir);
-			applyAction(action); // change orientation
-			applyAction(action); // move back
+			Action undo = Action.readDirection(dir);
+			applyAction(undo); // change orientation
+			applyAction(undo); // move back
 			//change orientation back
 			applyAction(Action.readDirection(Direction.oppositeDirection(dir)));
 			
