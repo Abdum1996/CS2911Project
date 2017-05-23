@@ -1,37 +1,45 @@
 package com.Model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * 2D fixed coordinate grid of tiles. The top left of the grid is located at (0, 0).
  * As you move from left to right, the grid's x coordinate increases, and the
- * y coordinate increases when moving down the grid.
+ * y coordinate increases when moving down the grid. This coordinate grid also
+ * keeps track of the locations of the goal tiles in the map.
  */
 public class TileMap implements Iterable<Tile> {
-	private final Tile[] tiles;
-	private final int width;
+	private final List<Point> goals;
+	private final List<Tile> tiles;
+	
 	private final int height;
+	private final int width;
 	
 	/**
-	 * Construct a new tile map and add tiles to the map, in order of left to 
-	 * right, top to bottom, from the input iterator. If the map still has
-	 * empty spots left then these spots are filled with empty tiles.
-	 * @param it     - iterator providing tiles
-	 * @param width  - width of map in columns
-	 * @param height - height of map in rows
+	 * Construct a new tile map, adding tiles supplied by the iterator in order of
+	 * left to right, top to bottom.
+	 * @pre number of tiles supplied by the iterator is >= width*height of map
+	 * @param it     - iterator supplying tiles
+	 * @param width  - width of the tile map in columns
+	 * @param height - height of the tile map in rows
 	 */
 	public TileMap(Iterator<Tile> it, int width, int height) {
-		tiles = new Tile[width*height];
+		tiles = new ArrayList<>(width*height);
+		goals = new ArrayList<>();
+		
 		this.width  = width;
 		this.height = height;
 		
-		int index = 0;
-		while (it.hasNext() && (index < tiles.length)) {
-			tiles[index++] = it.next();
-		}
-		
-		while (index < tiles.length) {
-			tiles[index++] = Tile.EMPTY;
+		for (int y = 0; y < height; ++y) {
+			for (int x = 0; x < width; ++x) {
+				Tile next = it.next();
+				tiles.add(next);
+				
+				if (next.equals(Tile.GOAL))
+					goals.add(Point.at(x, y));
+			}
 		}
 	}
 	
@@ -42,7 +50,7 @@ public class TileMap implements Iterable<Tile> {
 	 * @return tile at the given location
 	 */
 	public Tile get(Point point) {
-		return tiles[point.getX() + point.getY()*width];
+		return tiles.get(point.getX() + point.getX()*width);
 	}
 	
 	/**
@@ -59,6 +67,24 @@ public class TileMap implements Iterable<Tile> {
 	 */
 	public int getHeight() {
 		return height;
+	}
+	
+	/**
+	 * Get the locations of the goal tiles in the map.
+	 */
+	public Iterator<Point> getGoalPositions() {
+		Iterator<Point> it = goals.iterator();
+		return new Iterator<Point>() {
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
+
+			@Override
+			public Point next() {
+				return it.next();
+			}
+		};
 	}
 	
 	/**
@@ -88,17 +114,16 @@ public class TileMap implements Iterable<Tile> {
 
 	@Override
 	public Iterator<Tile> iterator() {
+		Iterator<Tile> it = tiles.iterator();
 		return new Iterator<Tile>() {
-			private int index = 0;
-			
 			@Override
 			public boolean hasNext() {
-				return (index < tiles.length);
+				return it.hasNext();
 			}
 
 			@Override
 			public Tile next() {
-				return tiles[index++];
+				return it.next();
 			}
 		};
 	}
