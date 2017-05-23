@@ -9,36 +9,6 @@ import java.util.List;
  */
 public interface GameBoard {
 	/**
-	 * Builder interface for setting up a new game board.
-	 */
-	public interface Builder {
-		/**
-		 * Set the tile at the given point.
-		 * @param value - value of the tile
-		 * @param point - tile's location
-		 */
-		public void setTile(Tile value, Point point);
-		
-		/**
-		 * Add a box to the given position in the board.
-		 * @param point - location of new box
-		 */
-		public void addBox(Point point);
-		
-		/**
-		 * Set the position of the player to a given point.
-		 * @param point - new location of the player
-		 */
-		public void setPlayerPos(Point point);
-		
-		/**
-		 * Construct finalized game board from the builder.
-		 * @return new game board
-		 */
-		public GameBoard build();
-	}
-	
-	/**
 	 * Get the tile at the given point.
 	 * @param point - location of tile in the map
 	 * @return tile located at that point
