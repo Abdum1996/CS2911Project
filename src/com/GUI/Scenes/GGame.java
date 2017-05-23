@@ -3,8 +3,11 @@ package com.GUI.Scenes;
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
 import com.Model.*;
+import com.Model.Action;
+import com.Model.Box;
 import com.Model.Point;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -97,6 +100,12 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 	 */
 	private SizedStack<ActionResult> recentActionResults = new SizedStack<>(3);
 
+    private boolean paused = false; // is the game paused?
+    private JPanel pauseMenu;
+    private JLabel pauseScrLabel;
+    private JButton pauseScrResumeBtn;
+    private JButton pauseScrRQuitBtn;
+
     public GGame(SceneManager sceneManager, ImageManager imgMan, String map) {
         super(sceneManager, imgMan);
 
@@ -107,11 +116,51 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         this.w = board.getMapWidth();
         this.h = board.getMapHeight();
         this.setPreferredSize(new Dimension(this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight()));
-        this.setLayout(new GridLayout(w, h));
 
         System.out.println("listener");
         this.addKeyListener(this);
         
+
+        pauseMenu = new JPanel();
+        //pauseMenu.setBackground(Color.BLACK);
+        pauseMenu.setLayout(new BoxLayout(pauseMenu, BoxLayout.PAGE_AXIS));
+        pauseMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pauseScrLabel = new JLabel("Game Paused");
+        pauseScrLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // center the stuff
+        pauseScrResumeBtn = new JButton("Resume");
+        pauseScrResumeBtn.addActionListener((ActionEvent ae) -> {
+            resumeGame();
+        });
+        pauseScrResumeBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pauseScrRQuitBtn = new JButton("Quit To Main Menu");
+        pauseScrRQuitBtn.addActionListener((ActionEvent ae) -> {
+            this.sceneManager.setScene(new GMainMenu(sceneManager, imgMan));
+        });
+        pauseScrRQuitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        pauseMenu.add(pauseScrLabel);
+        pauseMenu.add(pauseScrResumeBtn);
+        pauseMenu.add(pauseScrRQuitBtn);
+    }
+
+    private void resumeGame() {
+        this.paused = false;
+//        this.remove(pauseScrLabel);
+//        this.remove(pauseScrResumeBtn);
+//        this.remove(pauseScrRQuitBtn);
+        this.remove(pauseMenu);
+        this.repaint();
+        this.sceneManager.setVisible(true); // refresh at the level JFrame
+    }
+    private void pauseGame() {
+        this.paused = true;
+//        this.add(pauseScrLabel);
+//        this.add(pauseScrResumeBtn);
+//        this.add(pauseScrRQuitBtn);
+        this.add(pauseMenu);
+        this.repaint();
+        this.sceneManager.setVisible(true); // refresh at the level JFrame
+
     }
 
     public void reset() {
@@ -201,7 +250,10 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         int kc = e.getKeyCode();
         if (kc == KeyEvent.VK_R) {
             reset();
-        } 
+        }  else if (kc == KeyEvent.VK_P) {
+        	pauseGame();
+        	return;
+        }
         // ctrl z
         if ((kc == KeyEvent.VK_Z) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
         	undoLastMove();
@@ -213,13 +265,12 @@ public class GGame extends GScene implements KeyListener, ActionListener {
             playSound(winSound);
         }
         
-        applyAction(Action.readKeyEvent(e));
+        applyAction(Action.readKeyEvent(e));        
+
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
+    public void keyReleased(KeyEvent e) {}
 
     @Override
     public void paintComponent(Graphics g) {
@@ -230,40 +281,42 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         	return;
         }
 
-        g.drawString("Grid", 0, 0);
+        if (!paused) {
+            g.drawString("Grid", 0, 0);
 
-        int x = 0;
-        int y = 0;
+            int x = 0;
+            int y = 0;
 
-        // paint all tiles
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                Point pos = Point.at(j, i);
+            // paint all tiles
+            for (int i = 0; i < h; i++) {
+                for (int j = 0; j < w; j++) {
+                    Point pos = Point.at(j, i);
 
-                g.drawImage(imgMan.getTileImg(board.getTile(pos)), x, y, null);
-                x += imgMan.getImgHeight();
+                    g.drawImage(imgMan.getTileImg(board.getTile(pos)), x, y, null);
+                    x += imgMan.getImgHeight();
+                }
+                y += imgMan.getImgWidth();
+                x = 0;
             }
-            y += imgMan.getImgWidth();
-            x = 0;
+
+            BufferedImage box = imgMan.getBoxImg(0);
+            BufferedImage player = imgMan.getPlayerImg(board.getPlayer().getOrientation());
+
+            for (Box curr : board.getBoxes()) {
+                Point pos = curr.getPosition();
+
+                x = pos.getX() * box.getWidth();
+                y = pos.getY() * box.getHeight();
+                g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
+            }
+
+            Point playerPos = board.getPlayer().getPosition();
+            x = playerPos.getX() * player.getWidth();
+            y = playerPos.getY() * player.getHeight();
+
+            g.drawImage(player, x, y, null);
+        } else {
         }
-
-        BufferedImage box = imgMan.getBoxImg(0);
-        
-        BufferedImage player = imgMan.getPlayerImg(board.getPlayer().getOrientation());
-
-        for (Box curr : board.getBoxes()) {
-            Point pos = curr.getPosition();
-
-            x = pos.getX() * box.getWidth();
-            y = pos.getY() * box.getHeight();
-            g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
-        }
-
-        Point playerPos = board.getPlayer().getPosition();
-        x = playerPos.getX() * player.getWidth();
-        y = playerPos.getY() * player.getHeight();
-
-        g.drawImage(player, x, y, null);
     }
     
     public void paintChangingComponent(Graphics g) {
