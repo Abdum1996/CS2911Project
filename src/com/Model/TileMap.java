@@ -1,45 +1,75 @@
 package com.Model;
 
 import java.util.Iterator;
-import java.util.Arrays;
 
 /**
- * 2D coordinate grid of tiles. The top left of the grid is located at (0, 0).
- * As you move from left to right the grid's x coordinate increases, and the
+ * 2D fixed coordinate grid of tiles. The top left of the grid is located at (0, 0).
+ * As you move from left to right, the grid's x coordinate increases, and the
  * y coordinate increases when moving down the grid.
  */
-public class TileMap implements Grid<Tile> {
+public class TileMap implements Iterable<Tile> {
 	private final Tile[] tiles;
 	private final int width;
 	private final int height;
 	
 	/**
 	 * Construct a new tile map and add tiles to the map, in order of left to 
-	 * right, top to bottom, from the input iterator.
+	 * right, top to bottom, from the input iterator. If the map still has
+	 * empty spots left then these spots are filled with empty tiles.
 	 * @param it     - iterator providing tiles
 	 * @param width  - width of map in columns
 	 * @param height - height of map in rows
 	 */
 	public TileMap(Iterator<Tile> it, int width, int height) {
-		this(width, height);
+		tiles = new Tile[width*height];
+		this.width  = width;
+		this.height = height;
 		
 		int index = 0;
 		while (it.hasNext() && (index < tiles.length)) {
 			tiles[index++] = it.next();
 		}
+		
+		while (index < tiles.length) {
+			tiles[index++] = Tile.EMPTY;
+		}
 	}
 	
 	/**
-	 * Construct a new tile map.
-	 * @param width  - width of map in columns
-	 * @param height - height of map in rows
+	 * Get the tile at the specified location.
+	 * @pre grid actually contains the input point
+	 * @param point - point representing tiles location
+	 * @return tile at the given location
 	 */
-	public TileMap(int width, int height) {
-		tiles = new Tile[width*height];
-		this.width  = width;
-		this.height = height;
-		
-		Arrays.fill(tiles, Tile.EMPTY);
+	public Tile get(Point point) {
+		return tiles[point.getX() + point.getY()*width];
+	}
+	
+	/**
+	 * Get the width of the map in columns.
+	 * @return width of map
+	 */
+	public int getWidth() {
+		return width;
+	}
+	
+	/**
+	 * Get the height of the map in rows.
+	 * @return height of map
+	 */
+	public int getHeight() {
+		return height;
+	}
+	
+	/**
+	 * Determine if a point is within the bounds of the map.
+	 * @param point - point being checked
+	 * @return true if the map contains the point
+	 */
+	public boolean hasPoint(Point point) {
+		if ((point.getX() < 0) || (point.getX() >= width)) return false;
+		if ((point.getY() < 0) || (point.getY() >= height)) return false;
+		return true;
 	}
 	
 	/**
@@ -54,33 +84,6 @@ public class TileMap implements Grid<Tile> {
 		
 		Tile tile = get(point);
 		return !tile.equals(Tile.EMPTY) && !tile.equals(Tile.WALL);
-	}
-	
-	@Override
-	public void set(Tile value, Point point) {
-		tiles[point.getX() + point.getY()*width] = value;
-	}
-	
-	@Override
-	public Tile get(Point point) {
-		return tiles[point.getX() + point.getY()*width];
-	}
-	
-	@Override
-	public int getWidth() {
-		return width;
-	}
-	
-	@Override
-	public int getHeight() {
-		return height;
-	}
-
-	@Override
-	public boolean hasPoint(Point point) {
-		if ((point.getX() < 0) || (point.getX() >= width)) return false;
-		if ((point.getY() < 0) || (point.getY() >= height)) return false;
-		return true;
 	}
 
 	@Override
