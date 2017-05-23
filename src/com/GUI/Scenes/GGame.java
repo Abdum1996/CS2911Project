@@ -148,6 +148,9 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         pauseMenu.add(pauseScrLabel);
         pauseMenu.add(pauseScrResumeBtn);
         pauseMenu.add(pauseScrRQuitBtn);
+        
+//        for(Action a : board.solve())
+//        	System.out.println(a);
     }
 
     /**
