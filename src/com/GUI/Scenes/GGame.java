@@ -319,21 +319,24 @@ public class GGame extends GScene implements KeyListener, ActionListener {
             }
 
             BufferedImage box = imgMan.getBoxImg(0);
-
             BufferedImage player = imgMan.getPlayerImg(board.getPlayer().getOrientation());
-            Iterator<Box> boxIterator = board.getBoxes();
-        
-            while (boxIterator.hasNext()) {
-                Box curr = boxIterator.next();
+
+            Iterator<Box> it = board.getBoxes();
+            while (it.hasNext()) {
+            	Box curr = it.next();
                 Point pos = curr.getPosition();
-        	
+
                 x = pos.getX() * box.getWidth();
                 y = pos.getY() * box.getHeight();
                 g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
             }
 
-        } else {
+            Point playerPos = board.getPlayer().getPosition();
+            x = playerPos.getX() * player.getWidth();
+            y = playerPos.getY() * player.getHeight();
 
+            g.drawImage(player, x, y, null);
+        } else {
         }
     }
     
@@ -363,11 +366,11 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         BufferedImage box = imgMan.getBoxImg(0);
         
         BufferedImage player = imgMan.getPlayerImg(newDirection);
-        Iterator<Box> boxIterator = board.getBoxes();
+        Iterator<Box> it = board.getBoxes();
         
-        while (boxIterator.hasNext()) {
-        	Box curr = boxIterator.next();
-        	Point pos = curr.getPosition();
+        while (it.hasNext()) {
+        	Box curr = it.next();
+            Point pos = curr.getPosition();
 
             x = pos.getX() * box.getWidth();
             y = pos.getY() * box.getHeight();

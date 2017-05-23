@@ -50,7 +50,7 @@ public class TileMap implements Iterable<Tile> {
 	 * @return tile at the given location
 	 */
 	public Tile get(Point point) {
-		return tiles.get(point.getX() + point.getX()*width);
+		return tiles.get(point.getX() + point.getY()*width);
 	}
 	
 	/**
