@@ -22,7 +22,7 @@ public class GMainMenu extends GScene {
         btnStartGame.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             System.out.println("Start game, do stuff");
 
-            this.sceneManager.setScene(new GGame(sceneManager, imgMan, "./maps/map2.txt"));
+            this.sceneManager.setScene(new GGame(sceneManager, imgMan, "./maps/map1.txt"));
         });
         btnHelp = new JButton("Help");
         btnHelp.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
