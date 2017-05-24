@@ -44,6 +44,7 @@ public class SceneManager extends JFrame {
         this.setSize(800, 640);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //this.setLayout(new GridLayout());
+        this.setResizable(false);
 
         
         this.add(this.getCurrentScene());
