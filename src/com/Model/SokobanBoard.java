@@ -71,7 +71,6 @@ public class SokobanBoard implements GameBoard {
 		
 		// Ensure player is not moving outside of the map or
 		// into a tile that is either empty or a wall
-		if (dir != player.getOrientation()) return true; //changing orientation always valid
 		Point next1 = player.getPosition().move(dir);
 		if (!tileMap.isValidEntityPos(next1)) return false;
 		
@@ -93,7 +92,6 @@ public class SokobanBoard implements GameBoard {
 		
 		Player oldPlayer = player;
 		player = player.move(dir);
-		if (player.getOrientation() != oldPlayer.getOrientation()) return ActionResult.CHANGE_ORIENTATION;
 		
 		Box old = boxMap.remove(player.getPosition());
 		if (old != null) {
@@ -111,7 +109,6 @@ public class SokobanBoard implements GameBoard {
 		
 		Direction dir = Direction.readAction(action);
 		
-		if (player.getOrientation() != player.move(dir).getOrientation()) return ActionResult.CHANGE_ORIENTATION;
 		Player np = player.move(dir);
 		
 		Box old = boxMap.get(np.getPosition());
@@ -155,8 +152,8 @@ public class SokobanBoard implements GameBoard {
 
 	@Override
 	public boolean revertAction(Action action, ActionResult ar) {
-		// this function doesn't change orientation (trivial), it only moves things back
-		if (ar == ActionResult.CHANGE_ORIENTATION || ar == ActionResult.NONE) 
+		// this function only moves things back
+		if (ar == ActionResult.NONE) 
 			return true;
 		
 		Direction dir = Direction.readAction(action);

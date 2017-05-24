@@ -6,5 +6,5 @@ package com.Model;
  *
  */
 public enum ActionResult {
-	NONE, PLAYER_MOVE, CHANGE_ORIENTATION, BOX_MOVE
+	NONE, PLAYER_MOVE, BOX_MOVE
 }
