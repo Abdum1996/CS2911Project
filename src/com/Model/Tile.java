@@ -1,4 +1,4 @@
-package com;
+package com.Model;
 /**
  * Enumeration to represent a tile in a grid.
  *

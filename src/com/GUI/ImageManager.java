@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-import com.EntityTypes;
-import com.Tile;
+
+import com.Model.Direction;
+import com.Model.GameConstants;
+import com.Model.Tile;
 
 
 /**
@@ -19,12 +21,17 @@ public class ImageManager {
      */
     private HashMap<Tile, BufferedImage> tileImgs;
     /**
-    * hash map of all images for entities
+    * hash map of all images for boxes
      */
-    private HashMap<EntityTypes, BufferedImage> entityImgs;
-
-    private final int imgWidth = 64;
-    private final int imgHeight = 64;
+    private HashMap<Integer, BufferedImage> boxImgs;
+    
+    /**
+     * spritesheet object for the player
+     */
+    private GSpritesheet sheet;
+    
+    private final int imgWidth = GameConstants.IMAGE_DIMENSION;
+    private final int imgHeight = GameConstants.IMAGE_DIMENSION;
 
     /**
     * folder directory of tile, entity and default image
@@ -34,7 +41,8 @@ public class ImageManager {
      */
     public ImageManager () {
         this.tileImgs = new HashMap<>();
-        this.entityImgs = new HashMap<>();
+        this.boxImgs = new HashMap<>();
+        this.sheet = new GSpritesheet();
     }
 
     public void loadTileImg (Tile type, String path) {
@@ -48,11 +56,12 @@ public class ImageManager {
             e.printStackTrace();
         }
     }
-    public void loadEntityImg (EntityTypes type, String path) {
-        BufferedImage tileImage;
+    
+    public void loadBoxImg (int boxId, String path) {
+        BufferedImage boxImage;
         try {
-            tileImage = ImageIO.read(new File(path));
-            entityImgs.put(type, tileImage);
+            boxImage = ImageIO.read(new File(path));
+            boxImgs.put(boxId, boxImage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,10 +70,14 @@ public class ImageManager {
     public BufferedImage getTileImg (Tile type) {
         return this.tileImgs.get(type);
     }
-    public BufferedImage getEntityImg (EntityTypes type) {
-        return this.entityImgs.get(type);
+    public BufferedImage getBoxImg (int id) {
+        return this.boxImgs.get(id);
     }
 
+    public BufferedImage getPlayerImg (Direction dir) {
+        return sheet.getNextSprite(dir);
+    }
+    
     public int getImgHeight () {
         return this.imgHeight;
     }

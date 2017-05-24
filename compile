@@ -1,1 +1,9 @@
-echo 'now compiling... (WIP)'
+echo './compile has to be run in the root folder of the project'
+# clean all .class files first
+
+echo 'deleting all previous class files...'
+./clean
+
+cd src
+echo 'compiling...'
+javac -d .. com/Model/GameController.java
