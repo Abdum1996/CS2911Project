@@ -172,7 +172,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 //        this.add(pauseScrLabel);
 //        this.add(pauseScrResumeBtn);
 //        this.add(pauseScrRQuitBtn);
-        this.setFocusable(false);
         sceneManager.setScene(SceneManager.PAUSE_ID, new GPauseMenu(sceneManager, imgMan, board));
 //        repaint();
         sceneManager.setVisible(true); // refresh at the level JFrame
