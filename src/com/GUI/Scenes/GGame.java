@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -118,7 +119,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 
         this.imgMan = imgMan;
         this.map = map;
-        board = SokobanBoard.readFile(map);
+        board = BoardGenerator.readMap(map);
 
         this.w = board.getMapWidth();
         this.h = board.getMapHeight();
@@ -313,7 +314,9 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         BufferedImage box = imgMan.getBoxImg(0);
         BufferedImage player = imgMan.getPlayerImg(board.getPlayer().getOrientation());
 
-        for (Box curr : board.getBoxes()) {
+        Iterator<Box> it = board.getBoxes();
+        while (it.hasNext()) {
+            Box curr = it.next();
             Point pos = curr.getPosition();
 
             x = pos.getX() * box.getWidth();
@@ -355,8 +358,10 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         BufferedImage box = imgMan.getBoxImg(0);
         
         BufferedImage player = imgMan.getPlayerImg(newDirection);
-
-        for (Box curr : board.getBoxes()) {
+        Iterator<Box> it = board.getBoxes();
+        
+        while (it.hasNext()) {
+        	Box curr = it.next();
             Point pos = curr.getPosition();
 
             x = pos.getX() * box.getWidth();

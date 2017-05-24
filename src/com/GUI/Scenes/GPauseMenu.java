@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -97,7 +98,9 @@ public class GPauseMenu extends GScene implements KeyListener {
 	    BufferedImage box = imgMan.getBoxImg(0);
 	    BufferedImage player = imgMan.getPlayerImg(context.getPlayer().getOrientation());
 	
-	    for (Box curr : context.getBoxes()) {
+	    Iterator<Box> it = context.getBoxes();
+	    while (it.hasNext()) {
+	    	Box curr = it.next();
 	        Point pos = curr.getPosition();
 	
 	        x = pos.getX() * box.getWidth();
