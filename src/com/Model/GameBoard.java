@@ -1,6 +1,5 @@
 package com.Model;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -17,10 +16,16 @@ public interface GameBoard {
 	public Tile getTile(Point point);
 	
 	/**
-	 * Get all the boxes in the game map.
-	 * @return list of boxes in the map
+	 * Place a box at the given position in the map.
+	 * @param point - location where box will be placed
 	 */
-	public Iterator<Box> getBoxes();
+	public void placeBox(Point point);
+	
+	/**
+	 * Get all the boxes in the game map.
+	 * @return handle providing read only access to boxes in the map
+	 */
+	public Iterable<Box> getBoxes();
 	
 	/**
 	 * Get the current state of the player.

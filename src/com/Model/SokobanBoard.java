@@ -40,14 +40,22 @@ public class SokobanBoard implements GameBoard {
 		player = new Player(playerPos);
 	}
 	
+	public Iterable<Tile> getTiles() {
+		return tileMap;
+	}
+	
+	public void reset() {
+		
+	}
+	
 	@Override
 	public Tile getTile(Point point) {
 		return tileMap.get(point);
 	}
 
 	@Override
-	public Iterator<Box> getBoxes() {
-		return boxMap.values().iterator();
+	public Iterable<Box> getBoxes() {
+		return boxMap.values();
 	}
 
 	@Override
@@ -141,6 +149,10 @@ public class SokobanBoard implements GameBoard {
 		
 		BoardState start = new BoardState(tileMap, player, getBoxes());
 		return searchAlgo.runAStarSearch(start);
+	}
+	
+	public int getMinMoves() {
+		return 0;
 	}
 	
 	@Override

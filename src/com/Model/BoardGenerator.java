@@ -72,7 +72,7 @@ public class BoardGenerator {
 	 * @param height - height of the board in rows
 	 * @return procedurally generated game board
 	 */
-	public static SokobanBoard genBoard(int width, int height) {
+	public static SokobanBoard genBoard(Difficulty level) {
 		List<Tile> tiles = new ArrayList<>(width*height);
 		
 		int numGoals = generator.nextInt(MAX_GOALS) + 1;
