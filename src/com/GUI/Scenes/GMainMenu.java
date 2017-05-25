@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class GMainMenu extends GScene {
     private JButton btnStartGame;
     private JButton btnHelp;
@@ -25,15 +26,17 @@ public class GMainMenu extends GScene {
 
             this.sceneManager.setScene(SceneManager.GAME_ID, new GGame(sceneManager, imgMan, "./maps/map1.txt"));
         });
-        btnHelp = new JButton("Help");
+        
+        btnHelp = new ImageButton("./resources/helpbutton.png");
         btnHelp.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             System.out.println("Help");
         });
-        btnCredits = new JButton("Credits");
+        
+        btnCredits = new ImageButton("./resources/exitbutton.png");
         btnCredits.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             System.out.println("Credits");
         });
-
+        
         this.add(btnStartGame);
         this.add(btnHelp);
         this.add(btnCredits);

@@ -99,15 +99,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 	 * the last action results made by the user, used for undoing
 	 */
 	private SizedStack<ActionResult> recentActionResults = new SizedStack<>(3);
-
-	/**
-	 * Checks whether the game is pause or not, default is unpaused
-	 */
-    private JPanel pauseMenu;
-    private JLabel pauseScrLabel;
-    private JButton pauseScrResumeBtn;
-    private JButton pauseScrRQuitBtn;
-
     /**
      * Constructs a GameScene with the puzzle loadeds
      * @param sceneManager - The sceneManager managing this GScene
@@ -128,55 +119,16 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         System.out.println("listener");
         this.addKeyListener(this);
         
-
-        pauseMenu = new JPanel();
-        //pauseMenu.setBackground(Color.BLACK);
-        pauseMenu.setLayout(new BoxLayout(pauseMenu, BoxLayout.PAGE_AXIS));
-        pauseMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
-        pauseScrLabel = new JLabel("Game Paused");
-        pauseScrLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // center the stuff
-        pauseScrResumeBtn = new JButton("Resume");
-        pauseScrResumeBtn.addActionListener((ActionEvent ae) -> {
-            resumeGame();
-        });
-        pauseScrResumeBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        pauseScrRQuitBtn = new JButton("Quit To Main Menu");
-        pauseScrRQuitBtn.addActionListener((ActionEvent ae) -> {
-            this.sceneManager.setScene(SceneManager.MAIN_MENU_ID, new GMainMenu(sceneManager, imgMan));
-        });
-        pauseScrRQuitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        pauseMenu.add(pauseScrLabel);
-        pauseMenu.add(pauseScrResumeBtn);
-        pauseMenu.add(pauseScrRQuitBtn);
-        
 //        for(Action a : board.solve())
 //        	System.out.println(a);
-    }
-
-    /**
-     * Resumes the game from a paused state
-     */
-    private void resumeGame() {
-//        this.remove(pauseScrLabel);
-//        this.remove(pauseScrResumeBtn);
-//        this.remove(pauseScrRQuitBtn);
-        remove(pauseMenu);
-        repaint();
-        sceneManager.setVisible(true); // refresh at the level JFrame
     }
     
     /**
      * Pauses the game and displays a menu
      */
     private void pauseGame() {
-//        this.add(pauseScrLabel);
-//        this.add(pauseScrResumeBtn);
-//        this.add(pauseScrRQuitBtn);
         sceneManager.setScene(SceneManager.PAUSE_ID, new GPauseMenu(sceneManager, imgMan, board));
-//        repaint();
         sceneManager.setVisible(true); // refresh at the level JFrame
-
     }
 
     public void reset() {
