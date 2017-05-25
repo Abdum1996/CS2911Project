@@ -3,11 +3,25 @@ package com.Model;
 import java.util.Random;
 
 public class Template {
+	
+	/**
+	 * WALL = 0
+	 * FLOOR = 1
+	 * EMPTY = 2
+	 */
 
 	private int array[][];
+	private final Random rand;
 	
-	public Template() {
-		this.array = new int[5][5];
+	public Template(int[][] array) {
+		this.array = array;
+		this.rand = new Random();
+		
+	}
+	
+	public Template(Template tem) {
+		this.array = tem.array;
+		this.rand = tem.rand;
 	}
 	
 	private int[][] rotate() {
@@ -32,9 +46,8 @@ public class Template {
 		return newArray;
 	}
 	public Template modifyTemplate() {
-		Template temp = new Template();
-		Random r = new Random();
-		int i = r.nextInt(3);
+		Template temp = new Template(this);
+		int i = temp.rand.nextInt(3);
 		while (i > 0) {
 			if (i == 1) temp.array = temp.rotate();
 			else if (i == 2) temp.array = temp.reflect();
