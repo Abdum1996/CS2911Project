@@ -189,11 +189,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      */
     private void applyAction(Action action) {
     	
-    	// no board action should be done after winning
-    	if (gameWon()) {
-    		return;
-    	}
-    	
     	ActionResult ar = board.getActionResult((action));
     	System.out.println(action);
         System.out.println(ar);
@@ -202,10 +197,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         if (timer.isRunning()) {
         	pendingActions.add(action);
 			System.out.println("put into pending: " + action);
-        	return;
-        }
-        
-        if (ar == ActionResult.PLAYER_MOVE || ar == ActionResult.BOX_MOVE) {
+        } else if (ar == ActionResult.PLAYER_MOVE || ar == ActionResult.BOX_MOVE) {
         	// for undo
         	System.out.println("pushing...");
         	recentActions.push(action);
@@ -229,6 +221,15 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 				this.applyAction(action);
 				System.out.println("pulled from pending: " + action);
         	}
+        }
+        
+        // no board action should be done after winning
+    	if (gameWon()) {
+            System.out.println("Game Won!");
+            File winSound = new File("./sound_files/goalplacement.wav");
+            playSound(winSound);
+            reset();
+            return;
         }
     }
     
@@ -277,12 +278,12 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         	undoLastMove();
         	return;
         }
-        if (gameWon()) {
+ /*       if (gameWon()) {
             System.out.println("Game Won!");
             File winSound = new File("./sound_files/goalplacement.wav");
             playSound(winSound);
         }
-        
+*/        
         applyAction(Action.readKeyEvent(e));        
 
     }
