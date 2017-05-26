@@ -24,6 +24,7 @@ import com.GUI.SceneManager;
 import com.Model.Box;
 import com.Model.GameBoard;
 import com.Model.Point;
+import com.Model.SokobanBoard;
 
 @SuppressWarnings("serial")
 public class GPauseMenu extends GScene implements KeyListener {
@@ -33,9 +34,9 @@ public class GPauseMenu extends GScene implements KeyListener {
      */
     private BufferedImage bkgImg;
     
-    private GGame context;
+    private GameBoard context;
 
-	public GPauseMenu(SceneManager sceneManager, ImageManager imgMan, GGame context) {
+	public GPauseMenu(SceneManager sceneManager, ImageManager imgMan, GameBoard context) {
 		super(sceneManager, imgMan);
 		this.context = context;
 		
@@ -62,7 +63,7 @@ public class GPauseMenu extends GScene implements KeyListener {
 		pauseScrQuitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pauseScrQuitBtn.setAlignmentY(CENTER_ALIGNMENT);
 	    pauseScrQuitBtn.addActionListener((ActionEvent ae) -> {
-	        this.sceneManager.switchScene(SceneManager.MAIN_MENU_ID);
+	        this.sceneManager.setScene(new GMainMenu(sceneManager, imgMan));
 	    });
 
 	    add(pauseScrQuitBtn);
@@ -107,9 +108,7 @@ public class GPauseMenu extends GScene implements KeyListener {
 	
 	public void resumeGame() {
 		System.out.println("inside resume game");
-		sceneManager.add(context.getControlPanel());
-		context.getControlPanel().repaintAll();
-		sceneManager.switchScene(SceneManager.GAME_ID);
+		sceneManager.setScene(new GGame(sceneManager, imgMan, context));
 	}
 
 	@Override

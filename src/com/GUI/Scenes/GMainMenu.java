@@ -51,7 +51,7 @@ public class GMainMenu extends GScene {
             System.out.println("Start game, do stuff");
             playSound(new File("./sound_files/gamestart.wav"));
 
-            this.sceneManager.setScene(SceneManager.GAME_ID, new GGame(sceneManager, imgMan, "./maps/map5.txt"));
+            this.sceneManager.setScene(new GGame(sceneManager, imgMan, "./maps/map5.txt"));
         });
         
         btnHelp = new ImageButton("./resources/helpbutton.png");
