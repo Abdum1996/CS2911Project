@@ -1,7 +1,12 @@
 package com.Model;
 
 import java.util.LinkedList;
+import java.util.Optional;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Class representing a game 'level', which consists of a Sokoban board and all
@@ -9,24 +14,27 @@ import java.util.Deque;
  */
 public class GameLevel {
 	private final Difficulty difficulty;
-	private final SokobanBoard board;
 	private final int minMoves;
 	
-	// The below type can be used as both a stack and a queue :o
 	private final Deque<ActionResult> pastActionResults;
 	private final Deque<Action> pastActions;
+	
+	private final Map<Point, Box> boxMap;
+	private final TileMap tileMap;
+	private Player player;
 	
 	private int undoCount = 0;
 	private int moveCount = 0;
 	private int score = 0;
 	
 	/**
-	 * Construct a new game level with a given board and difficulty.
-	 * @param difficulty - difficulty level for this game
-	 * @param board - board to be used in the game
+	 * Construct a new game level with a given map and difficulty.
+	 * @param difficulty - level of game's difficulty
+	 * @param map - name of map file to be parsed (if applicable)
 	 */
-	public GameLevel(Difficulty difficulty, SokobanBoard board) {
-		this.board = board;
+	public GameLevel(Difficulty difficulty, Optional<String> map) {	
+		this.board = map.isPresent() ? BoardGenerator.readMap(map.get())
+				: BoardGenerator.genBoard(difficulty);
 		
 		minMoves = board.getMinMoves();
 		this.difficulty = difficulty;
@@ -76,7 +84,8 @@ public class GameLevel {
 		board.applyAction(action);
 		moveCount++;
 		
-		// add some metric for score counting in here
+		// add some metric for score counting in here (below is just as a reminder)
+		score += 1;
 	}
 	
 	/**
@@ -130,7 +139,13 @@ public class GameLevel {
 	 * @return true if all the boxes are in their goals
 	 */
 	public boolean hasWon() {
-		return !hasLost() && board.gameWon();
+		if (hasLost()) return false;
+		
+		for (Point curr : tileMap.getGoalPositions()) {
+			if (!boxMap.containsKey(curr)) return false;
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -147,7 +162,7 @@ public class GameLevel {
 	 * @return iterable reference to such tiles
 	 */
 	public Iterable<Tile> getTiles() {
-		return board.getTiles();
+		return tileMap.getTiles();
 	}
 	
 	/**
@@ -155,7 +170,8 @@ public class GameLevel {
 	 * @return iterable reference to such boxes
 	 */
 	public Iterable<Box> getBoxes() {
-		return board.getBoxes();
+		Collection<Box> boxes = boxMap.values();
+		return Collections.unmodifiableCollection(boxes);
 	}
 	
 	/**
@@ -163,7 +179,7 @@ public class GameLevel {
 	 * @return player
 	 */
 	public Player getPlayer() {
-		return board.getPlayer();
+		return player;
 	}
 	
 	/**
@@ -171,7 +187,7 @@ public class GameLevel {
 	 * @return map width
 	 */
 	public int getMapWidth() {
-		return board.getMapHeight();
+		return tileMap.getWidth();
 	}
 
 	/**
@@ -179,6 +195,6 @@ public class GameLevel {
 	 * @return map height
 	 */
 	public int getMapHeight() {
-		return board.getMapHeight();
+		return tileMap.getHeight();
 	}	
 }
