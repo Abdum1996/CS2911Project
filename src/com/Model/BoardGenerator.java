@@ -116,11 +116,6 @@ public class BoardGenerator {
 		} while (!board.isSolvable());
 		//Collections.s*/
 		
-		
-		
-		
-		
-		
 		return board;
 	}
 	
