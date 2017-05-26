@@ -32,9 +32,10 @@ public class SokobanBoard implements GameBoard {
 		boxMap  = new HashMap<>();
 		tileMap = map;
 		
+		int ctr = 0;
 		while (boxPositions.hasNext()) {
 			Point pos = boxPositions.next();
-			boxMap.put(pos, new Box(pos));
+			boxMap.put(pos, new Box(pos, ctr++));
 		}
 		
 		player = new Player(playerPos);
