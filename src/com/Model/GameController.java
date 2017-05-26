@@ -13,7 +13,7 @@ import com.GUI.SceneManager;
 public class GameController {
     public static void main(String[] args) {
     	// Tester for the board solver
-    	SokobanBoard board = BoardGenerator.readMap("./maps/map2.txt");
+    	SokobanBoard board = BoardGenerator.readMap("./maps/map5.txt");
     	List<Action> actions = board.solve();
     	for (Action curr : actions) {
     		System.out.println(curr);
