@@ -10,11 +10,15 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import com.GUI.ImageButton;
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
 import com.Model.Box;
@@ -23,41 +27,37 @@ import com.Model.Point;
 
 @SuppressWarnings("serial")
 public class GPauseMenu extends GScene implements KeyListener {
-	
-	private GameBoard context;
-	
-	/**
-     * width of this grid
-     */
-    private int w;
     
     /**
-     * height of this grid
+     * the background image of this menu
      */
-    private int h;
+    private BufferedImage bkgImg;
     
-    private final byte alpha = (byte) 190;
+    private GGame context;
 
-	public GPauseMenu(SceneManager sceneManager, ImageManager imgMan, GameBoard context) {
+	public GPauseMenu(SceneManager sceneManager, ImageManager imgMan, GGame context) {
 		super(sceneManager, imgMan);
-		this.w = context.getMapWidth();
-		this.h = context.getMapHeight();
 		this.context = context;
 		
-		
 //		setOpaque(false);
-		setBackground(new Color(0, 0, 0));
-		setPreferredSize(new Dimension(this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight()));
+		try {
+			bkgImg = ImageIO.read(new File("./resources/menubackground.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		setPreferredSize(new Dimension(bkgImg.getWidth(), bkgImg.getHeight()));
 		
 		
-		JButton pauseScrResumeBtn = new JButton("Resume");
+		JButton pauseScrResumeBtn = new ImageButton("./resources/resumebutton.png");
 		pauseScrResumeBtn.setAlignmentY(CENTER_ALIGNMENT);
 	    pauseScrResumeBtn.addActionListener((ActionEvent ae) -> {
 	        this.resumeGame();
 	    });
 	    add(pauseScrResumeBtn);
 		
-	    JButton pauseScrQuitBtn = new JButton("Quit To Main Menu");
+	    JButton pauseScrQuitBtn = new ImageButton("./resources/exitbutton.png");
 
 		pauseScrQuitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pauseScrQuitBtn.setAlignmentY(CENTER_ALIGNMENT);
@@ -78,41 +78,7 @@ public class GPauseMenu extends GScene implements KeyListener {
 		// first paint normal grid
         super.paintComponent(g);
         
-        g.drawString("Grid", 0, 0);
-
-        int x = 0;
-        int y = 0;
-
-        // paint all tiles
-	    for (int i = 0; i < h; i++) {
-	        for (int j = 0; j < w; j++) {
-	            Point pos = Point.at(j, i);
-	
-	            g.drawImage(imgMan.getTileImg(context.getTile(pos)), x, y, null);
-	            x += imgMan.getImgHeight();
-	        }
-	        y += imgMan.getImgWidth();
-	        x = 0;
-	    }
-	
-	    BufferedImage box = imgMan.getBoxImg(0);
-	    BufferedImage player = imgMan.getPlayerImg(context.getPlayer().getOrientation());
-	
-	    Iterator<Box> it = context.getBoxes();
-	    while (it.hasNext()) {
-	    	Box curr = it.next();
-	        Point pos = curr.getPosition();
-	
-	        x = pos.getX() * box.getWidth();
-	        y = pos.getY() * box.getHeight();
-	        g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
-	    }
-	
-	    Point playerPos = context.getPlayer().getPosition();
-	    x = playerPos.getX() * player.getWidth();
-	    y = playerPos.getY() * player.getHeight();
-	
-	    g.drawImage(player, x, y, null);
+        g.drawImage(bkgImg, 0, 0, null);
         
     }
 	
@@ -141,6 +107,7 @@ public class GPauseMenu extends GScene implements KeyListener {
 	
 	public void resumeGame() {
 		System.out.println("inside resume game");
+		sceneManager.add(context.getControlPanel());
 		sceneManager.switchScene(SceneManager.GAME_ID);
 	}
 
