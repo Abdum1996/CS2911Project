@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.List;
 
@@ -127,7 +128,7 @@ public class BoardGenerator {
 	        sc = new Scanner(new FileReader());
 		    String curr = null;
 		    String[] c = null;
-		    int array[5][5];
+		    char array[5][5];
 		    int i,j = 0;
 		    
 		    while ((sc.hasNextLine()) || (j < 5)) {
@@ -136,7 +137,7 @@ public class BoardGenerator {
 		    	c = curr.split(" ");
 		    	
 		    	for (i = 0; i < 5; i++) {
-		    		array[j][i] = Integer.parseInt(c[i]);
+		    		array[j][i] = c[i].chatAt(0);
 		    	}
 		    	j++;
 		    }
@@ -159,5 +160,70 @@ public class BoardGenerator {
 	private static Point genRandomPoint(TileMap map) {
 		int offset = generator.nextInt(map.getHeight()*map.getHeight());
 		return Point.at(offset % map.getWidth(), offset/map.getHeight());
+	}
+	
+	public char[][] emptyBoard(int height, int width) {
+		char[][] array = new char[height][width];
+		Arrays.fill(array,'E');
+		int i = 3 - height % 3;
+		int j = 3 - width  % 3;
+		char[][] tempArray = null;
+		Template t = null;
+		
+		while (i < height) {
+			tempArray = getArray(generator.nextInt(17)+1);
+			t = new Template(tempArray);
+			t.modifyTemplate();
+			if (!properOverlap(array,t,i,j)) continue;
+			tempToBoard(array,t,i,j);
+			j += 3;
+			if (j < width) continue;
+			j = 3 - width  % 3;
+			i += 3;
+		}
+		
+		return array;
+	}
+	
+	private void tempToBoard(char[][] array, Template t, int i, int j) {
+		
+	}
+
+	private boolean properOverlap(char[][] array, Template t, int i, int j) {
+		
+		return false;
+	}
+
+	public char[][] getArray(int index) {
+		String s = "./resources/Templates/t" + index + ".txt";
+		Scanner sc = null;
+	    char array[][] = new char[5][5];
+	    try
+	    {
+	        sc = new Scanner(new FileReader(s));
+		    String curr = null;
+		    String[] c = null;
+		    int i,j = 0;
+		    
+		    while ((sc.hasNextLine()) || (j < 5)) {
+		    
+		    	curr = sc.nextLine();
+		    	c = curr.split(" ");
+		    	
+		    	for (i = 0; i < 5; i++) {
+		    		array[j][i] = c[i].charAt(0);
+		    	}
+		    	j++;
+		    }
+
+	    }
+	    catch (FileNotFoundException e) {}
+
+	    finally
+	    {
+	        if (sc != null) sc.close();
+
+	    } 
+		return array;
 	}
 }
