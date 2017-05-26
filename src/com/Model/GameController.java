@@ -8,7 +8,6 @@ import com.GUI.SceneManager;
 
 /**
  * The driver class for the game, sets up the graphics and runs it
- * @author Abdulrahman Alhomayany
  */
 public class GameController {
     public static void main(String[] args) {
@@ -26,8 +25,8 @@ public class GameController {
         imgMan.loadTileImg(Tile.WALL, "./resources/wall.png");
         imgMan.loadTileImg(Tile.EMPTY, "./resources/empty.png");
         
+        Random rand = new Random();
         for (int i = 0; i < GameConstants.BOX_LIMIT; i++) {
-        	Random rand = new Random();
             int r = rand.nextInt(GameConstants.NUM_BOX_TEXTURES);
 			imgMan.loadBoxImg(i, "./resources/box" + r + ".png");
 			
