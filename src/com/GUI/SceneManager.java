@@ -12,8 +12,6 @@ import com.GUI.Scenes.GScene;
 
 /**
  * Manages the scenes on the main frame
- * @author Abdulrahman Alhomayany
- *
  */
 @SuppressWarnings("serial")
 public class SceneManager extends JFrame {
