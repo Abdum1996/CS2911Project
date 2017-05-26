@@ -1,6 +1,7 @@
 package com.Model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * y coordinate increases when moving down the grid. This coordinate grid also
  * keeps track of the locations of the goal tiles in the map.
  */
-public class TileMap implements Iterable<Tile> {
+public class TileMap {
 	private final List<Point> goals;
 	private final List<Tile> tiles;
 	
@@ -70,21 +71,19 @@ public class TileMap implements Iterable<Tile> {
 	}
 	
 	/**
-	 * Get the locations of the goal tiles in the map.
+	 * Get read-only access to the tiles in the tile map.
+	 * @return iterable reference to such tiles
 	 */
-	public Iterator<Point> getGoalPositions() {
-		Iterator<Point> it = goals.iterator();
-		return new Iterator<Point>() {
-			@Override
-			public boolean hasNext() {
-				return it.hasNext();
-			}
-
-			@Override
-			public Point next() {
-				return it.next();
-			}
-		};
+	public Iterable<Tile> getTiles() {
+		return Collections.unmodifiableCollection(tiles);
+	}
+	
+	/**
+	 * Get read-only access to the goal positions in the tile map. 
+	 * @return iterable reference to the goal positions
+	 */
+	public Iterable<Point> getGoalPositions() {
+		return Collections.unmodifiableCollection(goals);
 	}
 	
 	/**
@@ -110,21 +109,5 @@ public class TileMap implements Iterable<Tile> {
 		
 		Tile tile = get(point);
 		return !tile.equals(Tile.EMPTY) && !tile.equals(Tile.WALL);
-	}
-
-	@Override
-	public Iterator<Tile> iterator() {
-		Iterator<Tile> it = tiles.iterator();
-		return new Iterator<Tile>() {
-			@Override
-			public boolean hasNext() {
-				return it.hasNext();
-			}
-
-			@Override
-			public Tile next() {
-				return it.next();
-			}
-		};
 	}
 }
