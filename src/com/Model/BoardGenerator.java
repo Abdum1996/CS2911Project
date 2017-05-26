@@ -103,7 +103,7 @@ public class BoardGenerator {
 				
 				while (!map.isValidEntityPos(boxPos))
 					boxPos = genRandomPoint(map);
-				boxPositions.add(boxPos);
+					boxPositions.add(boxPos);
 			}
 			
 			Point playerPos = genRandomPoint(map);
@@ -116,44 +116,6 @@ public class BoardGenerator {
 		} while (!board.isSolvable());
 		//Collections.s*/
 		
-		
-		
-		
-		
-		/*  
-		Scanner sc = null;
-	    try
-	    {
-
-	        sc = new Scanner(new FileReader());
-		    String curr = null;
-		    String[] c = null;
-		    char array[5][5];
-		    int i,j = 0;
-		    
-		    while ((sc.hasNextLine()) || (j < 5)) {
-		    
-		    	curr = sc.nextLine();
-		    	c = curr.split(" ");
-		    	
-		    	for (i = 0; i < 5; i++) {
-		    		array[j][i] = c[i].chatAt(0);
-		    	}
-		    	j++;
-		    }
-		    
-		    Template temp = new Template(array);
-		    temp.modifyTemplate();
-	    }
-	    catch (FileNotFoundException e) {}
-
-	    finally
-	    {
-	        if (sc != null) sc.close();
-
-	    } 
-		 */
-		
 		return board;
 	}
 	
@@ -163,8 +125,8 @@ public class BoardGenerator {
 	}
 	
 	public char[][] emptyBoard(int height, int width) {
-		char[][] array = new char[height][width];
-		Arrays.fill(array,'E');
+		char[][] board = new char[height][width];
+		Arrays.fill(board,'E');
 		int i = 3 - height % 3;
 		int j = 3 - width  % 3;
 		char[][] tempArray = null;
@@ -174,19 +136,22 @@ public class BoardGenerator {
 			tempArray = getArray(generator.nextInt(17)+1);
 			t = new Template(tempArray);
 			t.modifyTemplate();
-			if (!properOverlap(array,t,i,j)) continue;
-			tempToBoard(array,t,i,j);
+			if (!properOverlap(board,t,i,j)) continue;
+			tempToBoard(board,t,i,j);
 			j += 3;
 			if (j < width) continue;
 			j = 3 - width  % 3;
 			i += 3;
 		}
 		
-		return array;
+		return board;
 	}
 	
 	private void tempToBoard(char[][] array, Template t, int i, int j) {
-		
+		int x1,y1 = 0;
+		int x2,y2 = 2;
+		if (i < 3) x1 = 1;
+		if (j < 3) y1 = 1;
 	}
 
 	private boolean properOverlap(char[][] array, Template t, int i, int j) {
