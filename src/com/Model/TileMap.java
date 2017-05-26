@@ -1,83 +1,130 @@
 package com.Model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * 2D coordinate grid of tiles. The top left of the grid is located at (0, 0).
- * As you move from left to right the grid's x coordinate increases, and the
- * y coordinate increases when moving down the grid.
+ * 2D fixed coordinate grid of tiles. The top left of the grid is located at (0, 0).
+ * As you move from left to right, the grid's x coordinate increases, and the
+ * y coordinate increases when moving down the grid. This coordinate grid also
+ * keeps track of the locations of the goal tiles in the map.
  */
-public class TileMap implements Grid<Tile> {
-	private final Tile[] tiles;
-	private final int width;
+public class TileMap implements Iterable<Tile> {
+	private final List<Point> goals;
+	private final List<Tile> tiles;
+	
 	private final int height;
+	private final int width;
 	
 	/**
-	 * Builder class for constructing a tile map.
+	 * Construct a new tile map, adding tiles supplied by the iterator in order of
+	 * left to right, top to bottom.
+	 * @pre number of tiles supplied by the iterator is >= width*height of map
+	 * @param it     - iterator supplying tiles
+	 * @param width  - width of the tile map in columns
+	 * @param height - height of the tile map in rows
 	 */
-	public static class Builder implements Grid.Builder<Tile> {
-		private final Tile[] tiles;
-		private final int width;
+	public TileMap(Iterator<Tile> it, int width, int height) {
+		tiles = new ArrayList<>(width*height);
+		goals = new ArrayList<>();
 		
-		/**
-		 * Construct a map builder of a given width and height.
-		 * @param width  - width of map in columns
-		 * @param height - height of map in rows
-		 */
-		public Builder(int width, int height) {
-			tiles = new Tile[width*height];
-			this.width = width;
-			
-			Arrays.fill(tiles, Tile.EMPTY);
-		}
-		
-		@Override
-		public void set(Tile value, Point point) {
-			tiles[point.getX() + point.getY()*width] = value;
-		}
-
-		@Override
-		public Grid<Tile> build() {
-			int height = tiles.length/width;
-			return new TileMap(tiles, width, height);
-		}
-	}
-	
-	/**
-	 * Construct a tile map from a list of tiles.
-	 * @param tiles  - input list of tiles
-	 * @param width  - width of map in columns
-	 * @param height - height of map in rows
-	 */
-	private TileMap(Tile[] tiles, int width, int height) {
-		this.tiles  = tiles;
 		this.width  = width;
 		this.height = height;
+		
+		for (int y = 0; y < height; ++y) {
+			for (int x = 0; x < width; ++x) {
+				Tile next = it.next();
+				tiles.add(next);
+				
+				if (next.equals(Tile.GOAL))
+					goals.add(Point.at(x, y));
+			}
+		}
 	}
 	
-	@Override
+	/**
+	 * Get the tile at the specified location.
+	 * @pre grid actually contains the input point
+	 * @param point - point representing tiles location
+	 * @return tile at the given location
+	 */
 	public Tile get(Point point) {
-		return tiles[point.getX() + point.getY()*width];
+		return tiles.get(point.getX() + point.getY()*width);
 	}
 	
-	@Override
+	/**
+	 * Get the width of the map in columns.
+	 * @return width of map
+	 */
 	public int getWidth() {
 		return width;
 	}
 	
-	@Override
+	/**
+	 * Get the height of the map in rows.
+	 * @return height of map
+	 */
 	public int getHeight() {
 		return height;
 	}
+	
+	/**
+	 * Get the locations of the goal tiles in the map.
+	 */
+	public Iterator<Point> getGoalPositions() {
+		Iterator<Point> it = goals.iterator();
+		return new Iterator<Point>() {
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
 
-	@Override
-	// A point is defined to be valid if it lies inside the grid
-	// and it is not an empty tile or a wall of some sort
-	public boolean isValidPoint(Point point) {
+			@Override
+			public Point next() {
+				return it.next();
+			}
+		};
+	}
+	
+	/**
+	 * Determine if a point is within the bounds of the map.
+	 * @param point - point being checked
+	 * @return true if the map contains the point
+	 */
+	public boolean hasPoint(Point point) {
 		if ((point.getX() < 0) || (point.getX() >= width)) return false;
 		if ((point.getY() < 0) || (point.getY() >= height)) return false;
+		return true;
+	}
+	
+	/**
+	 * Determine if an entity (box or player) can be placed at a given
+	 * point in the map. The point is valid if it lies inside the grid
+	 * and the corresponding tile is not empty or a wall of some sort.
+	 * @param point - point being checked
+	 * @return true if entities can be placed at that point
+	 */
+	public boolean isValidEntityPos(Point point) {
+		if (!hasPoint(point)) return false;
 		
 		Tile tile = get(point);
 		return !tile.equals(Tile.EMPTY) && !tile.equals(Tile.WALL);
+	}
+
+	@Override
+	public Iterator<Tile> iterator() {
+		Iterator<Tile> it = tiles.iterator();
+		return new Iterator<Tile>() {
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
+
+			@Override
+			public Tile next() {
+				return it.next();
+			}
+		};
 	}
 }

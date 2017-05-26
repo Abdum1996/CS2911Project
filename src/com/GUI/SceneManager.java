@@ -1,17 +1,44 @@
 package com.GUI;
 
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 
 import com.GUI.Scenes.GMainMenu;
 import com.GUI.Scenes.GScene;
 
+/**
+ * Manages the scenes on the main frame
+ * @author Abdulrahman Alhomayany
+ *
+ */
+@SuppressWarnings("serial")
 public class SceneManager extends JFrame {
-    private static final long serialVersionUID = 1L;
 
-    private GScene currentScene;
+    private int currentScene;
+    
+    public static final int MAIN_MENU_ID = 0;
+    public static final int GAME_ID = 1;
+    public static final int PAUSE_ID = 2;
+    public static final int CREDITS_ID = 3;
+    public static final int HELP_ID = 4;
+    public static final int NUM_SCENES = 5;
+    
+    
+    private ArrayList<GScene> scenes;
+    
+    private ImageManager imgMan;
 
     public SceneManager(ImageManager imgMan) {
-        this.setScene(new GMainMenu(this, imgMan));
+    	// set up null place holders for all scenes
+    	scenes = new ArrayList<>();
+    	for (int i = 0; i < NUM_SCENES; i++)
+			scenes.add(null);
+    	
+    	this.imgMan = imgMan;
+		
+    	scenes.set(MAIN_MENU_ID, new GMainMenu(this, imgMan));
+    	currentScene = MAIN_MENU_ID;
 
         this.setTitle("Warehouse Boss");
         this.setSize(800, 640);
@@ -20,27 +47,59 @@ public class SceneManager extends JFrame {
         this.setResizable(false);
 
         
-        this.add(this.getScene());
+        this.add(this.getCurrentScene());
 
-        this.setVisible(true);
-
-        this.pack();
+        setVisible(true);
+        setResizable(false);
+        pack();
     }
 
-    public void setScene (GScene scene) {
-        if (this.currentScene != null) {
-            this.remove(this.currentScene);
+    /**
+     * Sets the scene/panel for this frame
+     * @param sceneID
+     * @param scene
+     */
+    public void setScene (int sceneID, GScene scene) {
+        if (getCurrentScene() != null) {
+            remove(getCurrentScene());
         }
+        System.out.println("Setting scene");
 
-        this.currentScene = scene;
-        this.add(this.currentScene);
-        //setVisible(true);
-        this.currentScene.setFocusable(true);
-        this.currentScene.requestFocusInWindow();
-
+        currentScene = sceneID;
+        scenes.set(currentScene, scene);
+        // add scene to frame
+        add(scene);
+        setVisible(true);
+        
+        getCurrentScene().setFocusable(true);
+        getCurrentScene().requestFocusInWindow();
+        getCurrentScene().repaint();
         this.pack();
     }
-    public GScene getScene () {
-        return this.currentScene;
+    
+    /**
+     * Sets the scene/panel for this frame to an existing scene
+     * @param sceneID - the scene id of the scene we want to switch to
+     */
+    public void switchScene(int sceneID) {
+    	setScene(sceneID, scenes.get(sceneID));
     }
+    
+    /**
+     * Gets the current scene being displayed
+     * @return GScene in frame
+     */
+    public GScene getCurrentScene() {
+        return scenes.get(currentScene);
+    }
+    
+    /**
+     * gets the scene given the scene ID
+     * @param sceneID - the scene ID for the scene to be returned
+     * @return The scene with scene id
+     */
+    public GScene getScene(int sceneID) {
+    	return scenes.get(sceneID);
+    }
+   
 }

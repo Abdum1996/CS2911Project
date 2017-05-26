@@ -1,5 +1,6 @@
 package com.Model;
 
+import java.util.List;
 import java.util.Random;
 
 import com.GUI.ImageManager;
@@ -8,12 +9,16 @@ import com.GUI.SceneManager;
 /**
  * The driver class for the game, sets up the graphics and runs it
  * @author Abdulrahman Alhomayany
- *
  */
 public class GameController {
-	
     public static void main(String[] args) {
-
+    	// Tester for the board solver
+    	SokobanBoard board = BoardGenerator.readMap("./maps/map2.txt");
+    	List<Action> actions = board.solve();
+    	for (Action curr : actions) {
+    		System.out.println(curr);
+    	}
+    	
         // load the images
         ImageManager imgMan = new ImageManager();
         imgMan.loadTileImg(Tile.GOAL, "./resources/goal.png");
@@ -28,6 +33,5 @@ public class GameController {
 			
 		}
         SceneManager window = new SceneManager(imgMan);
-        System.out.print(window.getHeight()); // get rid of annoying unused warning
     }
 }

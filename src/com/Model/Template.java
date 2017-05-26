@@ -5,15 +5,15 @@ import java.util.Random;
 public class Template {
 	
 	/**
-	 * WALL = 0
-	 * FLOOR = 1
+	 * WALL = W
+	 * FLOOR = F
 	 * EMPTY = 2
 	 */
 
-	private int array[][];
+	private char array[][];
 	private final Random rand;
 	
-	public Template(int[][] array) {
+	public Template(char[][] array) {
 		this.array = array;
 		this.rand = new Random();
 		
@@ -24,8 +24,8 @@ public class Template {
 		this.rand = tem.rand;
 	}
 	
-	private int[][] rotate() {
-		int newArray[][] = new int[5][5];
+	private char[][] rotate() {
+		char newArray[][] = new char[5][5];
 		int i,j = 0;
 		for (i = 0; i < 5; i++) {
 			for (j = 0; j < 5; j++) {
@@ -35,8 +35,8 @@ public class Template {
 		return newArray;
 	}
 	
-	private int[][] reflect() {
-		int newArray[][] = new int[5][5];
+	private char[][] reflect() {
+		char newArray[][] = new char[5][5];
 		int i,j = 0;
 		for (i = 0; i < 5; i++) {
 			for (j = 0; j < 5; j++) {
