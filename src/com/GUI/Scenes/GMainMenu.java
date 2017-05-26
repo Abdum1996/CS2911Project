@@ -50,7 +50,7 @@ public class GMainMenu extends GScene {
         btnStartGame.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             System.out.println("Start game, do stuff");
 
-            this.sceneManager.setScene(SceneManager.GAME_ID, new GGame(sceneManager, imgMan, "./maps/map1.txt"));
+            this.sceneManager.setScene(SceneManager.GAME_ID, new GGame(sceneManager, imgMan, "./maps/map5.txt"));
         });
         
         btnHelp = new ImageButton("./resources/helpbutton.png");
