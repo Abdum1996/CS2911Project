@@ -108,6 +108,7 @@ public class GPauseMenu extends GScene implements KeyListener {
 	public void resumeGame() {
 		System.out.println("inside resume game");
 		sceneManager.add(context.getControlPanel());
+		context.getControlPanel().repaintAll();
 		sceneManager.switchScene(SceneManager.GAME_ID);
 	}
 
@@ -121,7 +122,7 @@ public class GPauseMenu extends GScene implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		int kc = e.getKeyCode();
 		System.out.println("in keypressed");
-		if (kc == KeyEvent.VK_P) {
+		if (kc == KeyEvent.VK_P || kc == KeyEvent.VK_ESCAPE) {
 			System.out.println("now resuming...");
 			resumeGame();
 		}

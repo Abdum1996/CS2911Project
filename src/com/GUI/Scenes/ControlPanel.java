@@ -69,4 +69,12 @@ public class ControlPanel extends JPanel {
 		
 	}
 
+	public void repaintAll() {
+		// TODO Auto-generated method stub
+		this.repaint();
+		btnNewPuzzle.repaint();
+		btnReset.repaint();
+		btnUndo.repaint();
+	}
+
 }
