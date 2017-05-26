@@ -38,6 +38,7 @@ public class GCredits extends GScene {
 		this.add (name4);
 		this.add (name5);
 		this.add(licenses);
+		this.add(returnBtn);
 	}
 	
 	
