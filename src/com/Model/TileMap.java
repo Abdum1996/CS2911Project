@@ -3,8 +3,8 @@ package com.Model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.List;
-
 /**
  * 2D fixed coordinate grid of tiles. The top left of the grid is located at (0, 0).
  * As you move from left to right, the grid's x coordinate increases, and the
@@ -12,6 +12,7 @@ import java.util.List;
  * keeps track of the locations of the goal tiles in the map.
  */
 public class TileMap {
+	private static final Random generator = new Random();
 	private final List<Point> goals;
 	private final List<Tile> tiles;
 	

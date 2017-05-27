@@ -15,8 +15,8 @@ import java.util.List;
 /**
  * Factory class responsible for creating new game boards, both by reading
  * input map files and through random procedural generation methods.
- * @author SamirMustavi
- * @author ThomasDaniell
+ * @author Samir Mustavi
+ * @author Thomas Daniell
  */
 public class BoardGenerator {
 	private static final Random generator = new Random();
