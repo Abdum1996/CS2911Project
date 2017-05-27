@@ -3,9 +3,7 @@ package com.Model;
 import java.util.Collections;
 import java.util.Collection;
 
-import java.util.LinkedList;
 import java.util.HashMap;
-import java.util.Deque;
 import java.util.Map;
 
 /**
@@ -19,8 +17,8 @@ public class SokobanLevel implements GameLevel {
 	private final TileMap tileMap;
 	private Player player;
 	
-	private final Deque<ActionResult> pastActionResults;
-	private final Deque<Action> pastActions;
+	private final SizedStack<ActionResult> pastActionResults;
+	private final SizedStack<Action> pastActions;
 	
 	private final int minMoves;
 	private int undoCount = 0;
@@ -33,9 +31,9 @@ public class SokobanLevel implements GameLevel {
 		tileMap = new TileMap();
 		player = new Player(Point.at(0, 0));
 		
-		
-		pastActionResults = new LinkedList<>();
-		pastActions = new LinkedList<>();
+		int maxMoves = (difficulty.equals(Difficulty.HARD)) ? minMoves*2 : Integer.MAX_VALUE;
+		pastActionResults = new SizedStack<>(maxMoves);
+		pastActions = new SizedStack<>(maxMoves);
 	}
 	
 	@Override
@@ -45,18 +43,19 @@ public class SokobanLevel implements GameLevel {
 
 	@Override
 	public ActionResult getActionResult(Action action) {
-		ActionResult result = ActionResult.PLAYER_MOVE;
-		Direction dir = Direction.readAction(action);
+		// If the game cannot be won, or already has been won then no actions can occur
+		if (!getGameState().equals(State.SOLVABLE)) return ActionResult.NONE;
 		
-		// Ensure player is not moving outside of the map or
-		// into a tile that is either empty or a wall
+		// Action is invalid if player attempts to move outside of the map or into a wall
+		Direction dir = Direction.readAction(action);
 		Point next1 = player.getPosition().move(dir);
 		if (!tileMap.isValidEntityPos(next1)) return ActionResult.NONE;
 		
-		
-		
-		// If next position is not a box then the result is a player move
+		// If the adjacent tile has no boxes then a player move can occur
 		if (!boxMap.containsKey(next1)) return ActionResult.PLAYER_MOVE;
+		
+		// Handle case where the maximum allowed box pushes has been reached
+		if (moveCount == difficulty.getMaxMoves(minMoves)) return ActionResult.NONE;
 		
 		// Box must be movable for a box push to occur
 		Point next2 = next1.move(dir);
@@ -97,7 +96,7 @@ public class SokobanLevel implements GameLevel {
 
 	@Override
 	public State getGameState() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	
