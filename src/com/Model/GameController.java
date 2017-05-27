@@ -1,6 +1,5 @@
 package com.Model;
 
-import java.util.List;
 import java.util.Random;
 
 import com.GUI.ImageManager;
@@ -11,12 +10,6 @@ import com.GUI.SceneManager;
  */
 public class GameController {
     public static void main(String[] args) {
-    	// Tester for the board solver
-    	SokobanBoard board = BoardGenerator.readMap("./maps/map5.txt");
-//    	List<Action> actions = board.solve();
-//    	for (Action curr : actions) {
-//    		System.out.println(curr);
-//    	}
     	
         // load the images
         ImageManager imgMan = new ImageManager();
@@ -31,7 +24,8 @@ public class GameController {
 			imgMan.loadBoxImg(i, "./resources/box" + r + ".png");
 			
 		}
-        //SceneManager window = new SceneManager(imgMan);
-        new SceneManager(imgMan);
+        
+        SceneManager window = new SceneManager(imgMan);
+        window.dispose();
     }
 }

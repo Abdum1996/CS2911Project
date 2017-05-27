@@ -17,11 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-<<<<<<< HEAD
-=======
-import java.io.IOException;
-import java.util.Iterator;
->>>>>>> master
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -29,12 +25,9 @@ import java.util.Queue;
  * A GScene panel that displays the relevant game level
  */
 @SuppressWarnings("serial")
-<<<<<<< HEAD
-public class GGame extends GScene implements KeyListener, ActionListener {    
-=======
 public class GGame extends GScene implements KeyListener, ActionListener {
     /**
-     * sound filea
+     * sound files
      */
     private File footstepSnd;
     private File lostgameSnd;
@@ -44,7 +37,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      */
     private ImageManager imgMan;
     
->>>>>>> master
     /**
      * timer to initiate animation sequence
      */
@@ -95,30 +87,8 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     /**
      * a queue that stores the pending actions applied by the player in between animations
      */
-<<<<<<< HEAD
 	private Queue<Action> pendingActions = new LinkedList<>();
-=======
-	private Queue<Action> pendingActions = new LinkedList<Action>();
 	
-	/**
-	 * the last actions made by the user, used for undoing actions
-	 */
-	private SizedStack<Action> recentActions = new SizedStack<>(3);
-	
-	/**
-	 * the last action results made by the user, used for undoing
-	 */
-	private SizedStack<ActionResult> recentActionResults = new SizedStack<>(3);
-	
-	private ControlPanel controlPanel;
-    /**
-     * Constructs a GameScene with the puzzle loadeds
-     * @param sceneManager - The sceneManager managing this GScene
-     * @param imgMan - The ImageManager associated with this SceneManager
-     * @param context - The map to be loaded on the GameBoard and displayed
-     */
->>>>>>> master
-
 	private ControlPanel controlPanel;
     
     public GGame(SceneManager sceneManager, ImageManager imgMan, GameLevel level) {
@@ -154,17 +124,13 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         this.requestFocus();
     }
 
-<<<<<<< HEAD
-=======
     private void initSounds() {
         footstepSnd = new File("./sound_files/walking.wav");
         lostgameSnd = new File("./sound_files/Sad_Trombone-Joe_Lamb-665429450.wav");
     }
 
-
->>>>>>> master
     /**
-     * Pauses the game and displays a menu
+     * Pauses the game and displays a menu.
      */
     private void pauseGame() {
     	sceneManager.setLayout(new BorderLayout());
@@ -174,13 +140,9 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     }
 
     public void reset() {
-<<<<<<< HEAD
     	level.reset();
     	
         sceneManager.setScene(new GGame(sceneManager, imgMan, level));
-=======
-        sceneManager.setScene(new GGame(sceneManager, imgMan, board.reset()));
->>>>>>> master
     }
 
     /**
@@ -190,16 +152,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     private void applyAction(Action action) {    	
     	Move move = level.getResultingMove(action);
     	if (!level.getGameState().equals(GameState.NOT_WON)) return;
-    	
-<<<<<<< HEAD
-=======
-    	// no board action should be done after winning
-    	if (board.gameWon()) {
-    		return;
-    	}
-    	
-    	ActionResult ar = board.getActionResult((action));
->>>>>>> master
+
     	System.out.println(action);
         System.out.println(move.getResult());
         
@@ -226,9 +179,9 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         	}
         }
 
-        controlPanel.setCounter(board.getMoveCount());
+        controlPanel.setCounter(level.getPushCount());
 
-        if (!board.isSolvable()) {
+        if (!level.isSolvable()) {
             playSound(lostgameSnd);
         }
     }
@@ -420,6 +373,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 	}
 
     public void genNewPuzzle() {
-        this.sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanBoard(this.board.getDifficulty())));
+        this.sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanLevel(level.getDifficulty())));
     }
 }
