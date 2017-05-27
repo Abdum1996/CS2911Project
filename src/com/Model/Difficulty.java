@@ -18,4 +18,16 @@ public enum Difficulty {
 	public int getMaxUndos() {
 		return maxUndos;
 	}
+	
+	public int getMaxMoves(int minMoves) {
+		switch (this) {
+			case EASY:
+			case NORMAL:
+				return Integer.MAX_VALUE;
+			case HARD:
+				return minMoves*2;
+			default:
+				return 0;
+		}
+	}
 }
