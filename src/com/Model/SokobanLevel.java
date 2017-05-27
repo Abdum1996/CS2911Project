@@ -17,12 +17,8 @@ public class SokobanLevel implements GameLevel {
 	private final TileMap tileMap;
 	private Player player;
 	
-	private final SizedStack<ActionResult> pastActionResults;
-	private final SizedStack<Action> pastActions;
-	
+	private final MoveTracker tracker;
 	private final int minPushes;
-	private int undoCount = 0;
-	private int pushCount = 0;
 	
 	public SokobanLevel(Difficulty difficulty) {
 		this.difficulty = difficulty;
@@ -46,7 +42,7 @@ public class SokobanLevel implements GameLevel {
 	
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
+		tracker.reset();
 	}
 
 	@Override
@@ -75,19 +71,17 @@ public class SokobanLevel implements GameLevel {
 	public boolean applyAction(Action action) {
 		ActionResult result = getActionResult(action);
 		if (result.equals(ActionResult.NONE)) return false;
+		tracker.addMove(action, result);
 		
-		pastActionResults.push(result);
-		pastActions.push(action);
-		
+		// Move the player accordingly
 		Direction dir = Direction.readAction(action);
 		player = player.move(dir);
 		
+		// Move the box if applicable
 		if (result.equals(ActionResult.BOX_MOVE)) {
 			Point pos = player.getPosition();
 			Box newBox = boxMap.remove(pos).move(dir);
 			boxMap.put(newBox.getPosition(), newBox);
-			
-			pushCount++;
 		}
 		
 		return true;
@@ -95,15 +89,19 @@ public class SokobanLevel implements GameLevel {
 
 	@Override
 	public void undoLastMove() {
-		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public State getGameState() {
-		// is it too expensive to solve the board every time?
-		if (hasWon()) return State.WON;	
-		if (difficulty.reachedMaxMoves(minPushes, pushCount)) return State.UNSOLVABLE;
-		return State.SOLVABLE;
+		if (hasWon()) {
+			return State.WON;
+		} else if (tracker.reachedMaxPushes()) {
+			// Is it too expensive to solve the board every time?
+			return State.UNSOLVABLE;
+		} else {
+			return State.SOLVABLE;
+		}
 	}
 	
 	@Override
@@ -118,12 +116,12 @@ public class SokobanLevel implements GameLevel {
 
 	@Override
 	public int getUndoCount() {
-		return undoCount;
+		return tracker.getUndoCount();
 	}
 
 	@Override
 	public int getMoveCount() {
-		return pushCount;
+		return tracker.getPushCount();
 	}
 
 	@Override
