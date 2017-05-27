@@ -35,7 +35,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     /**
      * Image manager of this instance
      */
-    private ImageManager imgMan;
+    ImageManager imgMan;
     
     /**
      * timer to initiate animation sequence

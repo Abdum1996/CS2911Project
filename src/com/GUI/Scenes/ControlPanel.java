@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.GUI.ImageButton;
+import com.Model.Difficulty;
+import com.Model.SokobanLevel;
 
 public class ControlPanel extends JPanel {
 	
@@ -65,15 +67,18 @@ public class ControlPanel extends JPanel {
 		});
 		
 		btnHard.addActionListener((ActionEvent ae) -> {
-			
+			context.playSound(new File("./sound_files/gamestart.wav"));
+            context.sceneManager.setScene(new GGame(context.sceneManager, context.imgMan, new SokobanLevel(Difficulty.HARD)));
 		});
 		
 		btnNormal.addActionListener((ActionEvent ae) -> {
-			
+			context.playSound(new File("./sound_files/gamestart.wav"));
+            context.sceneManager.setScene(new GGame(context.sceneManager, context.imgMan, new SokobanLevel(Difficulty.NORMAL)));
 		});
 		
 		btnEasy.addActionListener((ActionEvent ae) -> {
-			
+			context.playSound(new File("./sound_files/gamestart.wav"));
+            context.sceneManager.setScene(new GGame(context.sceneManager, context.imgMan, new SokobanLevel(Difficulty.EASY)));
 		});
 		
 		// make all buttons non-focusable
@@ -81,7 +86,6 @@ public class ControlPanel extends JPanel {
 		btnReset.setFocusable(false);
 		btnUndo.setFocusable(false);
 		
-		btnNewPuzzle.setAlignmentX(CENTER_ALIGNMENT);
 		// configure label counter
 		//counter.setText(context.getMinMoves());
 		
