@@ -1,7 +1,12 @@
 package com.GUI.Scenes;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -14,15 +19,21 @@ public class ControlPanel extends JPanel {
 	private ImageButton btnNewPuzzle;
 	private JLabel counter;
 	private JLabel minSteps;
+    private BufferedImage bkgImg;
 	
 	public ControlPanel(boolean isRandom, GGame context) {
 		// initialize all components
 		btnUndo = new ImageButton("./resources/undobutton.png");
 		btnReset = new ImageButton("./resources/resetbutton.png");
 		btnNewPuzzle = new ImageButton("./resources/newpuzzlebutton.png");
+        try {
+            bkgImg = ImageIO.read(new File("./resources/menubackground.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 		
-		counter = new JLabel();
-		minSteps = new JLabel();
+		counter = new JLabel("0 steps taken.");
 		
 		// add action listeners for all buttons
 		btnUndo.addActionListener((ActionEvent ae) -> {
@@ -31,7 +42,7 @@ public class ControlPanel extends JPanel {
 		});
 		
 		btnNewPuzzle.addActionListener((ActionEvent ae) -> {
-			//context.generateNewPuzzle();
+			context.genNewPuzzle();
 			context.repaint();
 		});
 		
@@ -58,23 +69,19 @@ public class ControlPanel extends JPanel {
 		// only add new puzzle thing if it's random
 		if (isRandom)
 			add(btnNewPuzzle);
+		add (counter);
 
 	}
-	
-	public void incrementCounter() {
-		
-	}
-	
-	public void decrementCounter() {
-		
-	}
 
-	public void repaintAll() {
-		// TODO Auto-generated method stub
+	public void setCounter(int c) {
+		this.counter.setText(Integer.toString(c) + " steps taken.");
 		this.repaint();
-		btnNewPuzzle.repaint();
-		btnReset.repaint();
-		btnUndo.repaint();
 	}
+
+	@Override
+    public void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+        g.drawImage(bkgImg, 0, 0, null);
+    }
 
 }

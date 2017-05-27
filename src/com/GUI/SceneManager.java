@@ -24,8 +24,6 @@ public class SceneManager extends JFrame {
     	
     	this.imgMan = imgMan;
 
-        currentScene = new GMainMenu(this, imgMan);
-
         this.setTitle("Warehouse Boss");
         this.setSize(640, 800);
         setBackground(Color.GRAY);
@@ -34,7 +32,7 @@ public class SceneManager extends JFrame {
         this.setResizable(false);
 
         
-        this.add(this.getCurrentScene());
+        this.setScene(new GMainMenu(this, imgMan));
 
         setVisible(true);
         setResizable(false);
@@ -46,8 +44,9 @@ public class SceneManager extends JFrame {
      * @param scene - the panel component to be viewed/set
      */
     public void setScene (GScene scene) {
-        if (getCurrentScene() != null) {
-            remove(getCurrentScene());
+        if (currentScene != null) {
+            System.out.println("Removing previous scene");
+            remove(currentScene);
         }
         
 //        if (sceneID != GAME_ID && sceneID != PAUSE_ID) {
@@ -60,10 +59,10 @@ public class SceneManager extends JFrame {
         // add scene to frame
         add(scene);
         setVisible(true);
-        
-        getCurrentScene().setFocusable(true);
-        getCurrentScene().requestFocusInWindow();
-        getCurrentScene().repaint();
+
+        currentScene.setFocusable(true);
+        currentScene.requestFocusInWindow();
+        currentScene.repaint();
         this.pack();
     }
     
