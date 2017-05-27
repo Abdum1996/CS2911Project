@@ -45,17 +45,17 @@ public class GMainMenu extends GScene {
 
         this.setPreferredSize(new Dimension(bkgImg.getWidth(), bkgImg.getHeight() - GameConstants.IMAGE_DIMENSION));
 
-        JButton btnEz = new JButton("Easy");
+        JButton btnEz = new ImageButton("./resources/easybutton.png");
         btnEz.addActionListener((ActionEvent e) -> {
             playSound(new File("./sound_files/gamestart.wav"));
             this.sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanLevel(Difficulty.EASY)));
         });
-        JButton btnNorm = new JButton("Normal");
+        JButton btnNorm = new ImageButton("./resources/normalbutton.png");
         btnNorm.addActionListener((ActionEvent e) -> {
             playSound(new File("./sound_files/gamestart.wav"));
             sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanLevel(Difficulty.NORMAL)));
         });
-        JButton btnOP = new JButton("Hard");
+        JButton btnOP = new ImageButton("./resources/hardbutton.png");
         btnOP.addActionListener((ActionEvent e) -> {
             playSound(new File("./sound_files/gamestart.wav"));
             sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanLevel(Difficulty.HARD)));
