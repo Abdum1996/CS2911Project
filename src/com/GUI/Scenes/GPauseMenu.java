@@ -25,13 +25,8 @@ public class GPauseMenu extends GScene implements KeyListener {
      * the background image of this menu
      */
     private BufferedImage bkgImg;
-    
-<<<<<<< HEAD
     private GameLevel level;
-=======
-    private GameBoard context;
 	private boolean resuming;
->>>>>>> master
 
 	public GPauseMenu(SceneManager sceneManager, ImageManager imgMan, GameLevel level) {
 		super(sceneManager, imgMan);
@@ -85,19 +80,14 @@ public class GPauseMenu extends GScene implements KeyListener {
 	
 	public void resumeGame() {
 		System.out.println("inside resume game");
-<<<<<<< HEAD
-		sceneManager.setScene(new GGame(sceneManager, imgMan, level));
-=======
 		resuming = true;
 		repaint();
-		sceneManager.setScene(new GGame(sceneManager, imgMan, context));
->>>>>>> master
+		sceneManager.setScene(new GGame(sceneManager, imgMan, level));
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -114,7 +104,5 @@ public class GPauseMenu extends GScene implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
-
 }

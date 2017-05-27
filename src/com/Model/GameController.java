@@ -10,7 +10,6 @@ import com.GUI.SceneManager;
  */
 public class GameController {
     public static void main(String[] args) {
-    	
         // load the images
         ImageManager imgMan = new ImageManager();
         imgMan.loadTileImg(Tile.GOAL, "./resources/goal.png");

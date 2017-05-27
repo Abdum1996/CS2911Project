@@ -3,8 +3,9 @@ package com.GUI.Scenes;
 import com.GUI.ImageButton;
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
+import com.Model.Difficulty;
 import com.Model.GameConstants;
-import com.Model.SokobanBoard;
+import com.Model.SokobanLevel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -47,17 +48,17 @@ public class GMainMenu extends GScene {
         JButton btnEz = new JButton("Easy");
         btnEz.addActionListener((ActionEvent e) -> {
             playSound(new File("./sound_files/gamestart.wav"));
-            this.sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanBoard(Difficulty.EASY)));
+            this.sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanLevel(Difficulty.EASY)));
         });
         JButton btnNorm = new JButton("Normal");
         btnNorm.addActionListener((ActionEvent e) -> {
             playSound(new File("./sound_files/gamestart.wav"));
-            sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanBoard(Difficulty.NORMAL)));
+            sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanLevel(Difficulty.NORMAL)));
         });
         JButton btnOP = new JButton("Hard");
         btnOP.addActionListener((ActionEvent e) -> {
             playSound(new File("./sound_files/gamestart.wav"));
-            sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanBoard(Difficulty.HARD)));
+            sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanLevel(Difficulty.HARD)));
         });
         
         btnHelp = new ImageButton("./resources/helpbutton.png");

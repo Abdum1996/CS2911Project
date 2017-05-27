@@ -26,29 +26,24 @@ public class SokobanLevel implements GameLevel {
 	private final int minPushes;
 	
 	/**
-	 * Construct a new Sokoban level of given difficulty and with
-	 * a given game map setup, which is assumed to be valid.
-	 * @param difficulty   - difficulty of the level
-	 * @param map          - input tile map for the board
-	 * @param boxPositions - locations where boxes will be placed
-	 * @param playerPos    - designated start position for the player
+	 * Construct a new Sokoban level of given difficulty a
+	 * procedurally generated game map.
 	 */
-	public SokobanLevel(Difficulty difficulty, TileMap map, 
-			Iterable<Point> boxPositions, Point playerPos) {
+	public SokobanLevel(Difficulty difficulty) {
 		this.difficulty = difficulty;
 		
 		boxMap  = new HashMap<>();
-		tileMap = map;
-		player  = new Player(playerPos);
+		tileMap = null;
+		player  = null;
 		
 		minPushes = solve().getActionCount();
 		tracker = new MoveTracker(difficulty, minPushes);
 		
-		int id = 0;
-		for (Point pos : boxPositions) {
+		//int id = 0;
+		/*for (Point pos : boxPositions) {
 			boxMap.put(pos, new Box(pos, id));
 			id++;
-		}
+		}*/
 	}
 	
 	/**

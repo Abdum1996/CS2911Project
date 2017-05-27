@@ -8,7 +8,6 @@ import com.Model.Box;
 import com.Model.GameLevel.GameState;
 import com.Model.Point;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

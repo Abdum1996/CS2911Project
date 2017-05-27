@@ -26,7 +26,7 @@ public class BoardGenerator {
 	 * @param height - height of the board in rows
 	 * @return procedurally generated game board
 	 */
-	public static SokobanBoard genBoard(Difficulty level) {
+	/*public static SokobanBoard genBoard(Difficulty level) {
 		List<Tile> tiles = new ArrayList<>(width*height);
 		
 		int numGoals = generator.nextInt(MAX_GOALS) + 1;
@@ -67,10 +67,9 @@ public class BoardGenerator {
 			board = new SokobanBoard(map, boxPositions.iterator(),
 					playerPos, width, height);
 		} while (!board.isSolvable());
-		//Collections.s*/
 		
 		return board;
-	}
+	}*/
 	
 	private static Point genRandomPoint(TileMap map) {
 		int offset = generator.nextInt(map.getHeight()*map.getHeight());
