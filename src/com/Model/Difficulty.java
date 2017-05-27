@@ -1,7 +1,7 @@
 package com.Model;
 
 public enum Difficulty {
-	EASY(5, Integer.MAX_VALUE), NORMAL(3, 3), HARD(0, 0);
+	EASY(2, Integer.MAX_VALUE), NORMAL(2, 2), HARD(0, 0);
 	
 	private final int undoDepth;
 	private final int maxUndos;
