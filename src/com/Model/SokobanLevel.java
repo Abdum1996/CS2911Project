@@ -43,7 +43,7 @@ public class SokobanLevel implements GameLevel {
 		
 		Scanner sc = null;
 		try {
-			sc = new Scanner(new FileReader("./maps/map5.txt"));
+			sc = new Scanner(new FileReader("./maps/map1.txt"));
 			
 			int width = sc.nextInt();
 			int height = sc.nextInt();
@@ -77,8 +77,8 @@ public class SokobanLevel implements GameLevel {
 		}
 		
 		tileMap = mapCandidate;
-		//minPushes = solve().getActionCount();
-		minPushes = 1000;
+		minPushes = solve().getActionCount();
+		
 		tracker = new MoveTracker(difficulty, minPushes);
 	}
 	
@@ -125,6 +125,8 @@ public class SokobanLevel implements GameLevel {
 		
 		// Action is invalid if player attempts to move outside of the map or into a wall
 		Direction dir = Direction.readAction(action);
+		if (dir.equals(Direction.NOTHING)) return Move.none();
+		
 		Point next1 = player.getPosition().move(dir);
 		if (!tileMap.isValidEntityPos(next1)) return Move.none();
 		

@@ -3,7 +3,7 @@ package com.Model;
  * Enumeration to represent direction mainly used to indicate a player's move.
  */
 public enum Direction {
-	UP, DOWN, LEFT, RIGHT;
+	NOTHING, UP, DOWN, LEFT, RIGHT;
 	
 	/**
 	 * Determine the direction of movement from an action.
@@ -21,7 +21,7 @@ public enum Direction {
 			case MOVE_RIGHT:
 				return RIGHT;
 			default:
-				return null;
+				return NOTHING;
 		}
 	}
 	
