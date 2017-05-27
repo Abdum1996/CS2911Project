@@ -32,11 +32,6 @@ public class Box implements Movable<Box> {
 	}
 	
 	@Override
-	public Point getInitialPosition() {
-		return initialPos;
-	}
-	
-	@Override
 	public Point getPosition() {
 		return position;
 	}
@@ -57,5 +52,10 @@ public class Box implements Movable<Box> {
 	 */
 	public int getId() {
 		return id;
+	}
+
+	@Override
+	public Box resetPosition() {
+		return new Box(initialPos, id);
 	}
 }

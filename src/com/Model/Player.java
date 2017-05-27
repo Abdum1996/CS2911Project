@@ -33,11 +33,6 @@ public class Player implements Movable<Player> {
 	}
 	
 	@Override
-	public Point getInitialPosition() {
-		return initialPos;
-	}
-	
-	@Override
 	public Point getPosition() {
 		return position;
 	}
@@ -60,5 +55,10 @@ public class Player implements Movable<Player> {
 	 */
 	public Direction getOrientation() {
 		return orientation;
+	}
+
+	@Override
+	public Player resetPosition() {
+		return new Player(initialPos);
 	}
 }

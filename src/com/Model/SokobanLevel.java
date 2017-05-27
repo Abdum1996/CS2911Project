@@ -1,15 +1,14 @@
 package com.Model;
 
+import com.Graph.AStarSearch;
+
 import java.util.Collections;
 import java.util.Collection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.Graph.AStarSearch;
-import com.Graph.Heuristic;
-import com.Graph.State;
 
 /**
  * Implementation of the game level interface. Actions here correspond 
@@ -75,7 +74,16 @@ public class SokobanLevel implements GameLevel {
 	
 	@Override
 	public void reset() {
-		tracker.reset(); // fix this
+		player = player.resetPosition();
+		tracker.reset();
+		
+		List<Box> boxes = new ArrayList<>(boxMap.values());
+		boxMap.clear();
+		
+		for (Box curr : boxes) {
+			curr = curr.resetPosition();
+			boxMap.put(curr.getPosition(), curr);
+		}
 	}
 
 	@Override
