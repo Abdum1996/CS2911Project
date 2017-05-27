@@ -41,7 +41,7 @@ public class SokobanLevel implements GameLevel {
 		tileMap = map;
 		player  = new Player(playerPos);
 		
-		minPushes = 0; // fix!!!!!!!!!
+		minPushes = 0;
 		tracker = new MoveTracker(difficulty, minPushes);
 		
 		int id = 0;
@@ -61,6 +61,16 @@ public class SokobanLevel implements GameLevel {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Determine the optimal sequence of actions to solve the level.
+	 * @return optimal list of actions
+	 */
+	private List<Action> solve() {
+		AStarSearch<Action> searchAlgo = new AStarSearch<>(new BoardHeuristic());
+		BoardState start = new BoardState(tileMap, player, getBoxes());
+		return searchAlgo.runAStarSearch(start);
 	}
 	
 	@Override
@@ -144,17 +154,8 @@ public class SokobanLevel implements GameLevel {
 		if (state.equals(GameState.WON)) return true;
 		if (state.equals(GameState.LOST)) return false;
 		
-		AStarSearch<Action> searchAlgo = new AStarSearch<>(
-				new Heuristic<Action>() {
-			@Override
-			public int hcost(State<Action> boardState) {
-				return 0;
-			}
-		});
-		
-		BoardState start = new BoardState(tileMap, player, getBoxes());
-		List<Action> result = searchAlgo.runAStarSearch(start);
-		return (result != null);
+		List<Action> actions = solve();
+		return actions == null;
 	}
 	
 	@Override
