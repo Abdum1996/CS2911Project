@@ -31,6 +31,12 @@ public interface GameLevel {
 	public void undoLastMove();
 	
 	/**
+	 * Get the game's difficulty level.
+	 * @return difficulty level
+	 */
+	public Difficulty getDifficulty();
+	
+	/**
 	 * Get the minimum number of moves needed to solve the level.
 	 * @return minimum moves
 	 */
@@ -47,12 +53,6 @@ public interface GameLevel {
 	 * @return move count
 	 */
 	public int getMoveCount();
-	
-	/**
-	 * Get the player's current score.
-	 * @return game score
-	 */
-	public int getScore();
 	
 	/**
 	 * Determine if the game is unsolvable, solvable or is in a winning state.
