@@ -66,10 +66,11 @@ public interface GameLevel {
 	public int getUndoCount();
 	
 	/**
-	 * Get read-only access to the tiles in the game board.
-	 * @return iterable reference to such tiles
+	 * Get the tile at the given position in the level's board.
+	 * @param pos - location of requested tile
+	 * @return requested tile
 	 */
-	public Iterable<Tile> getTiles();
+	public Tile getTile(Point pos);
 	
 	/**
 	 * Get read-only access to the boxes on the game board.

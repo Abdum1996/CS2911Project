@@ -45,6 +45,14 @@ public class Move {
 	}
 	
 	/**
+	 * Get the result of an action being performed.
+	 * @return action result
+	 */
+	public Action.Result getResult() {
+		return result;
+	}
+	
+	/**
 	 * Determine if the move is a box push.
 	 * @return true if this is the case
 	 */

@@ -5,6 +5,7 @@ import com.GUI.SceneManager;
 import com.Model.*;
 import com.Model.Action;
 import com.Model.Box;
+import com.Model.GameLevel.GameState;
 import com.Model.Point;
 
 import javax.swing.*;
@@ -15,21 +16,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * A GScene panel that displays the relevant Gameboard
+ * A GScene panel that displays the relevant game level
  */
 @SuppressWarnings("serial")
-public class GGame extends GScene implements KeyListener, ActionListener {
-    
-    /**
-     * Image manager of this instance
-     */
-    private ImageManager imgMan;
-    
+public class GGame extends GScene implements KeyListener, ActionListener {    
     /**
      * timer to initiate animation sequence
      */
@@ -51,7 +45,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     private int nshifts = 11;
     
     /**
-     * keeps track of the current shift (never exceeds nshifts)
+     * keeps track of the current shift (never exceeds number of shifts)
      */
     private int currShifts = 0;
     
@@ -66,87 +60,32 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     private int h;
 
     /**
-     * the gameboard containing the game data
+     * the level containing the game data
      */
-    private GameBoard board;
-    
-    /**
-     * the path to this map
-     */
-    private String map;
+    private GameLevel level;
     
     /**
      * the last viable action to be used in between animations
      */
     private Action lastViableAction;
     
-    
     private Direction newDirection;
 
     /**
      * a queue that stores the pending actions applied by the player in between animations
      */
-	private Queue<Action> pendingActions = new LinkedList<Action>();
-	
-	/**
-	 * the last actions made by the user, used for undoing actions
-	 */
-	private SizedStack<Action> recentActions = new SizedStack<>(3);
-	
-	/**
-	 * the last action results made by the user, used for undoing
-	 */
-	private SizedStack<ActionResult> recentActionResults = new SizedStack<>(3);
-	
+	private Queue<Action> pendingActions = new LinkedList<>();
+
 	private ControlPanel controlPanel;
-    /**
-     * Constructs a GameScene with the puzzle loadeds
-     * @param sceneManager - The sceneManager managing this GScene
-     * @param imgMan - The ImageManager associated with this SceneManager
-     * @param map - The map to be loaded on the GameBoard and displayed
-     */
-    public GGame(SceneManager sceneManager, ImageManager imgMan, String map) {
-        super(sceneManager, imgMan);
-        
-        this.imgMan = imgMan;
-        this.map = map;
-        board = BoardGenerator.readMap(map);
-        this.w = board.getMapWidth();
-        this.h = board.getMapHeight();
-        
-        // panel for control
-        controlPanel = new ControlPanel(false, this);
-        
-        sceneManager.getContentPane().setLayout(null);
-        sceneManager.setPreferredSize(new Dimension(this.w * imgMan.getImgWidth() + 8,
-        		this.h * imgMan.getImgHeight() + 64));
-        
-        this.setPreferredSize(new Dimension(this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight()));
-        
-        
-        this.setBounds(0, 0, this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight());
-        System.out.println("listener");
-        this.addKeyListener(this);
-        
-        // set the bounds for cpanel
-        controlPanel.setBounds(0, this.h * imgMan.getImgHeight(), this.h * imgMan.getImgWidth(), 28);
-        controlPanel.setFocusable(false);
-        sceneManager.add(controlPanel);
-        
-        this.setFocusable(true);
-        this.requestFocus();
-        
-//        for(Action a : board.solve())
-//        	System.out.println(a);
-    }
-
-    public GGame(SceneManager sceneManager, ImageManager imgMan, GameBoard context) {
+    
+    public GGame(SceneManager sceneManager, ImageManager imgMan, GameLevel level) {
         super(sceneManager, imgMan);
 
         this.imgMan = imgMan;
-        board = context;
-        this.w = board.getMapWidth();
-        this.h = board.getMapHeight();
+        this.level = level;
+        
+        this.w = level.getMapWidth();
+        this.h = level.getMapHeight();
 
         // panel for control
         controlPanel = new ControlPanel(false, this);
@@ -162,7 +101,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         System.out.println("listener");
         this.addKeyListener(this);
 
-        // set the bounds for cpanel
+        // set the bounds for control panel
         controlPanel.setBounds(0, this.h * imgMan.getImgHeight(), this.h * imgMan.getImgWidth(), 28);
         controlPanel.setFocusable(false);
         sceneManager.add(controlPanel);
@@ -171,35 +110,32 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         this.requestFocus();
     }
 
-
     /**
      * Pauses the game and displays a menu
      */
     private void pauseGame() {
     	sceneManager.setLayout(new BorderLayout());
-        sceneManager.setScene(new GPauseMenu(sceneManager, imgMan, this.board));
+        sceneManager.setScene(new GPauseMenu(sceneManager, imgMan, level));
         sceneManager.remove(controlPanel);
         sceneManager.setVisible(true); // refresh at the level JFrame
     }
 
     public void reset() {
-        sceneManager.setScene(new GGame(sceneManager, imgMan, map));
+    	level.reset();
+    	
+        sceneManager.setScene(new GGame(sceneManager, imgMan, level));
     }
 
     /**
      * Applies the action specified to the board and processes animation
      * @param action - the action to be carried out
      */
-    private void applyAction(Action action) {
+    private void applyAction(Action action) {    	
+    	Move move = level.getResultingMove(action);
+    	if (!level.getGameState().equals(GameState.NOT_WON)) return;
     	
-    	// no board action should be done after winning
-    	if (gameWon()) {
-    		return;
-    	}
-    	
-    	ActionResult ar = board.getActionResult((action));
     	System.out.println(action);
-        System.out.println(ar);
+        System.out.println(move.getResult());
         
         // if there's an animation running
         if (timer.isRunning()) {
@@ -208,27 +144,19 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         	return;
         }
         
-        if (ar == ActionResult.PLAYER_MOVE || ar == ActionResult.BOX_MOVE) {
-        	// for undo
-        	System.out.println("pushing...");
-        	recentActions.push(action);
-        	recentActionResults.push(ar);
-//        	System.out.println(recentActions.pop());
-//        	System.out.println(recentActions.peek());
-        	
+        if (!move.doesNothing()) {
         	//  play sound
 	        File footstep = new File("./sound_files/walking.wav");
 	        playSound(footstep);
 	        
-	        // --------------
 	        lastViableAction = action;
 	        newDirection = Direction.readAction(action);
 	        timer.start();
-        } else if (ar == ActionResult.NONE) {
+        } else {
         	if (!pendingActions.isEmpty()) {
-        		action = pendingActions.poll();
-				this.applyAction(action);
-				System.out.println("pulled from pending: " + action);
+        		Action lastAction = pendingActions.poll();
+				applyAction(lastAction);
+				System.out.println("pulled from pending: " + lastAction);
         	}
         }
     }
@@ -237,12 +165,8 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      * Undoes the last action made by the user
      */
     public void undoLastMove() {
-    	if (recentActions.empty()) 
-    		return; //empty or too many undos
-    	
-    	// undo 
     	System.out.println("now reverting...");
-    	board.revertAction(recentActions.pop(), recentActionResults.pop());
+    	level.undoLastMove();
     	repaint();
     }
     
@@ -251,12 +175,12 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      * @return true if the game has been won, false otherwise
      */
     private boolean gameWon() {
-        return this.board.gameWon();
+        return level.getGameState().equals(GameState.WON);
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+    	// do nothing
     }
 
     @Override
@@ -270,7 +194,8 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         	pauseGame();
         	return;
         }
-        // ctrl z
+        
+        // control z
         if ((kc == KeyEvent.VK_Z) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
         	undoLastMove();
         	return;
@@ -286,7 +211,9 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+    	// do nothing
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -307,7 +234,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
             for (int j = 0; j < w; j++) {
                 Point pos = Point.at(j, i);
 
-                g.drawImage(imgMan.getTileImg(board.getTile(pos)), x, y, null);
+                g.drawImage(imgMan.getTileImg(level.getTile(pos)), x, y, null);
                 x += imgMan.getImgHeight();
             }
             y += imgMan.getImgWidth();
@@ -315,11 +242,9 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         }
 
         BufferedImage box = imgMan.getBoxImg(0);
-        BufferedImage player = imgMan.getPlayerImg(board.getPlayer().getOrientation());
+        BufferedImage player = imgMan.getPlayerImg(level.getPlayer().getOrientation());
 
-        Iterator<Box> it = board.getBoxes();
-        while (it.hasNext()) {
-            Box curr = it.next();
+        for (Box curr : level.getBoxes()) {
             Point pos = curr.getPosition();
 
             x = pos.getX() * box.getWidth();
@@ -327,12 +252,11 @@ public class GGame extends GScene implements KeyListener, ActionListener {
             g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
         }
 
-        Point playerPos = board.getPlayer().getPosition();
+        Point playerPos = level.getPlayer().getPosition();
         x = playerPos.getX() * player.getWidth();
         y = playerPos.getY() * player.getHeight();
 
         g.drawImage(player, x, y, null);
-        
     }
     
     /**
@@ -351,7 +275,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
             for (int j = 0; j < w; j++) {
                 Point pos = Point.at(j, i);
 
-                g.drawImage(imgMan.getTileImg(board.getTile(pos)), x, y, null);
+                g.drawImage(imgMan.getTileImg(level.getTile(pos)), x, y, null);
                 x += imgMan.getImgHeight();
             }
             y += imgMan.getImgWidth();
@@ -361,24 +285,21 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         BufferedImage box = imgMan.getBoxImg(0);
         
         BufferedImage player = imgMan.getPlayerImg(newDirection);
-        Iterator<Box> it = board.getBoxes();
-        
-        while (it.hasNext()) {
-        	Box curr = it.next();
+        for (Box curr : level.getBoxes()) {
             Point pos = curr.getPosition();
 
             x = pos.getX() * box.getWidth();
             y = pos.getY() * box.getHeight();
             
             // This box is the one that's moving right now
-            if(curr.getPosition().equals(board.getPlayer().getPosition().move(newDirection))) {
+            if(curr.getPosition().equals(level.getPlayer().getPosition().move(newDirection))) {
             	x = x + xshift;
             	y = y + yshift;
             }
             g.drawImage(imgMan.getBoxImg(curr.getId()), x, y, null);
         }
 
-        Point playerPos = board.getPlayer().getPosition();
+        Point playerPos = level.getPlayer().getPosition();
         x = playerPos.getX() * player.getWidth();
         y = playerPos.getY() * player.getHeight();
 
@@ -411,7 +332,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 			timer.stop();
 			yshift = 0;
 			xshift = 0;
-			board.applyAction(lastViableAction);
+			level.applyAction(lastViableAction);
 			if(!pendingActions.isEmpty()) {
 				Action a = pendingActions.poll();
 				this.applyAction(a);
@@ -420,9 +341,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 		}
 		
 		repaint();
-		
 	}
-
 
 	public ControlPanel getControlPanel() {
 		return controlPanel;

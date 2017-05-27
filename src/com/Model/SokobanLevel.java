@@ -187,8 +187,8 @@ public class SokobanLevel implements GameLevel {
 	}
 	
 	@Override
-	public Iterable<Tile> getTiles() {
-		return tileMap.getTiles();
+	public Tile getTile(Point pos) {
+		return tileMap.get(pos);
 	}
 
 	@Override
