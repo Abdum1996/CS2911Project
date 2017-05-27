@@ -1,8 +1,7 @@
 package com.Model;
 
 /**
- * Generic interface representing a game level. Note that player
- * movement is not considered to be a game move.
+ * Generic interface representing a game level.
  */
 public interface GameLevel {
 	public enum State { UNSOLVABLE, SOLVABLE, WON }
@@ -13,22 +12,29 @@ public interface GameLevel {
 	public void reset();
 	
 	/**
-	 * Determine if a given action is valid.
-	 * @param action - action to be applied to the game
-	 * @return true if the action is legal
+	 * Determine what would happen if an action were applied to the board.
+	 * @param action - action being checked
+	 * @return result of that action
 	 */
-	public boolean isValidAction(Action action);
+	public ActionResult getActionResult(Action action);
 	
 	/**
 	 * Apply an action to the game.
 	 * @param action - action to be performed
+	 * @return true if the action was successfully performed
 	 */
-	public void applyAction(Action action);
+	public boolean applyAction(Action action);
 	
 	/**
 	 * If possible, undo the last move executed by the player.
 	 */
 	public void undoLastMove();
+	
+	/**
+	 * Determine if the game is unsolvable, solvable or is in a winning state.
+	 * @return current state of the level
+	 */
+	public State getGameState();
 	
 	/**
 	 * Get the game's difficulty level.
@@ -53,12 +59,6 @@ public interface GameLevel {
 	 * @return move count
 	 */
 	public int getMoveCount();
-	
-	/**
-	 * Determine if the game is unsolvable, solvable or is in a winning state.
-	 * @return current state of the level
-	 */
-	public State getGameState();
 	
 	/**
 	 * Get read-only access to the tiles in the game board.
