@@ -52,6 +52,14 @@ public class SizedStack<T>  {
 	}
 	
 	/**
+	 * Get the size of the stack.
+	 * @return number of items in the stack
+	 */
+	public int size() {
+		return deque.size();
+	}
+	
+	/**
 	 * Determine if the sized stack is empty.
 	 * @return true if it is empty
 	 */
