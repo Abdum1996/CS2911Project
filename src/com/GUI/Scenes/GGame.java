@@ -31,6 +31,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      */
     private File footstepSnd;
     private File lostgameSnd;
+    private File wingameSnd;
     
     /**
      * Image manager of this instance
@@ -148,6 +149,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     private void initSounds() {
         footstepSnd = new File("./sound_files/walking.wav");
         lostgameSnd = new File("./sound_files/Sad_Trombone-Joe_Lamb-665429450.wav");
+        wingameSnd = new File("./sound_files/goalplacement.wav");
     }
 
 
@@ -215,6 +217,8 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 
         if (!board.isSolvable()) {
             playSound(lostgameSnd);
+        } else if (gameWon()) {
+        	playSound(wingameSnd);
         }
     }
     
@@ -246,6 +250,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+    	
     	System.out.println("keyPressed: " + e);
         // animation ain't done yet
         int kc = e.getKeyCode();
@@ -262,8 +267,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         }
         if (gameWon()) {
             System.out.println("Game Won!");
-            File winSound = new File("./sound_files/goalplacement.wav");
-            playSound(winSound);
+            return;
         }
         
         applyAction(Action.readKeyEvent(e));        
