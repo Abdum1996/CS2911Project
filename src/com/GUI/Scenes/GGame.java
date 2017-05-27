@@ -244,7 +244,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+        g.clearRect(0, 0, getWidth(), getHeight() );
         if(timer.isRunning()) {
         	paintChangingComponent(g);
         	return;
@@ -367,7 +367,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 				System.out.println("pulled from pending: " + a);
 			}
 		}
-		
+		controlPanel.repaint();
 		repaint();
 	}
 	

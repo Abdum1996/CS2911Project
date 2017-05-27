@@ -40,9 +40,9 @@ public class ControlPanel extends JPanel {
 		
 		
         try {
-            bkgImg = ImageIO.read(new File("./resources/menubackground.png"));
+            bkgImg = ImageIO.read(new File("./resources/control_panel_bg.png"));
+            System.out.println("bkgimg loaded");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 		
@@ -112,7 +112,7 @@ public class ControlPanel extends JPanel {
 		add (counter);
 		add (minSteps);
 		
-
+		repaint();
 	}
 
 	public void setCounter(int c) {
