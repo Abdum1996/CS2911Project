@@ -20,6 +20,13 @@ public interface Movable<T> {
 	public T move(Direction dir);
 	
 	/**
+	 * Move the entity backwards in a given direction.
+	 * @param dir - direction in which entity is moved backwards
+	 * @return entity with an updated position
+	 */
+	public T moveBack(Direction dir);
+	
+	/**
 	 * Move the entity to a new point.
 	 * @param point - input point
 	 * @return entity with an updated position

@@ -39,6 +39,11 @@ public class Box implements Movable<Box> {
 	public Box move(Direction dir) {
 		return moveTo(position.move(dir));
 	}
+	
+	@Override
+	public Box moveBack(Direction dir) {
+		return move(dir);
+	}
 
 	@Override
 	public Box moveTo(Point point) {

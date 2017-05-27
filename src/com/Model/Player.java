@@ -36,7 +36,13 @@ public class Player implements Movable<Player> {
 		return new Player(position.move(dir), dir);
 
 	}
-
+	
+	@Override
+	public Player moveBack(Direction dir) {
+		return new Player(position.move(dir), 
+				Direction.oppositeDirection(dir));
+	}
+	
 	@Override
 	public Player moveTo(Point point) {
 		return new Player(point, orientation);
