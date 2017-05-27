@@ -68,9 +68,9 @@ public class SokobanLevel implements GameLevel {
 	}
 
 	@Override
-	public boolean applyAction(Action action) {
+	public void applyAction(Action action) {
 		ActionResult result = getActionResult(action);
-		if (result.equals(ActionResult.NONE)) return false;
+		if (result.equals(ActionResult.NONE)) return;
 		tracker.addMove(action, result);
 		
 		// Move the player accordingly
@@ -83,13 +83,24 @@ public class SokobanLevel implements GameLevel {
 			Box newBox = boxMap.remove(pos).move(dir);
 			boxMap.put(newBox.getPosition(), newBox);
 		}
-		
-		return true;
 	}
 
 	@Override
 	public void undoLastMove() {
+		Move lastMove = tracker.undoLastMove();
+		if (lastMove == null) return;
 		
+		// Move the player backwards
+		Direction dir = Direction.readAction(lastMove.getAction());
+		Direction opposite = Direction.oppositeDirection(dir);
+		player = player.moveBack(opposite);
+		
+		// If applicable, move the pushed box backwards
+		if (lastMove.getResult().equals(ActionResult.BOX_MOVE)) {
+			Point pos = player.getPosition();
+			Box newBox = boxMap.remove(pos).moveBack(dir);
+			boxMap.put(newBox.getPosition(), newBox);
+		}
 	}
 
 	@Override
