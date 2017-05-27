@@ -20,12 +20,23 @@ public class ControlPanel extends JPanel {
 	private JLabel counter;
 	private JLabel minSteps;
     private BufferedImage bkgImg;
+    private ImageButton btnHard;
+    private ImageButton btnNormal;
+    private ImageButton btnEasy;
+    
 	
 	public ControlPanel(boolean isRandom, GGame context) {
 		// initialize all components
 		btnUndo = new ImageButton("./resources/undobutton.png");
 		btnReset = new ImageButton("./resources/resetbutton.png");
 		btnNewPuzzle = new ImageButton("./resources/newpuzzlebutton.png");
+		
+		btnHard = new ImageButton("./resources/hardbutton_small.png");
+		btnNormal = new ImageButton("./resources/normalbutton_small.png");
+		btnEasy = new ImageButton("./resources/easybutton_small.png");
+		
+		
+		
         try {
             bkgImg = ImageIO.read(new File("./resources/menubackground.png"));
         } catch (IOException e) {
@@ -34,6 +45,8 @@ public class ControlPanel extends JPanel {
         }
 		
 		counter = new JLabel("0 steps taken.");
+		
+		minSteps = new JLabel("Min box pushes to solve: " + context.getMinPushes() + ".");
 		
 		// add action listeners for all buttons
 		btnUndo.addActionListener((ActionEvent ae) -> {
@@ -51,6 +64,18 @@ public class ControlPanel extends JPanel {
 			context.repaint();
 		});
 		
+		btnHard.addActionListener((ActionEvent ae) -> {
+			
+		});
+		
+		btnNormal.addActionListener((ActionEvent ae) -> {
+			
+		});
+		
+		btnEasy.addActionListener((ActionEvent ae) -> {
+			
+		});
+		
 		// make all buttons non-focusable
 		btnNewPuzzle.setFocusable(false);
 		btnReset.setFocusable(false);
@@ -63,13 +88,26 @@ public class ControlPanel extends JPanel {
 		
 		
 		// add all buttons
+		add(btnEasy);
+		add(btnNormal);
+		add(btnHard);
+		
 		add(btnUndo);
 		add(btnReset);
+		
+		btnEasy.setFocusable(false);
+		btnNormal.setFocusable(false);
+		btnHard.setFocusable(false);
+		btnUndo.setFocusable(false);
+		btnReset.setFocusable(false);
+		
 		
 		// only add new puzzle thing if it's random
 		if (isRandom)
 			add(btnNewPuzzle);
 		add (counter);
+		add (minSteps);
+		
 
 	}
 

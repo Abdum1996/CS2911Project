@@ -369,6 +369,10 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 		
 		repaint();
 	}
+	
+	public int getMinPushes() {
+		return level.getMinPushes();
+	}
 
 	public ControlPanel getControlPanel() {
 		return controlPanel;
