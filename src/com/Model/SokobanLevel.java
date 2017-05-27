@@ -20,18 +20,36 @@ public class SokobanLevel implements GameLevel {
 	private final MoveTracker tracker;
 	private final int minPushes;
 	
-	public SokobanLevel(Difficulty difficulty) {
+	/**
+	 * Construct a new Sokoban level of given difficulty and with
+	 * a given game map setup, which is assumed to be valid.
+	 * @param difficulty   - difficulty of the level
+	 * @param map          - input tile map for the board
+	 * @param boxPositions - locations where boxes will be placed
+	 * @param playerPos    - designated start position for the player
+	 */
+	public SokobanLevel(Difficulty difficulty, TileMap map, 
+			Iterable<Point> boxPositions, Point playerPos) {
 		this.difficulty = difficulty;
 		
-		boxMap = new HashMap<>();
-		tileMap = new TileMap();
-		player = new Player(Point.at(0, 0));
+		boxMap  = new HashMap<>();
+		tileMap = map;
+		player  = new Player(playerPos);
 		
-		int undoDepth = difficulty.getUndoDepth();
-		pastActionResults = new SizedStack<>(undoDepth);
-		pastActions = new SizedStack<>(undoDepth);
+		minPushes = 0; // fix!!!!!!!!!
+		tracker = new MoveTracker(difficulty, minPushes);
+		
+		int id = 0;
+		for (Point pos : boxPositions) {
+			boxMap.put(pos, new Box(pos, id));
+			id++;
+		}
 	}
 	
+	/**
+	 * Determine if the game is in a winning state.
+	 * @return true if this is the case
+	 */
 	private boolean hasWon() {
 		for (Point curr : tileMap.getGoalPositions()) {
 			if (!boxMap.containsKey(curr)) return false;
@@ -42,43 +60,44 @@ public class SokobanLevel implements GameLevel {
 	
 	@Override
 	public void reset() {
-		tracker.reset();
+		tracker.reset(); // fix this
 	}
 
 	@Override
-	public ActionResult getActionResult(Action action) {
+	public Move getResultingMove(Action action) {
 		// If the game cannot be won, or already has been won then no actions can occur
-		if (!getGameState().equals(State.SOLVABLE)) return ActionResult.NONE;
+		if (!getGameState().equals(State.NOT_WON)) return Move.none();
 		
 		// Action is invalid if player attempts to move outside of the map or into a wall
 		Direction dir = Direction.readAction(action);
 		Point next1 = player.getPosition().move(dir);
-		if (!tileMap.isValidEntityPos(next1)) return ActionResult.NONE;
+		if (!tileMap.isValidEntityPos(next1)) return Move.none();
 		
 		// If the adjacent tile has no boxes then a player move can occur
-		if (!boxMap.containsKey(next1)) return ActionResult.PLAYER_MOVE;
+		if (!boxMap.containsKey(next1)) return Move.of(action, Action.Result.PLAYER_MOVE);
 		
 		// Box must be movable for a box push to occur
 		Point next2 = next1.move(dir);
 		
-		if (!tileMap.isValidEntityPos(next2)) return ActionResult.NONE;
-		if (boxMap.containsKey(next2)) return ActionResult.NONE;
+		if (!tileMap.isValidEntityPos(next2)) return Move.none();
+		if (boxMap.containsKey(next2)) return Move.none();
 		
-		return ActionResult.BOX_MOVE;
+		return Move.of(action, Action.Result.BOX_MOVE);
 	}
 
 	@Override
 	public void applyAction(Action action) {
-		ActionResult result = getActionResult(action);
-		if (result.equals(ActionResult.NONE)) return;
-		tracker.addMove(action, result);
+		Move move = getResultingMove(action);
+		if (move.doesNothing()) return;
+		
+		tracker.addMove(move);
 		
 		// Move the player accordingly
 		Direction dir = Direction.readAction(action);
 		player = player.move(dir);
 		
 		// Move the box if applicable
-		if (result.equals(ActionResult.BOX_MOVE)) {
+		if (move.isPush()) {
 			Point pos = player.getPosition();
 			Box newBox = boxMap.remove(pos).move(dir);
 			boxMap.put(newBox.getPosition(), newBox);
@@ -95,8 +114,8 @@ public class SokobanLevel implements GameLevel {
 		Direction opposite = Direction.oppositeDirection(dir);
 		player = player.moveBack(opposite);
 		
-		// If applicable, move the pushed box backwards
-		if (lastMove.getResult().equals(ActionResult.BOX_MOVE)) {
+		// If applicable, pull the pushed box backwards
+		if (lastMove.isPush()) {
 			Point pos = player.getPosition();
 			Box newBox = boxMap.remove(pos).moveBack(dir);
 			boxMap.put(newBox.getPosition(), newBox);
@@ -108,10 +127,9 @@ public class SokobanLevel implements GameLevel {
 		if (hasWon()) {
 			return State.WON;
 		} else if (tracker.reachedMaxPushes()) {
-			// Is it too expensive to solve the board every time?
-			return State.UNSOLVABLE;
+			return State.LOST;
 		} else {
-			return State.SOLVABLE;
+			return State.NOT_WON;
 		}
 	}
 	
@@ -121,20 +139,20 @@ public class SokobanLevel implements GameLevel {
 	}
 
 	@Override
-	public int getMinMoves() {
+	public int getMinPushes() {
 		return minPushes;
+	}
+
+	@Override
+	public int getPushCount() {
+		return tracker.getPushCount();
 	}
 
 	@Override
 	public int getUndoCount() {
 		return tracker.getUndoCount();
 	}
-
-	@Override
-	public int getMoveCount() {
-		return tracker.getPushCount();
-	}
-
+	
 	@Override
 	public Iterable<Tile> getTiles() {
 		return tileMap.getTiles();
@@ -161,3 +179,17 @@ public class SokobanLevel implements GameLevel {
 		return tileMap.getHeight();
 	}
 }
+
+/*@Override -- Function preserved for later
+public List<Action> solve() {
+	AStarSearch<Action> searchAlgo = new AStarSearch<>(
+			new Heuristic<Action>() {
+		@Override
+		public int hcost(State<Action> state) {
+			return 0;
+		}
+	});
+	
+	BoardState start = new BoardState(tileMap, player, getBoxes());
+	return searchAlgo.runAStarSearch(start);
+}*/
