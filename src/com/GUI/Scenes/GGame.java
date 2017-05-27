@@ -7,6 +7,7 @@ import com.Model.Action;
 import com.Model.Box;
 import com.Model.Point;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -24,6 +26,11 @@ import java.util.Queue;
  */
 @SuppressWarnings("serial")
 public class GGame extends GScene implements KeyListener, ActionListener {
+    /**
+     * sound filea
+     */
+    private File footstepSnd;
+    private File lostgameSnd;
     
     /**
      * Image manager of this instance
@@ -103,46 +110,13 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      * Constructs a GameScene with the puzzle loadeds
      * @param sceneManager - The sceneManager managing this GScene
      * @param imgMan - The ImageManager associated with this SceneManager
-     * @param map - The map to be loaded on the GameBoard and displayed
+     * @param context - The map to be loaded on the GameBoard and displayed
      */
-    public GGame(SceneManager sceneManager, ImageManager imgMan, String map) {
-        super(sceneManager, imgMan);
-        
-        this.imgMan = imgMan;
-        this.map = map;
-        board = BoardGenerator.readMap(map);
-        this.w = board.getMapWidth();
-        this.h = board.getMapHeight();
-        
-        // panel for control
-        controlPanel = new ControlPanel(false, this);
-        
-        sceneManager.getContentPane().setLayout(null);
-        sceneManager.setPreferredSize(new Dimension(this.w * imgMan.getImgWidth() + 8,
-        		this.h * imgMan.getImgHeight() + 64));
-        
-        this.setPreferredSize(new Dimension(this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight()));
-        
-        
-        this.setBounds(0, 0, this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight());
-        System.out.println("listener");
-        this.addKeyListener(this);
-        
-        // set the bounds for cpanel
-        controlPanel.setBounds(0, this.h * imgMan.getImgHeight(), this.h * imgMan.getImgWidth(), 28);
-        controlPanel.setFocusable(false);
-        sceneManager.add(controlPanel);
-        
-        this.setFocusable(true);
-        this.requestFocus();
-        
-//        for(Action a : board.solve())
-//        	System.out.println(a);
-    }
 
     public GGame(SceneManager sceneManager, ImageManager imgMan, GameBoard context) {
         super(sceneManager, imgMan);
 
+        initSounds();
         this.imgMan = imgMan;
         board = context;
         this.w = board.getMapWidth();
@@ -171,6 +145,11 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         this.requestFocus();
     }
 
+    private void initSounds() {
+        footstepSnd = new File("./sound_files/walking.wav");
+        lostgameSnd = new File("./sound_files/Sad_Trombone-Joe_Lamb-665429450.wav");
+    }
+
 
     /**
      * Pauses the game and displays a menu
@@ -183,7 +162,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     }
 
     public void reset() {
-        sceneManager.setScene(new GGame(sceneManager, imgMan, map));
+        sceneManager.setScene(new GGame(sceneManager, imgMan, board.reset()));
     }
 
     /**
@@ -193,7 +172,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     private void applyAction(Action action) {
     	
     	// no board action should be done after winning
-    	if (gameWon()) {
+    	if (board.gameWon()) {
     		return;
     	}
     	
@@ -217,8 +196,8 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 //        	System.out.println(recentActions.peek());
         	
         	//  play sound
-	        File footstep = new File("./sound_files/walking.wav");
-	        playSound(footstep);
+
+	        playSound(footstepSnd);
 	        
 	        // --------------
 	        lastViableAction = action;
@@ -230,6 +209,12 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 				this.applyAction(action);
 				System.out.println("pulled from pending: " + action);
         	}
+        }
+
+        controlPanel.setCounter(board.getMoveCount());
+
+        if (!board.isSolvable()) {
+            playSound(lostgameSnd);
         }
     }
     
@@ -427,4 +412,8 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 	public ControlPanel getControlPanel() {
 		return controlPanel;
 	}
+
+    public void genNewPuzzle() {
+        this.sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanBoard(this.board.getDifficulty())));
+    }
 }

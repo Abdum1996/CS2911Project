@@ -35,6 +35,7 @@ public class GPauseMenu extends GScene implements KeyListener {
     private BufferedImage bkgImg;
     
     private GameBoard context;
+	private boolean resuming;
 
 	public GPauseMenu(SceneManager sceneManager, ImageManager imgMan, GameBoard context) {
 		super(sceneManager, imgMan);
@@ -72,14 +73,17 @@ public class GPauseMenu extends GScene implements KeyListener {
 	    setFocusable(true);
 	    requestFocus();
 	    repaint();
+		resuming = false;
 	}
 	
 	@Override
     public void paintComponent(Graphics g) {
 		// first paint normal grid
         super.paintComponent(g);
-        
-        g.drawImage(bkgImg, 0, 0, null);
+
+        if (!resuming) {
+			g.drawImage(bkgImg, 0, 0, null);
+		}
         
     }
 	
@@ -108,6 +112,8 @@ public class GPauseMenu extends GScene implements KeyListener {
 	
 	public void resumeGame() {
 		System.out.println("inside resume game");
+		resuming = true;
+		repaint();
 		sceneManager.setScene(new GGame(sceneManager, imgMan, context));
 	}
 
