@@ -139,20 +139,51 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 //        for(Action a : board.solve())
 //        	System.out.println(a);
     }
-    
-    
+
+    public GGame(SceneManager sceneManager, ImageManager imgMan, GameBoard context) {
+        super(sceneManager, imgMan);
+
+        this.imgMan = imgMan;
+        board = context;
+        this.w = board.getMapWidth();
+        this.h = board.getMapHeight();
+
+        // panel for control
+        controlPanel = new ControlPanel(false, this);
+
+        sceneManager.getContentPane().setLayout(null);
+        sceneManager.setPreferredSize(new Dimension(this.w * imgMan.getImgWidth() + 8,
+                this.h * imgMan.getImgHeight() + 64));
+
+        this.setPreferredSize(new Dimension(this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight()));
+
+
+        this.setBounds(0, 0, this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight());
+        System.out.println("listener");
+        this.addKeyListener(this);
+
+        // set the bounds for cpanel
+        controlPanel.setBounds(0, this.h * imgMan.getImgHeight(), this.h * imgMan.getImgWidth(), 28);
+        controlPanel.setFocusable(false);
+        sceneManager.add(controlPanel);
+
+        this.setFocusable(true);
+        this.requestFocus();
+    }
+
+
     /**
      * Pauses the game and displays a menu
      */
     private void pauseGame() {
     	sceneManager.setLayout(new BorderLayout());
-        sceneManager.setScene(SceneManager.PAUSE_ID, new GPauseMenu(sceneManager, imgMan, this));
+        sceneManager.setScene(new GPauseMenu(sceneManager, imgMan, this.board));
         sceneManager.remove(controlPanel);
         sceneManager.setVisible(true); // refresh at the level JFrame
     }
 
     public void reset() {
-        sceneManager.setScene(SceneManager.GAME_ID, new GGame(sceneManager, imgMan, map));
+        sceneManager.setScene(new GGame(sceneManager, imgMan, map));
     }
 
     /**
