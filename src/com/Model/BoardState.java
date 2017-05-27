@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.Graph.State;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -13,26 +12,27 @@ import java.util.List;
 public class BoardState implements State<Action> {
 	private final HashSet<Point> boxPositions;
 	private final Point playerPos;
+	private final int pushCount;
 	private final TileMap map;
 	
 	/**
 	 * Create a board state from a given game board.
 	 * @param board - board which is presumably in an unsolved state
 	 */
-	public BoardState(TileMap map, Player player, Iterator<Box> boxes) {
+	public BoardState(TileMap map, Player player, Iterable<Box> boxes) {
 		playerPos = player.getPosition();
 		boxPositions = new HashSet<>();
-		this.map = map;
+		pushCount = 0;
+		this.map  = map;
 		
-		while (boxes.hasNext()) {
-			Box curr = boxes.next();
+		for (Box curr : boxes)
 			boxPositions.add(curr.getPosition());
-		}
 	}
 	
 	/**
 	 * Create successor board state by applying an action to it.
-	 * @param state - state to which action is being applied
+	 * @param state  - state to which action is being applied
+	 * @param action - action being applied
 	 */
 	private BoardState(BoardState state, Action action) {
 		Direction dir = Direction.readAction(action);
@@ -44,6 +44,10 @@ public class BoardState implements State<Action> {
 		if (boxPositions.contains(playerPos)) {
 			boxPositions.remove(playerPos);
 			boxPositions.add(playerPos.move(dir));
+			pushCount = state.pushCount + 1;
+			
+		} else {
+			pushCount = state.pushCount;
 		}
 	}
 	
@@ -61,6 +65,11 @@ public class BoardState implements State<Action> {
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public int getActionCount() {
+		return pushCount;
 	}
 	
 	@Override
@@ -100,32 +109,20 @@ public class BoardState implements State<Action> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((boxPositions == null) ? 0 : boxPositions.hashCode());
-		result = prime * result + ((playerPos == null) ? 0 : playerPos.hashCode());
+		
+		result = prime*result + boxPositions.hashCode();
+		result = prime*result + playerPos.hashCode();
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BoardState other = (BoardState) obj;
-		if (boxPositions == null) {
-			if (other.boxPositions != null)
-				return false;
-		} else if (!boxPositions.equals(other.boxPositions))
-			return false;
-		if (playerPos == null) {
-			if (other.playerPos != null)
-				return false;
-		} else if (!playerPos.equals(other.playerPos))
-			return false;
-		return true;
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		
+		BoardState other = (BoardState)obj;
+		return (boxPositions.equals(other.boxPositions)
+				&& playerPos.equals(other.playerPos));
 	}
-	
-	
 }

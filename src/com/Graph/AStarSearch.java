@@ -4,43 +4,37 @@ import java.util.PriorityQueue;
 import java.util.HashMap;
 import java.util.List;
 
-// TODO - iterative deepening search algorithm (given in one of the research papers)
-
 /**
  * AStar search algorithm class.
  * @param <T> - action type
  */
 public class AStarSearch<T> {
-	private final Heuristic<T> strategy;
+	private Node<T> endNode;
 	
 	/**
-	 * Creates a new A* search class with a given heuristic strategy.
+	 * Creates a new A* search class with a given heuristic strategy,
+	 * and perform an A* search on the optimal set of actions to reach
+	 * a goal state.
 	 * @param strategy  - heuristic evaluation strategy
+	 * @param initState - initial state in the search space
 	 */
-	public AStarSearch(Heuristic<T> strategy) {
-		this.strategy  = strategy;
-	} 
-	
-	/**
-	 * Perform an A* search on the optimal set of possible actions to reach a goal state.
-	 * @param initState - initial state in search space
-	 * @return sequence of actions to reach goal state with the minimal cost
-	 */
-	public List<T> runAStarSearch(State<T> initState) {
+	public AStarSearch(Heuristic<T> strategy, State<T> initState) {
 		PriorityQueue<Node<T>> open = new PriorityQueue<>();
 		HashMap<State<T>, Node<T>> closed = new HashMap<>();
+		endNode = null;
 		
-		// What follows is basically the lecture slide A* algorithm translated to java code
 		open.add(new Node<>(initState));
 		while (!open.isEmpty()) {
 			Node<T> curr = open.poll();
 			closed.put(curr.getState(), curr);
 		
-			if (curr.isGoalState())
-				return curr.getActionSequence();
+			if (curr.isGoalState()) {
+				endNode = curr;
+				return;
+			}
 			
 			List<Node<T>> successors = curr.getSuccessors(strategy);
-			if (successors == null) return null;
+			if (successors == null) return;
 			
 			for (Node<T> next : successors) {
 				State<T> state = next.getState();
@@ -63,8 +57,6 @@ public class AStarSearch<T> {
 				}
 			}
 		}
-		
-		return null;
 	}
 	
 	/**
@@ -80,5 +72,29 @@ public class AStarSearch<T> {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Determine whether the search space was solvable.
+	 * @return true if it was solvable
+	 */
+	public boolean isSolvable() {
+		return (endNode != null);
+	}
+	
+	/**
+	 * Get the sequence of optimal actions needed to reach goal state.
+	 * @return ordered list of optimal actions
+	 */
+	public List<T> getActionSequence() {
+		return endNode.getActionSequence();
+	}
+	
+	/**
+	 * Get the minimal number of actions needed to reach goal state.
+	 * @return action count
+	 */
+	public int getActionCount() {
+		return endNode.getState().getActionCount();
 	}
 }

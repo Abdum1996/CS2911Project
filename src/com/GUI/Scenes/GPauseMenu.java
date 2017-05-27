@@ -1,6 +1,5 @@
 package com.GUI.Scenes;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -8,23 +7,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
 import com.GUI.ImageButton;
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
-import com.Model.Box;
-import com.Model.GameBoard;
-import com.Model.Point;
-import com.Model.SokobanBoard;
+import com.Model.GameLevel;
 
 @SuppressWarnings("serial")
 public class GPauseMenu extends GScene implements KeyListener {
@@ -33,13 +25,12 @@ public class GPauseMenu extends GScene implements KeyListener {
      * the background image of this menu
      */
     private BufferedImage bkgImg;
-    
-    private GameBoard context;
+    private GameLevel level;
 	private boolean resuming;
 
-	public GPauseMenu(SceneManager sceneManager, ImageManager imgMan, GameBoard context) {
+	public GPauseMenu(SceneManager sceneManager, ImageManager imgMan, GameLevel level) {
 		super(sceneManager, imgMan);
-		this.context = context;
+		this.level = level;
 		
 //		setOpaque(false);
 		try {
@@ -87,40 +78,16 @@ public class GPauseMenu extends GScene implements KeyListener {
         
     }
 	
-//	public BufferedImage setAlpha(byte alpha, BufferedImage obj_img) {       
-//	    alpha %= 0xff; 
-//	    for (int cx=0;cx<obj_img.getWidth();cx++) {          
-//	        for (int cy=0;cy<obj_img.getHeight();cy++) {
-//	            int color = obj_img.getRGB(cx, cy);
-//
-//	            int mc = (alpha << 24) | 0x00ffffff;
-//	            int newcolor = color & mc;
-//	            obj_img.setRGB(cx, cy, newcolor);            
-//
-//	        }
-//
-//	    }
-//	    return obj_img;
-//	}
-//	
-//	private static BufferedImage copy(BufferedImage bi) {
-//		 ColorModel cm = bi.getColorModel();
-//		 boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-//		WritableRaster raster = bi.copyData(null);
-//		 return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
-//	}
-	
 	public void resumeGame() {
 		System.out.println("inside resume game");
 		resuming = true;
 		repaint();
-		sceneManager.setScene(new GGame(sceneManager, imgMan, context));
+		sceneManager.setScene(new GGame(sceneManager, imgMan, level));
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -137,7 +104,5 @@ public class GPauseMenu extends GScene implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
-
 }

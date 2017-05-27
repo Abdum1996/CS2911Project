@@ -21,59 +21,12 @@ public class BoardGenerator {
 	private static final int MAX_GOALS = 10;
 	
 	/**
-	 * Generate a Sokoban board from an input map file.
-	 * @param filename - name of text file
-	 * @return new Sokoban board
-	 */
-	public static SokobanBoard readMap(String filename) {
-		SokobanBoard board = null;
-		Scanner sc = null;
-		
-		try {
-			sc = new Scanner(new FileReader(filename));
-			
-			int width = sc.nextInt();
-			int height = sc.nextInt();
-			
-			List<Tile> tiles = new ArrayList<>(width*height);
-			List<Point> boxPositions = new ArrayList<>();
-			Point playerPos = Point.at(0, 0);
-			
-			for (int y = 0; y < height; ++y) {
-				for (int x = 0; x < width; ++x) {
-					String symbol = sc.next();
-					tiles.add(Tile.parse(symbol));
-					
-					Point pos = Point.at(x, y);
-					if (symbol.equals("P")) {
-						playerPos = pos;
-					} else if (symbol.equals("B")) {
-						boxPositions.add(pos);
-					}
-				}
-			}
-			
-			TileMap map = new TileMap(tiles.iterator(), width, height);
-			board = new SokobanBoard(map, boxPositions.iterator(), 
-					playerPos, width, height);
-			
-		} catch (FileNotFoundException | NoSuchElementException e) {
-			e.printStackTrace();
-			
-		} finally {
-			if (sc != null) sc.close();
-		}
-		
-		return board;
-	}
-	
-	/**
 	 * Procedurally generate a new Sokoban board.
 	 * @param width  - width of the board in columns 
 	 * @param height - height of the board in rows
 	 * @return procedurally generated game board
 	 */
-	public static SokobanBoard genBoard(int width, int height) {
+	/*public static SokobanBoard genBoard(Difficulty level) {
 		List<Tile> tiles = new ArrayList<>(width*height);
 		
 		int numGoals = generator.nextInt(MAX_GOALS) + 1;
@@ -114,10 +67,9 @@ public class BoardGenerator {
 			board = new SokobanBoard(map, boxPositions.iterator(),
 					playerPos, width, height);
 		} while (!board.isSolvable());
-		//Collections.s*/
 		
 		return board;
-	}
+	}*/
 	
 	private static Point genRandomPoint(TileMap map) {
 		int offset = generator.nextInt(map.getHeight()*map.getHeight());
