@@ -7,6 +7,12 @@ package com.Model;
  */
 public interface Movable<T> {
 	/**
+	 * Get the initial position of the entity.
+	 * @return initial position
+	 */
+	public Point getInitialPosition();
+	
+	/**
 	 * Get the entity's coordinate position.
 	 * @return point representing entity's position. 
 	 */
@@ -25,11 +31,4 @@ public interface Movable<T> {
 	 * @return entity with an updated position
 	 */
 	public T moveBack(Direction dir);
-	
-	/**
-	 * Move the entity to a new point.
-	 * @param point - input point
-	 * @return entity with an updated position
-	 */
-	public T moveTo(Point point);
 }

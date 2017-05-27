@@ -4,26 +4,37 @@ package com.Model;
  * Class representing a player entity on a game board.
  */
 public class Player implements Movable<Player> {
-	private final Point position;
 	private final Direction orientation;
+	private final Point initialPos;
+	private final Point position;
 	
 	/**
-	 * Construct a player at the given point.
+	 * Construct a new player at the given point.
 	 * @param point - input point
 	 */
 	public Player(Point point) {
-		position = point;
 		orientation = Direction.DOWN;
+		
+		initialPos = point;
+		position = point;
 	}
 	
 	/**
-	 * Construct a player at the given point facing the given direction
-	 * @param point - input point
-	 * @param dir the direction the player is initially facing
+	 * Construct a player with an updated orientation and position.
+	 * @param original - player with the original position
+	 * @param point    - new position of player
+	 * @param dir      - new player orientation
 	 */
-	public Player(Point point, Direction dir) {
-		position = point;
-		orientation = dir;
+	private Player(Player original, Point point, Direction dir) {
+		initialPos = original.initialPos;
+		
+		this.orientation = dir;
+		this.position = point;
+	}
+	
+	@Override
+	public Point getInitialPosition() {
+		return initialPos;
 	}
 	
 	@Override
@@ -33,19 +44,14 @@ public class Player implements Movable<Player> {
 
 	@Override
 	public Player move(Direction dir) {
-		return new Player(position.move(dir), dir);
+		return new Player(this, position.move(dir), dir);
 
 	}
 	
 	@Override
 	public Player moveBack(Direction dir) {
-		return new Player(position.move(dir), 
+		return new Player(this, position.move(dir), 
 				Direction.oppositeDirection(dir));
-	}
-	
-	@Override
-	public Player moveTo(Point point) {
-		return new Player(point, orientation);
 	}
 
 	/**
