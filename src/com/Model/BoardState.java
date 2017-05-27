@@ -98,32 +98,20 @@ public class BoardState implements State<Action> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((boxPositions == null) ? 0 : boxPositions.hashCode());
-		result = prime * result + ((playerPos == null) ? 0 : playerPos.hashCode());
+		
+		result = prime*result + boxPositions.hashCode();
+		result = prime*result + playerPos.hashCode();
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BoardState other = (BoardState) obj;
-		if (boxPositions == null) {
-			if (other.boxPositions != null)
-				return false;
-		} else if (!boxPositions.equals(other.boxPositions))
-			return false;
-		if (playerPos == null) {
-			if (other.playerPos != null)
-				return false;
-		} else if (!playerPos.equals(other.playerPos))
-			return false;
-		return true;
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		
+		BoardState other = (BoardState)obj;
+		return (boxPositions.equals(other.boxPositions)
+				&& playerPos.equals(other.playerPos));
 	}
-	
-	
 }
