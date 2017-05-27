@@ -32,4 +32,10 @@ public interface State<T> {
 	 * @return true if the state is a goal state
 	 */
 	public boolean isGoalState();
+	
+	/**
+	 * Get the number of actions needed to reach the current state.
+	 * @return action count
+	 */
+	public int getActionCount();
 }

@@ -12,6 +12,7 @@ import java.util.List;
 public class BoardState implements State<Action> {
 	private final HashSet<Point> boxPositions;
 	private final Point playerPos;
+	private final int pushCount;
 	private final TileMap map;
 	
 	/**
@@ -21,7 +22,8 @@ public class BoardState implements State<Action> {
 	public BoardState(TileMap map, Player player, Iterable<Box> boxes) {
 		playerPos = player.getPosition();
 		boxPositions = new HashSet<>();
-		this.map = map;
+		pushCount = 0;
+		this.map  = map;
 		
 		for (Box curr : boxes)
 			boxPositions.add(curr.getPosition());
@@ -42,6 +44,10 @@ public class BoardState implements State<Action> {
 		if (boxPositions.contains(playerPos)) {
 			boxPositions.remove(playerPos);
 			boxPositions.add(playerPos.move(dir));
+			pushCount = state.pushCount + 1;
+			
+		} else {
+			pushCount = state.pushCount;
 		}
 	}
 	
@@ -59,6 +65,11 @@ public class BoardState implements State<Action> {
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public int getActionCount() {
+		return pushCount;
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package com.Model;
 
 import com.Graph.AStarSearch;
+import com.Graph.Heuristic;
 
 import java.util.Collections;
 import java.util.Collection;
@@ -40,7 +41,7 @@ public class SokobanLevel implements GameLevel {
 		tileMap = map;
 		player  = new Player(playerPos);
 		
-		minPushes = 0;
+		minPushes = solve().getActionCount();
 		tracker = new MoveTracker(difficulty, minPushes);
 		
 		int id = 0;
@@ -64,12 +65,13 @@ public class SokobanLevel implements GameLevel {
 	
 	/**
 	 * Determine the optimal sequence of actions to solve the level.
-	 * @return optimal list of actions
+	 * @return solved search space
 	 */
-	private List<Action> solve() {
-		AStarSearch<Action> searchAlgo = new AStarSearch<>(new BoardHeuristic());
+	private AStarSearch<Action> solve() {
 		BoardState start = new BoardState(tileMap, player, getBoxes());
-		return searchAlgo.runAStarSearch(start);
+		Heuristic<Action> heuristic = new BoardHeuristic();
+		
+		return new AStarSearch<>(heuristic, start);
 	}
 	
 	@Override
@@ -161,9 +163,7 @@ public class SokobanLevel implements GameLevel {
 		GameState state = getGameState();
 		if (state.equals(GameState.WON)) return true;
 		if (state.equals(GameState.LOST)) return false;
-		
-		List<Action> actions = solve();
-		return actions == null;
+		return solve().isSolvable();
 	}
 	
 	@Override
