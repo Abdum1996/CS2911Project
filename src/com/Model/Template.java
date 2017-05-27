@@ -2,32 +2,43 @@ package com.Model;
 
 import java.util.Random;
 
+/**
+ * Template class for random empty board generation
+ * @author SamirMustavi
+ */
 public class Template {
 	
-	/**
+	/*
 	 * WALL = W
 	 * FLOOR = F
-<<<<<<< HEAD
-	 * EMPTY = 2
-=======
 	 * EMPTY = E
->>>>>>> master
 	 */
 
+	/**
+	 * Stores the char matrix containing the template
+	 */
 	private char array[][];
-	private final Random rand;
 	
+	/**
+	 * Constructor for an instance of the Template class
+	 * @param array - the matrix containing template information
+	 */
 	public Template(char[][] array) {
 		this.array = array;
-		this.rand = new Random();
-		
 	}
 	
-	public Template(Template tem) {
-		this.array = tem.array;
-		this.rand = tem.rand;
+	/**
+	 * Gets the 2d char array for the given template
+	 * @return the char matrix array
+	 */
+	public char[][] getTemplateMap() {
+		return array;
 	}
-	
+
+	/**
+	 * Rotates the template clock-wise by 90 degrees
+	 * @return the rotated template array
+	 */
 	private char[][] rotate() {
 		char newArray[][] = new char[5][5];
 		int i,j = 0;
@@ -39,6 +50,10 @@ public class Template {
 		return newArray;
 	}
 	
+	/**
+	 * Reflects the template along the main diagonal
+	 * @return the transpose of the given template array
+	 */
 	private char[][] reflect() {
 		char newArray[][] = new char[5][5];
 		int i,j = 0;
@@ -49,14 +64,18 @@ public class Template {
 		}
 		return newArray;
 	}
-	public Template modifyTemplate() {
-		Template temp = new Template(this);
-		int i = temp.rand.nextInt(3);
-		while (i > 0) {
-			if (i == 1) temp.array = temp.rotate();
-			else if (i == 2) temp.array = temp.reflect();
-		}
-		return temp;
-	}
 	
+	/**
+	 * Modifies the template array by randomly rotating and reflecting
+	 * @param r - the Random type that calls randomly on reflect() and rotate() to modify the template array
+	 * @return the modified template array
+	 */
+	public Template modifyTemplate(Random r) {
+		int i = r.nextInt(3);
+		while (i > 0) {
+			if (i == 1) this.array = this.rotate();
+			else if (i == 2) this.array = this.reflect();
+		}
+		return this;
+	}
 }

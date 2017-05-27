@@ -8,25 +8,32 @@ import java.util.Scanner;
 
 import java.util.Collections;
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
 import java.util.Arrays;
->>>>>>> master
 import java.util.Random;
 import java.util.List;
 
 /**
  * Factory class responsible for creating new game boards, both by reading
  * input map files and through random procedural generation methods.
+ * @author SamirMustavi
+ * @author ThomasDaniell
  */
 public class BoardGenerator {
 	private static final Random generator = new Random();
 	private static final int MAX_GOALS = 10;
+	private Template[] templates;
+	
+	public BoardGenerator() {
+		int i;
+		for (i = 0; i < 17; i++) {
+			templates[i] = new Template(getArray(i+1));
+		}
+	}
 	
 	/**
 	 * Generate a Sokoban board from an input map file.
 	 * @param filename - name of text file
-	 * @return new Sokoban board
+	 * @return the new Sokoban board
 	 */
 	public static SokobanBoard readMap(String filename) {
 		SokobanBoard board = null;
@@ -106,11 +113,7 @@ public class BoardGenerator {
 				
 				while (!map.isValidEntityPos(boxPos))
 					boxPos = genRandomPoint(map);
-<<<<<<< HEAD
-				boxPositions.add(boxPos);
-=======
 					boxPositions.add(boxPos);
->>>>>>> master
 			}
 			
 			Point playerPos = genRandomPoint(map);
@@ -121,76 +124,100 @@ public class BoardGenerator {
 			board = new SokobanBoard(map, boxPositions.iterator(),
 					playerPos, width, height);
 		} while (!board.isSolvable());
-<<<<<<< HEAD
-=======
 		//Collections.s*/
 		
 		return board;
 	}
 	
+	/**
+	 * Generates a random point from a given map, for placing boxes and players
+	 * @param map - the map to generate a random point for
+	 * @return a random point
+	 */
 	private static Point genRandomPoint(TileMap map) {
 		int offset = generator.nextInt(map.getHeight()*map.getHeight());
 		return Point.at(offset % map.getWidth(), offset/map.getHeight());
 	}
 	
+	/**
+	 * Produces a 2d char array containing information on a possible empty board for a Sokoban game
+	 * @param height - the desired height of the board
+	 * @param width - the desired width of the board
+	 * @return the char array containing the randomly generated empty board
+	 */
 	public char[][] emptyBoard(int height, int width) {
 		char[][] board = new char[height][width];
 		Arrays.fill(board,'E');
-		int i = generator.nextInt(height-5);
-		int j = generator.nextInt(width-5);
+		int i = 2;
+		int j = 2;
 		char[][] tempArray = null;
 		Template t = null;
->>>>>>> master
 		
-		while (i < height - 4) {
-			tempArray = getArray(generator.nextInt(17)+1);
-			t = new Template(tempArray);
-			t.modifyTemplate();
-			if (!properOverlap(board,t,i,j,height,width)) continue;
-			tempToBoard(board,t,i,j,height,width);
-			if (j < width - 4) continue;
+		while (i < height) {
+			t = templates[generator.nextInt(17)];
+			t.modifyTemplate(generator);
+			tempArray = t.getTemplateMap();
+			if (!properOverlap(board,tempArray,i,j)) continue;
+			board = tempToBoard(board,tempArray,i,j);
+			j += 3;
+			if (j < width) continue;
+			j = 2;
+			i += 3;
 		}
 		
 		return board;
 	}
 	
-	private void tempToBoard(char[][] array, Template t, int i, int j, int height, int width) {
+	/**
+	 * Called by emptyBoard to check if a template can be placed on the given board at a given set of points (3x3 space on the board)
+	 * The overlap from template and board allow for more interesting puzzles to be created
+	 * @param array - the board on which to place the template
+	 * @param t - the template to place on the board
+	 * @param i - the vertical index of the board to place the template
+	 * @param j - the horizontal index of the board to place the template
+	 * @return true if the template can be placed on the board with no conflicting overlaps, false otherwise
+	 */
+	private boolean properOverlap(char[][] array, char[][] t, int i, int j) {
 		int x1 = 0;
 		int y1 = 0;
-		int x2 = 5;
-		int y2 = 5;
-		int x,y;
-		if (i < 3) x1 = 1;
-		if (j < 3) y1 = 1;
-		if (i > height - 3) x2 = 4;
-		if (j > width - 3) y2 = 4;
-		for (x = x1; x < x2; x++) {
-			for (y = y1; y < y2; y++) {
-				
+		int x2;
+		int y2;
+		for (x2 = i-1; x2 < i+4; x2++) {
+			for (y2 = j-1; y2 < j+4; y2++) {
+				if ((t[x1][y1] != 'E') && (array[x2][y2] != 'E')) {
+					if (t[x1][x2] != array[x2][y2]) return false;
+				}
 			}
 		}
+		return true;
+	}
+	
+	/**
+	 * Called by emptyBoard to place a template on the board at a given set of points (3x3 space on the board)
+	 * @param array - the board on which to place the template
+	 * @param t - the template to place on the board
+	 * @param i - the vertical index of the board to place the template
+	 * @param j - the horizontal index of the board to place the template
+	 * @return the same board with the template added on
+	 */
+	private char[][] tempToBoard(char[][] array, char[][] t, int i, int j) {
+		int x1 = 0;
+		int y1 = 0;
+		int x2;
+		int y2;
+		for (x2 = i-1; x2 < i+4; x2++) {
+			for (y2 = j-1; y2 < j+4; y2++) {
+				if ((t[x1][y1] != 'E') && (array[x2][y2] == 'E')) array[x2][y2] = t[x1][y1];
+			}
+		}
+		return array;
 	}
 
-	private boolean properOverlap(char[][] array, Template t, int i, int j, int height, int width) {
-		
-<<<<<<< HEAD
-		
-		
-		
-		
-		/*  
-		Scanner sc = null;
-	    try
-	    {
-
-	        sc = new Scanner(new FileReader());
-		    String curr = null;
-		    String[] c = null;
-		    int array[5][5];
-=======
-		return false;
-	}
-
+	/**
+	 * Scans the desired text file in the Templates folder to get a 2d array containing template information
+	 * @param index - the template file to extract
+	 * @return the 2d char array for the template
+	 */
 	public char[][] getArray(int index) {
 		String s = "./resources/Templates/t" + index + ".txt";
 		Scanner sc = null;
@@ -200,7 +227,6 @@ public class BoardGenerator {
 	        sc = new Scanner(new FileReader(s));
 		    String curr = null;
 		    String[] c = null;
->>>>>>> master
 		    int i,j = 0;
 		    
 		    while ((sc.hasNextLine()) || (j < 5)) {
@@ -209,21 +235,11 @@ public class BoardGenerator {
 		    	c = curr.split(" ");
 		    	
 		    	for (i = 0; i < 5; i++) {
-<<<<<<< HEAD
-		    		array[j][i] = Integer.parseInt(c[i]);
-		    	}
-		    	j++;
-		    }
-		    
-		    Template temp = new Template(array);
-		    temp.modifyTemplate();
-=======
 		    		array[j][i] = c[i].charAt(0);
 		    	}
 		    	j++;
 		    }
 
->>>>>>> master
 	    }
 	    catch (FileNotFoundException e) {}
 
@@ -232,17 +248,38 @@ public class BoardGenerator {
 	        if (sc != null) sc.close();
 
 	    } 
-<<<<<<< HEAD
-		 */
-		
-		return board;
+		return array;
 	}
 	
-	private static Point genRandomPoint(TileMap map) {
-		int offset = generator.nextInt(map.getHeight()*map.getHeight());
-		return Point.at(offset % map.getWidth(), offset/map.getHeight());
-=======
-		return array;
->>>>>>> master
+	/**
+	 * Determines whether a produced empty board has too much floor space in single areas (this detracts from possibly interesting boards) usually in 4x3 grids
+	 * @param emptyMap - the map to check
+	 * @param height - the height of the map
+	 * @param width - the width of the map
+	 * @return true if there are any big board spaces in the map (which would be disregarded), false otherwise
+	 */
+	public boolean isHugeFloorSpace(char[][] emptyMap, int height, int width) {
+		int i,j;
+		for (i = 0; i < height-4; i++) {
+			for (j = 0; j < width-4; j++) {
+				if (emptyMap[i][j] == 'F') {
+					if ((emptyMap[i+1][j] == 'F') && (emptyMap[i+2][j] == 'F') &&
+						(emptyMap[i][j+1] == 'F') && (emptyMap[i+1][j+1] == 'F') &&
+						(emptyMap[i+2][j+1] == 'F') && (emptyMap[i][j+2] == 'F') &&
+						(emptyMap[i+1][j+2] == 'F') && (emptyMap[i+2][j+2] == 'F')) {
+						if ((emptyMap[i+3][j] == 'F') && (emptyMap[i+3][j+1] == 'F') &&
+							(emptyMap[i+3][j+2] == 'F')) {
+							return true;
+						}
+						if ((emptyMap[i][j+3] == 'F') && (emptyMap[i+1][j+3] == 'F') &&
+							(emptyMap[i+2][j+3] == 'F')) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 }

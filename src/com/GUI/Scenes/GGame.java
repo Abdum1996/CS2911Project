@@ -97,20 +97,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 	 * the last action results made by the user, used for undoing
 	 */
 	private SizedStack<ActionResult> recentActionResults = new SizedStack<>(3);
-<<<<<<< HEAD
-
-	/**
-	 * Checks whether the game is pause or not, default is unpaused
-	 */
-    private JPanel pauseMenu;
-    private JLabel pauseScrLabel;
-    private JButton pauseScrResumeBtn;
-    private JButton pauseScrRQuitBtn;
-
-=======
-	
 	private ControlPanel controlPanel;
->>>>>>> master
     /**
      * Constructs a GameScene with the puzzle loadeds
      * @param sceneManager - The sceneManager managing this GScene
@@ -123,10 +110,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         this.imgMan = imgMan;
         this.map = map;
         board = BoardGenerator.readMap(map);
-<<<<<<< HEAD
 
-=======
->>>>>>> master
         this.w = board.getMapWidth();
         this.h = board.getMapHeight();
         
@@ -144,44 +128,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         System.out.println("listener");
         this.addKeyListener(this);
         
-<<<<<<< HEAD
-
-        pauseMenu = new JPanel();
-        //pauseMenu.setBackground(Color.BLACK);
-        pauseMenu.setLayout(new BoxLayout(pauseMenu, BoxLayout.PAGE_AXIS));
-        pauseMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
-        pauseScrLabel = new JLabel("Game Paused");
-        pauseScrLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // center the stuff
-        pauseScrResumeBtn = new JButton("Resume");
-        pauseScrResumeBtn.addActionListener((ActionEvent ae) -> {
-            resumeGame();
-        });
-        pauseScrResumeBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        pauseScrRQuitBtn = new JButton("Quit To Main Menu");
-        pauseScrRQuitBtn.addActionListener((ActionEvent ae) -> {
-            this.sceneManager.setScene(SceneManager.MAIN_MENU_ID, new GMainMenu(sceneManager, imgMan));
-        });
-        pauseScrRQuitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        pauseMenu.add(pauseScrLabel);
-        pauseMenu.add(pauseScrResumeBtn);
-        pauseMenu.add(pauseScrRQuitBtn);
-        
-//        for(Action a : board.solve())
-//        	System.out.println(a);
-    }
-
-    /**
-     * Resumes the game from a paused state
-     */
-    private void resumeGame() {
-//        this.remove(pauseScrLabel);
-//        this.remove(pauseScrResumeBtn);
-//        this.remove(pauseScrRQuitBtn);
-        remove(pauseMenu);
-        repaint();
-        sceneManager.setVisible(true); // refresh at the level JFrame
-=======
         // set the bounds for cpanel
         controlPanel.setBounds(0, this.h * imgMan.getImgHeight(), this.h * imgMan.getImgWidth(), 28);
         controlPanel.setFocusable(false);
@@ -192,7 +138,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         
 //        for(Action a : board.solve())
 //        	System.out.println(a);
->>>>>>> master
     }
     
     
@@ -200,20 +145,10 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      * Pauses the game and displays a menu
      */
     private void pauseGame() {
-<<<<<<< HEAD
-//        this.add(pauseScrLabel);
-//        this.add(pauseScrResumeBtn);
-//        this.add(pauseScrRQuitBtn);
-        sceneManager.setScene(SceneManager.PAUSE_ID, new GPauseMenu(sceneManager, imgMan, board));
-//        repaint();
-        sceneManager.setVisible(true); // refresh at the level JFrame
-
-=======
     	sceneManager.setLayout(new BorderLayout());
         sceneManager.setScene(SceneManager.PAUSE_ID, new GPauseMenu(sceneManager, imgMan, this));
         sceneManager.remove(controlPanel);
         sceneManager.setVisible(true); // refresh at the level JFrame
->>>>>>> master
     }
 
     public void reset() {
@@ -301,11 +236,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         int kc = e.getKeyCode();
         if (kc == KeyEvent.VK_R) {
             reset();
-<<<<<<< HEAD
-        }  else if (kc == KeyEvent.VK_P) {
-=======
         }  else if (kc == KeyEvent.VK_P || kc == KeyEvent.VK_ESCAPE)  {
->>>>>>> master
         	pauseGame();
         	return;
         }

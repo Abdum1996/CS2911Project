@@ -1,11 +1,8 @@
 package com.GUI;
 
-<<<<<<< HEAD
-=======
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
->>>>>>> master
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -63,26 +60,17 @@ public class SceneManager extends JFrame {
 
     /**
      * Sets the scene/panel for this frame
-<<<<<<< HEAD
-     * @param sceneID
-     * @param scene
-=======
      * @param sceneID - the id of the scene to be switched to 
      * @param scene - the panel component to be viewed/set
->>>>>>> master
      */
     public void setScene (int sceneID, GScene scene) {
         if (getCurrentScene() != null) {
             remove(getCurrentScene());
         }
-<<<<<<< HEAD
-=======
-        
         if (sceneID != GAME_ID && sceneID != PAUSE_ID) {
         	this.setLayout(new BorderLayout());
         	this.setPreferredSize(new Dimension(10*32, 14*32));
         }
->>>>>>> master
         System.out.println("Setting scene");
 
         currentScene = sceneID;
