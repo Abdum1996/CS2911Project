@@ -20,9 +20,9 @@ public class SokobanLevel implements GameLevel {
 	private final SizedStack<ActionResult> pastActionResults;
 	private final SizedStack<Action> pastActions;
 	
-	private final int minMoves;
+	private final int minPushes;
 	private int undoCount = 0;
-	private int moveCount = 0;	
+	private int pushCount = 0;
 	
 	public SokobanLevel(Difficulty difficulty) {
 		this.difficulty = difficulty;
@@ -31,9 +31,17 @@ public class SokobanLevel implements GameLevel {
 		tileMap = new TileMap();
 		player = new Player(Point.at(0, 0));
 		
-		int maxMoves = (difficulty.equals(Difficulty.HARD)) ? minMoves*2 : Integer.MAX_VALUE;
-		pastActionResults = new SizedStack<>(maxMoves);
-		pastActions = new SizedStack<>(maxMoves);
+		int undoDepth = difficulty.getUndoDepth();
+		pastActionResults = new SizedStack<>(undoDepth);
+		pastActions = new SizedStack<>(undoDepth);
+	}
+	
+	private boolean hasWon() {
+		for (Point curr : tileMap.getGoalPositions()) {
+			if (!boxMap.containsKey(curr)) return false;
+		}
+		
+		return true;
 	}
 	
 	@Override
@@ -53,9 +61,6 @@ public class SokobanLevel implements GameLevel {
 		
 		// If the adjacent tile has no boxes then a player move can occur
 		if (!boxMap.containsKey(next1)) return ActionResult.PLAYER_MOVE;
-		
-		// Handle case where the maximum allowed box pushes has been reached
-		if (moveCount == difficulty.getMaxMoves(minMoves)) return ActionResult.NONE;
 		
 		// Box must be movable for a box push to occur
 		Point next2 = next1.move(dir);
@@ -82,7 +87,7 @@ public class SokobanLevel implements GameLevel {
 			Box newBox = boxMap.remove(pos).move(dir);
 			boxMap.put(newBox.getPosition(), newBox);
 			
-			moveCount++;
+			pushCount++;
 		}
 		
 		return true;
@@ -91,13 +96,14 @@ public class SokobanLevel implements GameLevel {
 	@Override
 	public void undoLastMove() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public State getGameState() {
-		
-		return null;
+		// is it too expensive to solve the board every time?
+		if (hasWon()) return State.WON;	
+		if (difficulty.reachedMaxMoves(minPushes, pushCount)) return State.UNSOLVABLE;
+		return State.SOLVABLE;
 	}
 	
 	@Override
@@ -107,7 +113,7 @@ public class SokobanLevel implements GameLevel {
 
 	@Override
 	public int getMinMoves() {
-		return minMoves;
+		return minPushes;
 	}
 
 	@Override
@@ -117,7 +123,7 @@ public class SokobanLevel implements GameLevel {
 
 	@Override
 	public int getMoveCount() {
-		return moveCount;
+		return pushCount;
 	}
 
 	@Override
