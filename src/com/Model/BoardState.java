@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.Graph.State;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,20 +18,19 @@ public class BoardState implements State<Action> {
 	 * Create a board state from a given game board.
 	 * @param board - board which is presumably in an unsolved state
 	 */
-	public BoardState(TileMap map, Player player, Iterator<Box> boxes) {
+	public BoardState(TileMap map, Player player, Iterable<Box> boxes) {
 		playerPos = player.getPosition();
 		boxPositions = new HashSet<>();
 		this.map = map;
 		
-		while (boxes.hasNext()) {
-			Box curr = boxes.next();
+		for (Box curr : boxes)
 			boxPositions.add(curr.getPosition());
-		}
 	}
 	
 	/**
 	 * Create successor board state by applying an action to it.
-	 * @param state - state to which action is being applied
+	 * @param state  - state to which action is being applied
+	 * @param action - action being applied
 	 */
 	private BoardState(BoardState state, Action action) {
 		Direction dir = Direction.readAction(action);

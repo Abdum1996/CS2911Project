@@ -4,7 +4,12 @@ import java.util.Collections;
 import java.util.Collection;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.Graph.AStarSearch;
+import com.Graph.Heuristic;
+import com.Graph.State;
 
 /**
  * Implementation of the game level interface. Actions here correspond 
@@ -66,7 +71,7 @@ public class SokobanLevel implements GameLevel {
 	@Override
 	public Move getResultingMove(Action action) {
 		// If the game cannot be won, or already has been won then no actions can occur
-		if (!getGameState().equals(State.NOT_WON)) return Move.none();
+		if (!getGameState().equals(GameState.NOT_WON)) return Move.none();
 		
 		// Action is invalid if player attempts to move outside of the map or into a wall
 		Direction dir = Direction.readAction(action);
@@ -123,14 +128,33 @@ public class SokobanLevel implements GameLevel {
 	}
 
 	@Override
-	public State getGameState() {
+	public GameState getGameState() {
 		if (hasWon()) {
-			return State.WON;
+			return GameState.WON;
 		} else if (tracker.reachedMaxPushes()) {
-			return State.LOST;
+			return GameState.LOST;
 		} else {
-			return State.NOT_WON;
+			return GameState.NOT_WON;
 		}
+	}
+	
+	@Override
+	public boolean isSolvable() {
+		GameState state = getGameState();
+		if (state.equals(GameState.WON)) return true;
+		if (state.equals(GameState.LOST)) return false;
+		
+		AStarSearch<Action> searchAlgo = new AStarSearch<>(
+				new Heuristic<Action>() {
+			@Override
+			public int hcost(State<Action> boardState) {
+				return 0;
+			}
+		});
+		
+		BoardState start = new BoardState(tileMap, player, getBoxes());
+		List<Action> result = searchAlgo.runAStarSearch(start);
+		return (result != null);
 	}
 	
 	@Override
@@ -179,17 +203,3 @@ public class SokobanLevel implements GameLevel {
 		return tileMap.getHeight();
 	}
 }
-
-/*@Override -- Function preserved for later
-public List<Action> solve() {
-	AStarSearch<Action> searchAlgo = new AStarSearch<>(
-			new Heuristic<Action>() {
-		@Override
-		public int hcost(State<Action> state) {
-			return 0;
-		}
-	});
-	
-	BoardState start = new BoardState(tileMap, player, getBoxes());
-	return searchAlgo.runAStarSearch(start);
-}*/

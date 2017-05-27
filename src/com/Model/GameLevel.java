@@ -4,7 +4,7 @@ package com.Model;
  * Generic interface representing a game level.
  */
 public interface GameLevel {
-	public enum State { LOST, NOT_WON, WON }
+	public enum GameState { LOST, NOT_WON, WON }
 	
 	/**
 	 * Reset the level to its starting state.
@@ -33,7 +33,13 @@ public interface GameLevel {
 	 * Determine if the game has been lost, won or neither.
 	 * @return current state of the level
 	 */
-	public State getGameState();
+	public GameState getGameState();
+	
+	/**
+	 * Determine if the game, given its current state, is solvable.
+	 * @return true if there is exists set of actions to reach a goal state
+	 */
+	public boolean isSolvable();
 	
 	/**
 	 * Get the game's difficulty level.
