@@ -22,17 +22,18 @@ public class TileMap {
 	 * Construct a new tile map, adding tiles supplied by the iterator in order of
 	 * left to right, top to bottom.
 	 * @pre number of tiles supplied by the iterator is >= width*height of map
-	 * @param it     - iterator supplying tiles
-	 * @param width  - width of the tile map in columns
-	 * @param height - height of the tile map in rows
+	 * @param newTiles - collection supplying the tiles
+	 * @param width    - width of the tile map in columns
+	 * @param height   - height of the tile map in rows
 	 */
-	public TileMap(Iterator<Tile> it, int width, int height) {
+	public TileMap(Iterable<Tile> newTiles, int width, int height) {
 		tiles = new ArrayList<>(width*height);
 		goals = new ArrayList<>();
 		
 		this.width  = width;
 		this.height = height;
 		
+		Iterator<Tile> it = newTiles.iterator();
 		for (int y = 0; y < height; ++y) {
 			for (int x = 0; x < width; ++x) {
 				Tile next = it.next();
