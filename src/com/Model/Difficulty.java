@@ -15,19 +15,7 @@ public enum Difficulty {
 		return undoDepth;
 	}
 	
-	public boolean reachedMaxUndos(int undoCount) {
-		return undoCount >= maxUndos;
-	}
-	
-	public boolean reachedMaxMoves(int minMoves, int numMoves) {
-		switch (this) {
-			case EASY:
-			case NORMAL:
-				return false;
-			case HARD:
-				return numMoves >= minMoves*2;
-			default:
-				return false;
-		}
+	public int getMaxUndos() {
+		return maxUndos;
 	}
 }
