@@ -30,7 +30,7 @@ public class Move {
 	 * Get the result of performing the move.
 	 * @return result of move
 	 */
-	public ActionResult getActionResult() {
+	public ActionResult getResult() {
 		return result;
 	}
 	

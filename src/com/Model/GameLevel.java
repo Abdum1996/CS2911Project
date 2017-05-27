@@ -21,9 +21,8 @@ public interface GameLevel {
 	/**
 	 * Apply an action to the game.
 	 * @param action - action to be performed
-	 * @return true if the action was successfully performed
 	 */
-	public boolean applyAction(Action action);
+	public void applyAction(Action action);
 	
 	/**
 	 * If possible, undo the last move executed by the player.
