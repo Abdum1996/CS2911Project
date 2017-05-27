@@ -21,7 +21,6 @@ public class GameController {
         for (int i = 0; i < GameConstants.BOX_LIMIT; i++) {
             int r = rand.nextInt(GameConstants.NUM_BOX_TEXTURES);
 			imgMan.loadBoxImg(i, "./resources/box" + r + ".png");
-			
 		}
         
         @SuppressWarnings("unused")

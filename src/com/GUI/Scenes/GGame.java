@@ -180,7 +180,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         	}
         }
 
-        controlPanel.setCounter(level.getPushCount());
         if (level.getGameState().equals(GameState.LOST)) {
             playSound(lostgameSnd);
         } else if (gameWon()) {
@@ -360,6 +359,8 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 			yshift = 0;
 			xshift = 0;
 			level.applyAction(lastViableAction);
+			controlPanel.setCounter(level.getPushCount());
+			
 			if(!pendingActions.isEmpty()) {
 				Action a = pendingActions.poll();
 				this.applyAction(a);
