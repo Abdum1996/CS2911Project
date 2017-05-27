@@ -3,7 +3,12 @@ package com.Model;
 import java.awt.event.KeyEvent;
 
 public enum Action {
-	MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT;
+	NO_MOVE, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT;
+	
+	public enum Result {
+		NONE, PLAYER_MOVE, BOX_MOVE
+	}
+
 	
 	public static Action readKeyEvent(KeyEvent e) {
 		int kc = e.getKeyCode();
@@ -17,7 +22,7 @@ public enum Action {
             return MOVE_DOWN;
         }
 		
-		return null;
+		return NO_MOVE;
 	}
 	
 	public static Action readDirection(Direction dir) {
@@ -31,7 +36,7 @@ public enum Action {
 			case RIGHT:
 				return MOVE_RIGHT;
 			default:
-				return null;
+				return NO_MOVE;
 		}
 	}
 }

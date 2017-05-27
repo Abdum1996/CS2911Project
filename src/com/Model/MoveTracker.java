@@ -27,8 +27,7 @@ public class MoveTracker {
 		pushCount = 0;
 	}
 	
-	public void addMove(Action action, ActionResult result) {
-		Move move = new Move(action, result);
+	public void addMove(Move move) {
 		if (move.isPush()) pushCount++;
 		moves.push(move);
 		
