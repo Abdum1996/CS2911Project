@@ -24,7 +24,7 @@ public class GameController {
 			
 		}
         
+        @SuppressWarnings("unused")
         SceneManager window = new SceneManager(imgMan);
-        window.dispose();
     }
 }

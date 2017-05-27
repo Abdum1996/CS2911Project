@@ -38,14 +38,12 @@ public class SokobanLevel implements GameLevel {
 		this.difficulty = difficulty;
 		
 		boxMap  = new HashMap<>();
-		minPushes = solve().getActionCount();
-		tracker = new MoveTracker(difficulty, minPushes);
 		List<Point> boxPositions = new ArrayList<>();
 		TileMap mapCandidate = null;
 		
 		Scanner sc = null;
 		try {
-			sc = new Scanner(new FileReader("./maps/map1.txt"));
+			sc = new Scanner(new FileReader("./maps/map5.txt"));
 			
 			int width = sc.nextInt();
 			int height = sc.nextInt();
@@ -67,7 +65,7 @@ public class SokobanLevel implements GameLevel {
 
 			mapCandidate = new TileMap(tiles, width, height);
 		} catch (FileNotFoundException | NoSuchElementException e) {
-			// Do nothing
+			System.out.println("fail");
 		} finally {
 			if (sc != null) sc.close();
 		}
@@ -79,6 +77,9 @@ public class SokobanLevel implements GameLevel {
 		}
 		
 		tileMap = mapCandidate;
+		//minPushes = solve().getActionCount();
+		minPushes = 1000;
+		tracker = new MoveTracker(difficulty, minPushes);
 	}
 	
 	/**
@@ -100,7 +101,6 @@ public class SokobanLevel implements GameLevel {
 	private AStarSearch<Action> solve() {
 		BoardState start = new BoardState(tileMap, player, getBoxes());
 		Heuristic<Action> heuristic = new BoardHeuristic();
-		
 		return new AStarSearch<>(heuristic, start);
 	}
 	

@@ -179,8 +179,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         }
 
         controlPanel.setCounter(level.getPushCount());
-
-        if (!level.isSolvable()) {
+        if (level.getGameState().equals(GameState.LOST)) {
             playSound(lostgameSnd);
         }
     }
