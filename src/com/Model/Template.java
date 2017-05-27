@@ -7,7 +7,11 @@ public class Template {
 	/**
 	 * WALL = W
 	 * FLOOR = F
+<<<<<<< HEAD
 	 * EMPTY = 2
+=======
+	 * EMPTY = E
+>>>>>>> master
 	 */
 
 	private char array[][];

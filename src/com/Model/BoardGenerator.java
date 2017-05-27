@@ -8,6 +8,10 @@ import java.util.Scanner;
 
 import java.util.Collections;
 import java.util.ArrayList;
+<<<<<<< HEAD
+=======
+import java.util.Arrays;
+>>>>>>> master
 import java.util.Random;
 import java.util.List;
 
@@ -102,7 +106,11 @@ public class BoardGenerator {
 				
 				while (!map.isValidEntityPos(boxPos))
 					boxPos = genRandomPoint(map);
+<<<<<<< HEAD
 				boxPositions.add(boxPos);
+=======
+					boxPositions.add(boxPos);
+>>>>>>> master
 			}
 			
 			Point playerPos = genRandomPoint(map);
@@ -113,9 +121,59 @@ public class BoardGenerator {
 			board = new SokobanBoard(map, boxPositions.iterator(),
 					playerPos, width, height);
 		} while (!board.isSolvable());
-		
+<<<<<<< HEAD
+=======
 		//Collections.s*/
 		
+		return board;
+	}
+	
+	private static Point genRandomPoint(TileMap map) {
+		int offset = generator.nextInt(map.getHeight()*map.getHeight());
+		return Point.at(offset % map.getWidth(), offset/map.getHeight());
+	}
+	
+	public char[][] emptyBoard(int height, int width) {
+		char[][] board = new char[height][width];
+		Arrays.fill(board,'E');
+		int i = generator.nextInt(height-5);
+		int j = generator.nextInt(width-5);
+		char[][] tempArray = null;
+		Template t = null;
+>>>>>>> master
+		
+		while (i < height - 4) {
+			tempArray = getArray(generator.nextInt(17)+1);
+			t = new Template(tempArray);
+			t.modifyTemplate();
+			if (!properOverlap(board,t,i,j,height,width)) continue;
+			tempToBoard(board,t,i,j,height,width);
+			if (j < width - 4) continue;
+		}
+		
+		return board;
+	}
+	
+	private void tempToBoard(char[][] array, Template t, int i, int j, int height, int width) {
+		int x1 = 0;
+		int y1 = 0;
+		int x2 = 5;
+		int y2 = 5;
+		int x,y;
+		if (i < 3) x1 = 1;
+		if (j < 3) y1 = 1;
+		if (i > height - 3) x2 = 4;
+		if (j > width - 3) y2 = 4;
+		for (x = x1; x < x2; x++) {
+			for (y = y1; y < y2; y++) {
+				
+			}
+		}
+	}
+
+	private boolean properOverlap(char[][] array, Template t, int i, int j, int height, int width) {
+		
+<<<<<<< HEAD
 		
 		
 		
@@ -129,6 +187,20 @@ public class BoardGenerator {
 		    String curr = null;
 		    String[] c = null;
 		    int array[5][5];
+=======
+		return false;
+	}
+
+	public char[][] getArray(int index) {
+		String s = "./resources/Templates/t" + index + ".txt";
+		Scanner sc = null;
+	    char array[][] = new char[5][5];
+	    try
+	    {
+	        sc = new Scanner(new FileReader(s));
+		    String curr = null;
+		    String[] c = null;
+>>>>>>> master
 		    int i,j = 0;
 		    
 		    while ((sc.hasNextLine()) || (j < 5)) {
@@ -137,6 +209,7 @@ public class BoardGenerator {
 		    	c = curr.split(" ");
 		    	
 		    	for (i = 0; i < 5; i++) {
+<<<<<<< HEAD
 		    		array[j][i] = Integer.parseInt(c[i]);
 		    	}
 		    	j++;
@@ -144,6 +217,13 @@ public class BoardGenerator {
 		    
 		    Template temp = new Template(array);
 		    temp.modifyTemplate();
+=======
+		    		array[j][i] = c[i].charAt(0);
+		    	}
+		    	j++;
+		    }
+
+>>>>>>> master
 	    }
 	    catch (FileNotFoundException e) {}
 
@@ -152,6 +232,7 @@ public class BoardGenerator {
 	        if (sc != null) sc.close();
 
 	    } 
+<<<<<<< HEAD
 		 */
 		
 		return board;
@@ -160,5 +241,8 @@ public class BoardGenerator {
 	private static Point genRandomPoint(TileMap map) {
 		int offset = generator.nextInt(map.getHeight()*map.getHeight());
 		return Point.at(offset % map.getWidth(), offset/map.getHeight());
+=======
+		return array;
+>>>>>>> master
 	}
 }

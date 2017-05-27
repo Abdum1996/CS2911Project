@@ -5,37 +5,84 @@ import com.GUI.ImageManager;
 import com.GUI.SceneManager;
 import com.Model.GameConstants;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+@SuppressWarnings("serial")
 public class GMainMenu extends GScene {
+	/**
+	 * Holds the button for the start game
+	 */
     private JButton btnStartGame;
+    
+    /**
+     * Holds the button to get the help screen
+     */
     private JButton btnHelp;
-    private JButton btnCredits;
+    
+    /**
+     * holds the button that switches you to the credits screen
+     */
+    private JButton btnExit;
+    
+    /**
+     * the background image of this menu
+     */
+    private BufferedImage bkgImg;
 
     public GMainMenu(SceneManager sceneManager, ImageManager imgMan) {
         super(sceneManager, imgMan);
+        
+        try {
+			bkgImg = ImageIO.read(new File("./resources/menubackground.png"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
+<<<<<<< HEAD
         this.setPreferredSize(new Dimension(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT));
+=======
+        this.setPreferredSize(new Dimension(bkgImg.getWidth(), bkgImg.getHeight() - GameConstants.IMAGE_DIMENSION));
+>>>>>>> master
         
         btnStartGame = new ImageButton("./resources/startbutton.png");
         btnStartGame.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             System.out.println("Start game, do stuff");
 
+<<<<<<< HEAD
             this.sceneManager.setScene(SceneManager.GAME_ID, new GGame(sceneManager, imgMan, "./maps/map1.txt"));
+=======
+            this.sceneManager.setScene(SceneManager.GAME_ID, new GGame(sceneManager, imgMan, "./maps/map5.txt"));
+>>>>>>> master
         });
-        btnHelp = new JButton("Help");
+        
+        btnHelp = new ImageButton("./resources/helpbutton.png");
         btnHelp.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             System.out.println("Help");
         });
-        btnCredits = new JButton("Credits");
-        btnCredits.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
-            System.out.println("Credits");
+        
+        btnExit = new ImageButton("./resources/exitbutton.png");
+        btnExit.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
+            System.exit(0);
         });
-
-        this.add(btnStartGame);
-        this.add(btnHelp);
-        this.add(btnCredits);
+        btnStartGame.setAlignmentY(CENTER_ALIGNMENT);
+        btnStartGame.setAlignmentX(CENTER_ALIGNMENT);
+        
+        add(btnStartGame);
+        add(btnHelp);
+        add(btnExit);
+        
+    }
+    
+    @Override
+    public void paintComponent(Graphics g) {
+    	super.paintComponent(g);
+    	
+    	g.drawImage(bkgImg, 0, 0, null);
     }
 }

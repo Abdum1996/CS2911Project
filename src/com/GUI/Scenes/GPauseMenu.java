@@ -10,11 +10,23 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+<<<<<<< HEAD
 import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+=======
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+
+import com.GUI.ImageButton;
+>>>>>>> master
 import com.GUI.ImageManager;
 import com.GUI.SceneManager;
 import com.Model.Box;
@@ -23,6 +35,7 @@ import com.Model.Point;
 
 @SuppressWarnings("serial")
 public class GPauseMenu extends GScene implements KeyListener {
+<<<<<<< HEAD
 	
 	private GameBoard context;
 	
@@ -51,13 +64,43 @@ public class GPauseMenu extends GScene implements KeyListener {
 		
 		
 		JButton pauseScrResumeBtn = new JButton("Resume");
+=======
+    
+    /**
+     * the background image of this menu
+     */
+    private BufferedImage bkgImg;
+    
+    private GGame context;
+
+	public GPauseMenu(SceneManager sceneManager, ImageManager imgMan, GGame context) {
+		super(sceneManager, imgMan);
+		this.context = context;
+		
+//		setOpaque(false);
+		try {
+			bkgImg = ImageIO.read(new File("./resources/menubackground.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		setPreferredSize(new Dimension(bkgImg.getWidth(), bkgImg.getHeight()));
+		
+		
+		JButton pauseScrResumeBtn = new ImageButton("./resources/resumebutton.png");
+>>>>>>> master
 		pauseScrResumeBtn.setAlignmentY(CENTER_ALIGNMENT);
 	    pauseScrResumeBtn.addActionListener((ActionEvent ae) -> {
 	        this.resumeGame();
 	    });
 	    add(pauseScrResumeBtn);
 		
+<<<<<<< HEAD
 	    JButton pauseScrQuitBtn = new JButton("Quit To Main Menu");
+=======
+	    JButton pauseScrQuitBtn = new ImageButton("./resources/exitbutton.png");
+>>>>>>> master
 
 		pauseScrQuitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pauseScrQuitBtn.setAlignmentY(CENTER_ALIGNMENT);
@@ -78,6 +121,7 @@ public class GPauseMenu extends GScene implements KeyListener {
 		// first paint normal grid
         super.paintComponent(g);
         
+<<<<<<< HEAD
         g.drawString("Grid", 0, 0);
 
         int x = 0;
@@ -113,6 +157,9 @@ public class GPauseMenu extends GScene implements KeyListener {
 	    y = playerPos.getY() * player.getHeight();
 	
 	    g.drawImage(player, x, y, null);
+=======
+        g.drawImage(bkgImg, 0, 0, null);
+>>>>>>> master
         
     }
 	
@@ -141,6 +188,11 @@ public class GPauseMenu extends GScene implements KeyListener {
 	
 	public void resumeGame() {
 		System.out.println("inside resume game");
+<<<<<<< HEAD
+=======
+		sceneManager.add(context.getControlPanel());
+		context.getControlPanel().repaintAll();
+>>>>>>> master
 		sceneManager.switchScene(SceneManager.GAME_ID);
 	}
 
@@ -154,7 +206,11 @@ public class GPauseMenu extends GScene implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		int kc = e.getKeyCode();
 		System.out.println("in keypressed");
+<<<<<<< HEAD
 		if (kc == KeyEvent.VK_P) {
+=======
+		if (kc == KeyEvent.VK_P || kc == KeyEvent.VK_ESCAPE) {
+>>>>>>> master
 			System.out.println("now resuming...");
 			resumeGame();
 		}

@@ -1,0 +1,5 @@
+E E E E E
+E W W W E
+E F F F E
+E F F F E
+E E E E E
