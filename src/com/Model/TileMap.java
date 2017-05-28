@@ -66,8 +66,7 @@ public class TileMap {
 	 * @return distance between the two points
 	 */
 	public int getShortestDist(Point point1, Point point2) {
-		Map<Point, Integer> map = distances.get(point1);
-		return map.get(point2);
+		return distances.get(point1).get(point2);
 	}
 	
 	/**
@@ -91,7 +90,7 @@ public class TileMap {
 			for (Point point2 : getAdjTilePoints(point1)) {
 				if (!visited.contains(point2)) {
 					dist.put(point2,  dist.get(point1) + 1);
-					queue.add(point2);
+					queue.offer(point2);
 				}
 			}
 		}
