@@ -29,6 +29,7 @@ public class GCredits extends GScene {
 		
 		JLabel licenses = new JLabel("info");
 		
+<<<<<<< HEAD
 		licenses.setText("<html><font color='white'>Textures and assets from Kenney.nl <br>license: CC0 1.0 Universal (CC0 1.0) <br>" +
 				"<br>Sounds from http://www.gameburp.com/ <br>license: http://www.gameburp.com/license-free/<br>" +
 				"<br>Sad trombone sound Recorded by Joe Lamb <br>from  http://soundbible.com/1830-Sad-Trombone.html  "
@@ -45,6 +46,23 @@ public class GCredits extends GScene {
 				+ "Harry Zhanga<br><br>"
 				+ "</font></html>");
 		JButton returnBtn = new ImageButton( "./resources/exitbutton.png");
+=======
+		licenses.setText("Textures and assets from Kenney.nl license: CC0 1.0 Universal (CC0 1.0) \n" +
+				"\n" +
+				"Sounds from http://www.gameburp.com/ license: http://www.gameburp.com/license-free/\n" +
+				"\n" +
+				"Sad trombone sound Recorded by Joe Lamb from  http://soundbible.com/1830-Sad-Trombone.html  license: Attribution 3.0" +
+				"\n" +
+				"Credit to the paper on https://larc.unt.edu/techreports/LARC-2011-01.pdf for providing ideas on board generation methods");
+
+		JLabel createdby = new JLabel("Created By:");
+		JLabel name1 = new JLabel ("Abdul Alhomayany");
+		JLabel name2 = new JLabel ("Chris Miles");
+		JLabel name3 = new JLabel ("Harry Zhanga");
+		JLabel name4 = new JLabel ("Samir Md Mustavi");
+		JLabel name5 = new JLabel ("Thomas Daniell");
+		JButton returnBtn = new JButton( "Return to menu");
+>>>>>>> master
 		returnBtn.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
 			sceneManager.setScene(new GMainMenu(sceneManager, imgMan));
 		});
