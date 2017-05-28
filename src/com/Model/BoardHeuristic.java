@@ -5,10 +5,10 @@ import java.util.HashSet;
 import com.Graph.Heuristic;
 import com.Graph.State;
 
-public class BoardHeuristic implements Heuristic<Action> {
+public class BoardHeuristic implements Heuristic<Direction> {
 	@Override
-	public int hcost(State<Action> state) {
-		BoardState trueState = (BoardState)state;
+	public int hcost(State<Direction> state) {
+		/*BoardState trueState = (BoardState)state;
 		int cost = 0;
 		
 		HashSet<Point> boxPositions = trueState.getBoxPositions();
@@ -32,8 +32,8 @@ public class BoardHeuristic implements Heuristic<Action> {
 			
 			
 			
-		}
+		}*/
 		
-		return cost;
+		return 0;
 	}
 }

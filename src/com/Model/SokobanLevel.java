@@ -63,9 +63,9 @@ public class SokobanLevel implements GameLevel {
 	 * Determine the optimal sequence of actions to solve the level.
 	 * @return solved search space
 	 */
-	private AStarSearch<Action> solve() {
+	private AStarSearch<Direction> solve() {
 		BoardState start = new BoardState(tileMap, player, getBoxes());
-		Heuristic<Action> heuristic = new BoardHeuristic();
+		Heuristic<Direction> heuristic = new BoardHeuristic();
 		return new AStarSearch<>(heuristic, start);
 	}
 	

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * This class keeps track of the state of a game board.
  */
-public class BoardState implements State<Action> {
+public class BoardState implements State<Direction> {
 	private final HashSet<Point> boxPositions;
 	private final Point playerPos;
 	private final int pushCount;
@@ -51,12 +51,10 @@ public class BoardState implements State<Action> {
 	
 	/**
 	 * Create successor board state by applying an action to it.
-	 * @param state  - state to which action is being applied
-	 * @param action - action being applied
+	 * @param state - state to which action is being applied
+	 * @param dir   - direction in which player is moved 
 	 */
-	private BoardState(BoardState state, Action action) {
-		Direction dir = Direction.readAction(action);
-		
+	private BoardState(BoardState state, Direction dir) {
 		boxPositions = new HashSet<>(state.boxPositions);
 		playerPos = state.playerPos.move(dir);
 		map = state.map;
@@ -71,9 +69,7 @@ public class BoardState implements State<Action> {
 		}
 	}
 	
-	private boolean isValidAction(Action action) {
-		Direction dir = Direction.readAction(action);
-		
+	private boolean isValidAction(Direction dir) {
 		Point next1 = playerPos.move(dir);
 		if (!map.isValidEntityPos(next1)) return false;
 		
@@ -93,20 +89,20 @@ public class BoardState implements State<Action> {
 	}
 	
 	@Override
-	public int getStepCost(State<Action> prev) {
+	public int getStepCost(State<Direction> prev) {
 		return 1; // Move costs are uniform for now
 	}
 
 	@Override
-	public State<Action> applyAction(Action action) {
-		return new BoardState(this, action);
+	public State<Direction> applyAction(Direction dir) {
+		return new BoardState(this, dir);
 	}
 
 	@Override
-	public List<Action> getValidActions() {
-		List<Action> actions = new ArrayList<>();
+	public List<Direction> getValidActions() {
+		List<Direction> actions = new ArrayList<>();
 		
-		for (Action curr : Action.values()) {
+		for (Direction curr : Direction.values()) {
 			if (isValidAction(curr))
 				actions.add(curr);
 		}
