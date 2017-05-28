@@ -131,6 +131,8 @@ public class SokobanLevel implements GameLevel {
 		Move lastMove = tracker.undoLastMove();
 		if (lastMove == null) return;
 		
+		Point oldPos = player.getPosition();
+		
 		// Move the player backwards
 		Direction dir = Direction.readAction(lastMove.getAction());
 		Direction opposite = Direction.oppositeDirection(dir);
@@ -138,8 +140,8 @@ public class SokobanLevel implements GameLevel {
 		
 		// If applicable, pull the pushed box backwards
 		if (lastMove.isPush()) {
-			Point pos = player.getPosition();
-			Box newBox = boxMap.remove(pos).moveBack(dir);
+			Point oldBoxPos = oldPos.move(dir);
+			Box newBox = boxMap.remove(oldBoxPos).moveBack(opposite);
 			boxMap.put(newBox.getPosition(), newBox);
 		}
 	}
