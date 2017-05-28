@@ -1,10 +1,12 @@
 package com.Model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import java.util.Random;
+
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.Graph.AStarSearch;
 import com.Graph.Heuristic;
@@ -12,17 +14,20 @@ import com.Graph.Heuristic;
 public class BoardGenerator {
 	private static final Random generator = new Random();
 	private static final int MAX_GOALS = 10;
+	
 	private static final int WIDTH  = 25;
 	private static final int HEIGHT = 25;
+	private static final int SIZE   = WIDTH*HEIGHT;
 	
 	private final List<Point> boxPositions;
 	private final int numGoals;
+	
 	private TileMap tileMap;
 	private Point playerPos;
 	private int minPushes;
 	
 	public BoardGenerator() {
-		numGoals = generator.nextInt(MAX_GOALS) + 1;
+		numGoals = generator.nextInt(MAX_GOALS) + 1;		
 		boxPositions = new ArrayList<>();
 		genValidBoard();
 	}
@@ -62,14 +67,24 @@ public class BoardGenerator {
 	}
 	
 	private TileMap genTileMap() {
-		List<Tile> newTiles = new ArrayList<>(WIDTH*HEIGHT);
-		int tilesLeft = WIDTH*HEIGHT - numGoals;
+		List<Tile> newTiles = new ArrayList<>(SIZE);
+		Map<Tile, Integer> amounts = new HashMap<>();
 		
-		// Place the goals first
-		for (int i = 0; i < numGoals; ++i)
-			newTiles.add(Tile.GOAL);
+		int minFloors = numGoals + 1;
+		int bound = SIZE - numGoals - minFloors;
+		int numFloors = generator.nextInt(bound) + minFloors + 1;
+		int numWalls = SIZE - numGoals - numFloors;
 		
-		// ensure there are at least n floor positions!!!!
+		amounts.put(Tile.GOAL, numGoals);
+		amounts.put(Tile.FLOOR, numFloors);
+		amounts.put(Tile.WALL, numWalls);
+		
+		for (Tile type : amounts.keySet()) {
+			int numTiles = amounts.get(type);
+			
+		}
+		
+		
 		// Place the remaining tile types
 		for (Tile type : Tile.values()) {
 			if (type.equals(Tile.EMPTY) || type.equals(Tile.GOAL)) continue;
@@ -82,6 +97,7 @@ public class BoardGenerator {
 		
 		// Permute the tiles so that the resulting map is random
 		Collections.shuffle(newTiles);
+		System.out.println(newTiles.size());
 		return new TileMap(newTiles, WIDTH, HEIGHT);
 	}
 	
