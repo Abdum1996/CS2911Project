@@ -4,7 +4,7 @@ import java.util.Random;
 
 /**
  * Template class for random empty board generation
- * @author Samir Mustavi
+ * @author SamirMustavi
  */
 public class Template {
 	
@@ -71,11 +71,17 @@ public class Template {
 	 * @return the modified template array
 	 */
 	public Template modifyTemplate(Random r) {
-		int i = r.nextInt(3);
-		while (i > 0) {
-			if (i == 1) this.array = this.rotate();
-			else if (i == 2) this.array = this.reflect();
+		int i = r.nextInt(8);
+		Template t = new Template(this.array);
+		
+		if (i > 3) {
+			t.array = t.reflect();
+			i -= 4;
 		}
-		return this;
+		while (i > 0) {
+			t.array = t.rotate();
+			i--;
+		}
+		return t;
 	}
 }

@@ -1,4 +1,5 @@
 package com.Model;
+
 /**
  * Enumeration to represent direction mainly used to indicate a player's move.
  */

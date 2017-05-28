@@ -34,8 +34,6 @@ public class AStarSearch<T> {
 			}
 			
 			List<Node<T>> successors = curr.getSuccessors(strategy);
-			if (successors == null) return;
-			
 			for (Node<T> next : successors) {
 				State<T> state = next.getState();
 				
