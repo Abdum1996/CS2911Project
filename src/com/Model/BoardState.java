@@ -22,6 +22,18 @@ public class BoardState implements State<Action> {
 		pushCount = 0;
 		this.map = map;
 	}
+
+	public HashSet<Point> getBoxPositions() {
+		return boxPositions;
+	}
+	
+	public Point getPlayerPos() {
+		return playerPos;
+	}
+	
+	public TileMap getTileMap() {
+		return map;
+	}
 	
 	/**
 	 * Create a board state from a given game board.
