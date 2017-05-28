@@ -1,9 +1,13 @@
 package com.Model;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.HashSet;
+import java.util.Queue;
 import java.util.List;
+
 /**
  * 2D fixed coordinate grid of tiles. The top left of the grid is located at (0, 0).
  * As you move from left to right, the grid's x coordinate increases, and the
@@ -130,5 +134,34 @@ public class TileMap {
 		
 		Tile tile = get(point);
 		return !tile.equals(Tile.EMPTY) && !tile.equals(Tile.WALL);
+	}
+	
+	/**
+	 * Determine if every floor on the map is reachable.
+	 * @return true if the map is path connected
+	 */
+	public boolean isPathConnected() {
+		List<Point> floorPositions = getFloorPositions();
+		
+		HashSet<Point> visited = new HashSet<>();
+		Queue<Point> queue = new ArrayDeque<>();
+		queue.add(floorPositions.get(0));
+		
+		while (!queue.isEmpty()) {
+			Point curr = queue.poll();
+			if (visited.contains(curr)) continue;
+			
+			visited.add(curr);
+			for (Direction dir : Direction.allDirections()) {
+				Point next = curr.move(dir);
+				
+				if (!isValidEntityPos(next)) continue;
+				if (!visited.contains(next)) queue.add(next);
+			}
+		}
+		
+		for (Point curr : floorPositions)
+			if (!visited.contains(curr)) return false;
+		return true;
 	}
 }
