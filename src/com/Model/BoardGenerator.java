@@ -53,6 +53,8 @@ public class BoardGenerator {
 			System.out.println("loading");
 			placeEntities();
 			space = getSearchSpace();
+			if (space.isSolvable()) break;
+			
 		} while (!space.isSolvable());
 		
 		minPushes = space.getActionCount();

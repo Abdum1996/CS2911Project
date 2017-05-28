@@ -54,6 +54,11 @@ public class AStarSearch<T> {
 					open.add(next);
 				}
 			}
+			
+			if (open.size() > 5000) {
+				this.endNode = new Node<>(initState);
+				return;
+			}
 		}
 	}
 	

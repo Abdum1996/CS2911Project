@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.HashSet;
 import java.util.Queue;
@@ -157,7 +158,7 @@ public class TileMap {
 	 * Get read-only access to the goal positions in the tile map. 
 	 * @return iterable reference to the goal positions
 	 */
-	public Iterable<Point> getGoalPositions() {
+	public Collection<Point> getGoalPositions() {
 		return Collections.unmodifiableCollection(goals);
 	}
 	
