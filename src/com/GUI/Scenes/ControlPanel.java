@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.GUI.ImageButton;
+import com.Model.Difficulty;
+import com.Model.SokobanLevel;
 
 public class ControlPanel extends JPanel {
 	
@@ -20,20 +22,33 @@ public class ControlPanel extends JPanel {
 	private JLabel counter;
 	private JLabel minSteps;
     private BufferedImage bkgImg;
+    private ImageButton btnHard;
+    private ImageButton btnNormal;
+    private ImageButton btnEasy;
+    
 	
 	public ControlPanel(boolean isRandom, GGame context) {
 		// initialize all components
 		btnUndo = new ImageButton("./resources/undobutton.png");
 		btnReset = new ImageButton("./resources/resetbutton.png");
 		btnNewPuzzle = new ImageButton("./resources/newpuzzlebutton.png");
+		
+		btnHard = new ImageButton("./resources/hardbutton_small.png");
+		btnNormal = new ImageButton("./resources/normalbutton_small.png");
+		btnEasy = new ImageButton("./resources/easybutton_small.png");
+		
+		
+		
         try {
-            bkgImg = ImageIO.read(new File("./resources/menubackground.png"));
+            bkgImg = ImageIO.read(new File("./resources/control_panel_bg.png"));
+            System.out.println("bkgimg loaded");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 		
 		counter = new JLabel("0 steps taken.");
+		
+		minSteps = new JLabel("Min box pushes to solve: " + context.getMinPushes() + ".");
 		
 		// add action listeners for all buttons
 		btnUndo.addActionListener((ActionEvent ae) -> {
@@ -51,26 +66,53 @@ public class ControlPanel extends JPanel {
 			context.repaint();
 		});
 		
+		btnHard.addActionListener((ActionEvent ae) -> {
+			context.playSound(new File("./sound_files/gamestart.wav"));
+            context.sceneManager.setScene(new GGame(context.sceneManager, context.imgMan, new SokobanLevel(Difficulty.HARD)));
+		});
+		
+		btnNormal.addActionListener((ActionEvent ae) -> {
+			context.playSound(new File("./sound_files/gamestart.wav"));
+            context.sceneManager.setScene(new GGame(context.sceneManager, context.imgMan, new SokobanLevel(Difficulty.NORMAL)));
+		});
+		
+		btnEasy.addActionListener((ActionEvent ae) -> {
+			context.playSound(new File("./sound_files/gamestart.wav"));
+            context.sceneManager.setScene(new GGame(context.sceneManager, context.imgMan, new SokobanLevel(Difficulty.EASY)));
+		});
+		
 		// make all buttons non-focusable
 		btnNewPuzzle.setFocusable(false);
 		btnReset.setFocusable(false);
 		btnUndo.setFocusable(false);
 		
-		btnNewPuzzle.setAlignmentX(CENTER_ALIGNMENT);
 		// configure label counter
 		//counter.setText(context.getMinMoves());
 		
 		
 		
 		// add all buttons
+		add(btnEasy);
+		add(btnNormal);
+		add(btnHard);
+		
 		add(btnUndo);
 		add(btnReset);
+		
+		btnEasy.setFocusable(false);
+		btnNormal.setFocusable(false);
+		btnHard.setFocusable(false);
+		btnUndo.setFocusable(false);
+		btnReset.setFocusable(false);
+		
 		
 		// only add new puzzle thing if it's random
 		if (isRandom)
 			add(btnNewPuzzle);
 		add (counter);
-
+		add (minSteps);
+		
+		repaint();
 	}
 
 	public void setCounter(int c) {

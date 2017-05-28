@@ -60,10 +60,15 @@ public class GMainMenu extends GScene {
             playSound(new File("./sound_files/gamestart.wav"));
             sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanLevel(Difficulty.HARD)));
         });
+
+        JButton btnCredits = new ImageButton("./resources/creditbutton.png");
+        btnCredits.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
+            sceneManager.setScene(new GCredits(sceneManager, imgMan));
+        });
         
         btnHelp = new ImageButton("./resources/helpbutton.png");
         btnHelp.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
-            System.out.println("Help");
+            sceneManager.setScene(new GHelp(sceneManager, imgMan));
         });
         
         btnExit = new ImageButton("./resources/exitbutton.png");
@@ -81,13 +86,14 @@ public class GMainMenu extends GScene {
         add(btnNorm);
         add(btnOP);
         add(btnHelp);
+        add(btnCredits);
         add(btnExit);
     }
     
     @Override
     public void paintComponent(Graphics g) {
     	super.paintComponent(g);
-    	
+        g.clearRect(0, 0, getWidth(), getHeight() );
     	g.drawImage(bkgImg, 0, 0, null);
     }
 }

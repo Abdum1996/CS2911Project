@@ -35,7 +35,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     /**
      * Image manager of this instance
      */
-    private ImageManager imgMan;
+    ImageManager imgMan;
     
     /**
      * timer to initiate animation sequence
@@ -244,7 +244,7 @@ public class GGame extends GScene implements KeyListener, ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+        g.clearRect(0, 0, getWidth(), getHeight() );
         if(timer.isRunning()) {
         	paintChangingComponent(g);
         	return;
@@ -367,8 +367,12 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 				System.out.println("pulled from pending: " + a);
 			}
 		}
-		
+		controlPanel.repaint();
 		repaint();
+	}
+	
+	public int getMinPushes() {
+		return level.getMinPushes();
 	}
 
 	public ControlPanel getControlPanel() {

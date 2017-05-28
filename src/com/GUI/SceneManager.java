@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 import com.GUI.Scenes.GMainMenu;
+import com.GUI.Scenes.GPauseMenu;
 import com.GUI.Scenes.GScene;
 
 /**
@@ -49,10 +50,10 @@ public class SceneManager extends JFrame {
             remove(currentScene);
         }
         
-//        if (sceneID != GAME_ID && sceneID != PAUSE_ID) {
-//        	this.setLayout(new BorderLayout());
-//        	this.setPreferredSize(new Dimension(10*32, 14*32));
-//        }
+       if (scene instanceof GMainMenu || scene instanceof GPauseMenu) {
+       	this.setLayout(new BorderLayout());
+       	this.setPreferredSize(new Dimension(480, 600));
+       }
         System.out.println("Setting scene");
 
         currentScene = scene;
