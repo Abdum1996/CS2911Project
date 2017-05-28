@@ -1,12 +1,15 @@
 package com.Model;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashSet;
 import java.util.Queue;
+import java.util.Set;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 2D fixed coordinate grid of tiles. The top left of the grid is located at (0, 0).
@@ -15,6 +18,7 @@ import java.util.List;
  * keeps track of the locations of the goal tiles in the map.
  */
 public class TileMap {
+	private final Map<Point, Map<Point, Integer>> distances;
 	private final List<Point> goals;
 	private final List<Tile> tiles;
 	
@@ -46,7 +50,41 @@ public class TileMap {
 					goals.add(Point.at(x, y));
 			}
 		}
+		
+		// Compute distances between all valid entity points on the map
+		distances = new HashMap<>();
+		for (Point curr : getFloorPositions()) {
+			//distances.put(curr, runBFS(curr));
+		}	
 	}
+	
+	/**
+	 * Get the distance between the input point and every other point
+	 * on the map which are considered to be valid entity positions.
+	 * @param point - current position
+	 */
+	/*private Map<Point, Integer> runBFS(Point point) {
+		List<Point> floorPositions = getFloorPositions();
+		Queue<Point> queue = new ArrayDeque<>();
+		Map<Point, Point> pred = new HashMap<>();
+		
+		queue.add(point);
+		while (!queue.isEmpty()) {
+			Point curr = queue.poll();
+			if (visited.contains(curr)) continue;
+			
+			visited.add(curr);
+			for (Point next : getAdjTilePoints(curr)) {
+				if (!isValidEntityPos(next)) continue;
+				if (!visited.contains(next)) queue.add(next);
+			}
+		}
+		
+		for (Point curr : floorPositions)
+			if (!visited.contains(curr)) return false;
+		return true;
+		
+	}*/
 	
 	/**
 	 * Get the tile at the specified location.
@@ -85,7 +123,7 @@ public class TileMap {
 			for (int x  = 0; x < width; ++x) {
 				Tile tile = tiles.get(x + y*width);
 				
-				if (tile.equals(Tile.FLOOR)) {
+				if (tile.equals(Tile.FLOOR) || tile.equals(Tile.GOAL)) {
 					Point pos = Point.at(x, y);
 					positions.add(pos);
 				}
@@ -154,8 +192,8 @@ public class TileMap {
 	 */
 	public boolean isPathConnected() {
 		List<Point> floorPositions = getFloorPositions();
-		HashSet<Point> visited = new HashSet<>();
 		Queue<Point> queue = new ArrayDeque<>();
+		Set<Point> visited = new HashSet<>();
 		
 		queue.add(floorPositions.get(0));
 		while (!queue.isEmpty()) {

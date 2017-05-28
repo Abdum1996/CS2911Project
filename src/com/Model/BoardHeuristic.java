@@ -20,8 +20,6 @@ public class BoardHeuristic implements Heuristic<Direction> {
 			if (!map.get(curr).equals(Tile.GOAL) && validCount <= 2) return Integer.MAX_VALUE;	
 		}
 		
-		// 
-		
 		return 0;
 	}
 }
