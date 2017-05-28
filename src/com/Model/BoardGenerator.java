@@ -81,21 +81,10 @@ public class BoardGenerator {
 		
 		for (Tile type : amounts.keySet()) {
 			int numTiles = amounts.get(type);
-			
-		}
-		
-		
-		// Place the remaining tile types
-		for (Tile type : Tile.values()) {
-			if (type.equals(Tile.EMPTY) || type.equals(Tile.GOAL)) continue;
-			int numTiles = generator.nextInt(tilesLeft) + 1;
-			tilesLeft -= numTiles;
-			
 			for (int i = 0; i < numTiles; ++i)
 				newTiles.add(type);
 		}
 		
-		// Permute the tiles so that the resulting map is random
 		Collections.shuffle(newTiles);
 		System.out.println(newTiles.size());
 		return new TileMap(newTiles, WIDTH, HEIGHT);
