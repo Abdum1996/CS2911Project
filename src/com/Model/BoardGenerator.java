@@ -11,12 +11,12 @@ import java.util.Map;
 import com.Graph.AStarSearch;
 import com.Graph.Heuristic;
 
-public class BoardGenerator {
+public class BoardGenerator {	
 	private static final Random generator = new Random();
-	private static final int MAX_GOALS = 10;
+	private static final int MAX_GOALS = 5;
 	
-	private static final int WIDTH  = 25;
-	private static final int HEIGHT = 25;
+	private static final int WIDTH  = 20;
+	private static final int HEIGHT = 20;
 	private static final int SIZE   = WIDTH*HEIGHT;
 	
 	private final List<Point> boxPositions;
@@ -49,20 +49,24 @@ public class BoardGenerator {
 	}
 	
 	private void genValidBoard() {
-		AStarSearch<Action> space;
+		AStarSearch<Direction> space;
 		
 		do {
-			tileMap = genTileMap();
-			placeEntities();
+			do {
+				tileMap = LayoutGenerator.genTileMap(numGoals);
+			} while (!tileMap.isPathConnected());
 			
+			System.out.println("hello");
+			placeEntities();
 			space = getSearchSpace();
-			minPushes = space.getActionCount();
 		} while (!space.isSolvable());
+		
+		minPushes = space.getActionCount();
 	}
 	
-	private AStarSearch<Action> getSearchSpace() {
+	private AStarSearch<Direction> getSearchSpace() {
 		BoardState start = new BoardState(tileMap, playerPos, boxPositions);
-		Heuristic<Action> heuristic = new BoardHeuristic();
+		Heuristic<Direction> heuristic = new BoardHeuristic();
 		return new AStarSearch<>(heuristic, start);
 	}
 	
@@ -72,7 +76,7 @@ public class BoardGenerator {
 		
 		int minFloors = numGoals + 1;
 		int bound = SIZE - numGoals - minFloors;
-		int numFloors = generator.nextInt(bound) + minFloors + 1;
+		int numFloors = generator.nextInt(bound/2) + minFloors + 1; // Reduce floors placed
 		int numWalls = SIZE - numGoals - numFloors;
 		
 		amounts.put(Tile.GOAL, numGoals);
@@ -86,7 +90,6 @@ public class BoardGenerator {
 		}
 		
 		Collections.shuffle(newTiles);
-		System.out.println(newTiles.size());
 		return new TileMap(newTiles, WIDTH, HEIGHT);
 	}
 	
