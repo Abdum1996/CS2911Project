@@ -18,14 +18,16 @@ public class GCredits extends GScene {
 				"\n" +
 				"Sounds from http://www.gameburp.com/ license: http://www.gameburp.com/license-free/\n" +
 				"\n" +
-				"Sad trombone sound Recorded by Joe Lamb from  http://soundbible.com/1830-Sad-Trombone.html  license: Attribution 3.0");
+				"Sad trombone sound Recorded by Joe Lamb from  http://soundbible.com/1830-Sad-Trombone.html  license: Attribution 3.0" +
+				"\n" +
+				"Credit to the paper on https://larc.unt.edu/techreports/LARC-2011-01.pdf for providing ideas on board generation methods");
 
 		JLabel createdby = new JLabel("Created By:");
-		JLabel name1 = new JLabel ("Abdul .");
+		JLabel name1 = new JLabel ("Abdul Alhomayany");
 		JLabel name2 = new JLabel ("Chris Miles");
-		JLabel name3 = new JLabel ("Harry .");
-		JLabel name4 = new JLabel ("Samir .");
-		JLabel name5 = new JLabel ("Thomas .");
+		JLabel name3 = new JLabel ("Harry Zhanga");
+		JLabel name4 = new JLabel ("Samir Md Mustavi");
+		JLabel name5 = new JLabel ("Thomas Daniell");
 		JButton returnBtn = new JButton( "Return to menu");
 		returnBtn.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
 			sceneManager.setScene(new GMainMenu(sceneManager, imgMan));
