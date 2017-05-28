@@ -24,7 +24,7 @@ public class BoardState implements State<Direction> {
 	}
 
 	public HashSet<Point> getBoxPositions() {
-		return boxPositions;
+		return new HashSet<>(boxPositions);
 	}
 	
 	public Point getPlayerPos() {

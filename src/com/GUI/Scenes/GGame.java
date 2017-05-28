@@ -110,7 +110,6 @@ public class GGame extends GScene implements KeyListener, ActionListener {
 
         this.setPreferredSize(new Dimension(this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight()));
 
-
         this.setBounds(0, 0, this.w * imgMan.getImgWidth(), this.h * imgMan.getImgHeight());
         System.out.println("listener");
         this.addKeyListener(this);

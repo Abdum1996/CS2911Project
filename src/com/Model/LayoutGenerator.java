@@ -22,7 +22,7 @@ public class LayoutGenerator {
 	public static TileMap genTileMap(int numGoals) {
 		LayoutGenerator boardGen = new LayoutGenerator();
 		char[][] game = boardGen.emptyBoard(20, 20);
-		while (boardGen.isHugeFloorSpace(game,20,20)) {
+		while (boardGen.isHugeFloorSpace(game, 20, 20)) {
 			game = boardGen.emptyBoard(20, 20);
 		}
 		
