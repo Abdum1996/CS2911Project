@@ -9,7 +9,7 @@ import java.util.Random;
 import com.Graph.AStarSearch;
 import com.Graph.Heuristic;
 
-public class BoardBuilder {
+public class BoardGenerator {
 	private static final Random generator = new Random();
 	private static final int MAX_GOALS = 10;
 	private static final int WIDTH  = 25;
@@ -19,26 +19,46 @@ public class BoardBuilder {
 	private final int numGoals;
 	private TileMap tileMap;
 	private Point playerPos;
+	private int minPushes;
 	
-	public BoardBuilder() {
+	public BoardGenerator() {
 		numGoals = generator.nextInt(MAX_GOALS) + 1;
 		boxPositions = new ArrayList<>();
 		genValidBoard();
 	}
 	
+	public TileMap getTileMap() {
+		return tileMap;
+	}
 	
+	public Iterable<Point> getBoxPositions() {
+		return Collections.unmodifiableCollection(boxPositions);
+	}
+	
+	public Point getPlayerPos() {
+		return playerPos;
+	}
+	
+	public int getMinPushes() {
+		return minPushes;
+	}
 	
 	private void genValidBoard() {
+		AStarSearch<Action> space;
+		
 		do {
 			tileMap = genTileMap();
 			placeEntities();
-		} while (!isSolvable());
+			
+			space = getSearchSpace();
+			minPushes = space.getActionCount();
+		} while (!space.isSolvable());
 	}
 	
-	private boolean isSolvable() {
+	private AStarSearch<Action> getSearchSpace() {
 		BoardState start = new BoardState(tileMap, playerPos, boxPositions);
 		Heuristic<Action> heuristic = new BoardHeuristic();
-		return new AStarSearch<>(heuristic, start).isSolvable();
+		return new AStarSearch<>(heuristic, start);
 	}
 	
 	private TileMap genTileMap() {
