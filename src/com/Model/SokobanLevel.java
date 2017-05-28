@@ -90,7 +90,7 @@ public class SokobanLevel implements GameLevel {
 		
 		// Action is invalid if player attempts to move outside of the map or into a wall
 		Direction dir = Direction.readAction(action);
-		if (dir.equals(Direction.NOTHING)) return Move.none();
+		if (dir == null) return Move.none();
 		
 		Point next1 = player.getPosition().move(dir);
 		if (!tileMap.isValidEntityPos(next1)) return Move.none();
