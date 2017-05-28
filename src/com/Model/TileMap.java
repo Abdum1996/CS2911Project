@@ -59,6 +59,18 @@ public class TileMap {
 	}
 	
 	/**
+	 * Get the distance between two points on a map, assuming that
+	 * they both are actually located on the map.
+	 * @param point1 - first point
+	 * @param point2 - second point
+	 * @return distance between the two points
+	 */
+	public int getShortestDist(Point point1, Point point2) {
+		Map<Point, Integer> map = distances.get(point1);
+		return map.get(point2);
+	}
+	
+	/**
 	 * Get the distance between the input point and every other point
 	 * on the map which are considered to be valid entity positions.
 	 * @param point - current position
@@ -70,6 +82,7 @@ public class TileMap {
 		
 		dist.put(point, 0);
 		queue.add(point);
+		
 		while (!queue.isEmpty()) {
 			Point point1 = queue.poll();
 			if (visited.contains(point1)) continue;
