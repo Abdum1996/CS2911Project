@@ -12,7 +12,7 @@ import java.util.Random;
 /**
  * Factory class responsible for creating new game boards, both by reading
  * input map files and through random procedural generation methods.
- * @author SamirMustavi
+ * @author Samir Mustavi
  * @author ThomasDaniell
  */
 public class LayoutGenerator {
@@ -23,7 +23,7 @@ public class LayoutGenerator {
 		LayoutGenerator boardGen = new LayoutGenerator();
 		char[][] game = boardGen.emptyBoard(20, 20);
 		while (boardGen.isHugeFloorSpace(game,20,20)) {
-			game = boardGen.emptyBoard(20,20);
+			game = boardGen.emptyBoard(20, 20);
 		}
 		
 		placeRandomGoals(numGoals, game);

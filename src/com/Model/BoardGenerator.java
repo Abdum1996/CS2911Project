@@ -11,7 +11,7 @@ import java.util.Map;
 import com.Graph.AStarSearch;
 import com.Graph.Heuristic;
 
-public class BoardGenerator {	
+public class BoardGenerator {
 	private static final Random generator = new Random();
 	private static final int MAX_GOALS = 5;
 	
@@ -52,11 +52,12 @@ public class BoardGenerator {
 		AStarSearch<Direction> space;
 		
 		do {
-			do {
-				tileMap = LayoutGenerator.genTileMap(numGoals);
-			} while (!tileMap.isPathConnected());
-			
-			System.out.println("hello");
+			tileMap = LayoutGenerator.genTileMap(numGoals);
+		} while (!tileMap.isPathConnected());
+		
+		
+		do {
+			System.out.println("loading");
 			placeEntities();
 			space = getSearchSpace();
 		} while (!space.isSolvable());
