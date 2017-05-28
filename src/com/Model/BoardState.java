@@ -1,6 +1,7 @@
 package com.Model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 
 import com.Graph.State;
@@ -14,6 +15,13 @@ public class BoardState implements State<Action> {
 	private final Point playerPos;
 	private final int pushCount;
 	private final TileMap map;
+	
+	public BoardState(TileMap map, Point playerPos, Collection<Point> boxPositions) {
+		this.playerPos = playerPos;
+		this.boxPositions = new HashSet<>(boxPositions);
+		pushCount = 0;
+		this.map = map;
+	}
 	
 	/**
 	 * Create a board state from a given game board.
