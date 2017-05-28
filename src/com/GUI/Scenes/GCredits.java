@@ -33,7 +33,9 @@ public class GCredits extends GScene {
 		licenses.setText("<html><font color='white'>Textures and assets from Kenney.nl <br>license: CC0 1.0 Universal (CC0 1.0) <br>" +
 				"<br>Sounds from http://www.gameburp.com/ <br>license: http://www.gameburp.com/license-free/<br>" +
 				"<br>Sad trombone sound Recorded by Joe Lamb <br>from  http://soundbible.com/1830-Sad-Trombone.html  "
-				+ "<br>license: Attribution 3.0"
+				+ "<br>license: Attribution 3.0<br><br>"
+				+ "Board generation technique inspired from this paper:<br>"
+				+ "https://larc.unt.edu/techreports/LARC-2011-01.pdf"
 				+ "</font></html>");
 
 		JLabel createdby = new JLabel();
