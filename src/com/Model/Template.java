@@ -71,11 +71,11 @@ public class Template {
 	 * @return the modified template array
 	 */
 	public Template modifyTemplate(Random r) {
-		int i = r.nextInt(3);
-		while (i > 0) {
+		for (int i = r.nextInt(3); i > 0; i--) {
 			if (i == 1) this.array = this.rotate();
 			else if (i == 2) this.array = this.reflect();
 		}
+		
 		return this;
 	}
 }
