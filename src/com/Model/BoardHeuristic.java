@@ -8,31 +8,19 @@ import com.Graph.State;
 public class BoardHeuristic implements Heuristic<Direction> {
 	@Override
 	public int hcost(State<Direction> state) {
-		/*BoardState trueState = (BoardState)state;
-		int cost = 0;
+		BoardState trueState = (BoardState)state;
 		
 		HashSet<Point> boxPositions = trueState.getBoxPositions();
 		Point playerPos = trueState.getPlayerPos();
 		TileMap map = trueState.getTileMap();
 		
+		// Determine if any boxes are in 'dead lock' positions
 		for (Point curr : boxPositions) {
-			Direction[] directions = { Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT };
-			for (int i = 0; i < directions.length; ++i) {
-				
-			}
-			
-			Point[] points = { curr, curr, curr, curr };
-			
-			
-			
-			Point[] points = { curr.move(Direction.UP), curr.move(dir)Direction.DOWN, 
-					Direction.LEFT, Direction.RIGHT };
-			
-			
-			
-			
-			
-		}*/
+			int validCount = map.getAdjTilePoints(curr).size();
+			if (!map.get(curr).equals(Tile.GOAL) && validCount <= 2) return Integer.MAX_VALUE;	
+		}
+		
+		// 
 		
 		return 0;
 	}
