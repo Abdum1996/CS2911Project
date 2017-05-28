@@ -11,11 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import java.util.NoSuchElementException;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.Scanner;
-
 /**
  * Implementation of the game level interface. Actions here correspond 
  * to player movements and game moves are defined as box pushes.
@@ -36,49 +31,19 @@ public class SokobanLevel implements GameLevel {
 	 */
 	public SokobanLevel(Difficulty difficulty) {
 		this.difficulty = difficulty;
+		boxMap = new HashMap<>();
 		
-		boxMap  = new HashMap<>();
-		List<Point> boxPositions = new ArrayList<>();
-		TileMap mapCandidate = null;
-		
-		Scanner sc = null;
-		try {
-			sc = new Scanner(new FileReader("./maps/map1.txt"));
-			
-			int width = sc.nextInt();
-			int height = sc.nextInt();
-			
-			List<Tile> tiles = new ArrayList<>(width*height);
-			for (int y = 0; y < height; ++y) {
-				for (int x = 0; x < width; ++x) {
-					String symbol = sc.next();
-					tiles.add(Tile.parse(symbol));
-
-					Point pos = Point.at(x, y);
-					if (symbol.equals("P")) {
-						player = new Player(pos);
-					} else if (symbol.equals("B")) {
-						boxPositions.add(pos);
-					}
-				}
-			}
-
-			mapCandidate = new TileMap(tiles, width, height);
-		} catch (FileNotFoundException | NoSuchElementException e) {
-			System.out.println("fail");
-		} finally {
-			if (sc != null) sc.close();
-		}
+		BoardGenerator generator = new BoardGenerator();
+		player = new Player(generator.getPlayerPos());
+		tileMap = generator.getTileMap();
 		
 		int id = 0;
-		for (Point pos : boxPositions) {
+		for (Point pos : generator.getBoxPositions()) {
 			boxMap.put(pos, new Box(pos, id));
 			id++;
 		}
 		
-		tileMap = mapCandidate;
-		minPushes = solve().getActionCount();
-		
+		minPushes = generator.getMinPushes();
 		tracker = new MoveTracker(difficulty, minPushes);
 	}
 	
