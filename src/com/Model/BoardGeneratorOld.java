@@ -20,7 +20,7 @@ public class BoardGeneratorOld {
 	private static final int MAX_GOALS = 10;
 	private Template[] templates;
 	
-	public BoardGenerator() {
+	public BoardGeneratorOld() {
 		templates = new Template[17];
 		
 		for (int i = 0; i < 17; i++) {
@@ -29,7 +29,7 @@ public class BoardGeneratorOld {
 	}
 	
 	public static TileMap genTileCollection() {
-		BoardGenerator gen = new BoardGenerator();
+		BoardGeneratorOld gen = new BoardGeneratorOld();
 		char[][] emptyBoard = gen.emptyBoard(GameConstants.MAX_MAP_HEIGHT, 
 				GameConstants.MAX_MAP_WIDTH);
 		
