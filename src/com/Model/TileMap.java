@@ -54,7 +54,7 @@ public class TileMap {
 		// Compute distances between all valid entity points on the map
 		distances = new HashMap<>();
 		for (Point curr : getFloorPositions()) {
-			//distances.put(curr, runBFS(curr));
+			distances.put(curr, runBFS(curr));
 		}	
 	}
 	
@@ -63,28 +63,28 @@ public class TileMap {
 	 * on the map which are considered to be valid entity positions.
 	 * @param point - current position
 	 */
-	/*private Map<Point, Integer> runBFS(Point point) {
-		List<Point> floorPositions = getFloorPositions();
+	private Map<Point, Integer> runBFS(Point point) {
 		Queue<Point> queue = new ArrayDeque<>();
-		Map<Point, Point> pred = new HashMap<>();
+		Map<Point, Integer> dist = new HashMap<>();
+		Set<Point> visited = new HashSet<>();
 		
+		dist.put(point, 0);
 		queue.add(point);
 		while (!queue.isEmpty()) {
-			Point curr = queue.poll();
-			if (visited.contains(curr)) continue;
+			Point point1 = queue.poll();
+			if (visited.contains(point1)) continue;
+			visited.add(point1);
 			
-			visited.add(curr);
-			for (Point next : getAdjTilePoints(curr)) {
-				if (!isValidEntityPos(next)) continue;
-				if (!visited.contains(next)) queue.add(next);
+			for (Point point2 : getAdjTilePoints(point1)) {
+				if (!visited.contains(point2)) {
+					dist.put(point2,  dist.get(point1) + 1);
+					queue.add(point2);
+				}
 			}
 		}
 		
-		for (Point curr : floorPositions)
-			if (!visited.contains(curr)) return false;
-		return true;
-		
-	}*/
+		return dist;
+	}
 	
 	/**
 	 * Get the tile at the specified location.

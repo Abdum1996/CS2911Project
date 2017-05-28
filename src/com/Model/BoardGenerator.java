@@ -55,7 +55,6 @@ public class BoardGenerator {
 			tileMap = LayoutGenerator.genTileMap(numGoals);
 		} while (!tileMap.isPathConnected());
 		
-		
 		do {
 			System.out.println("loading");
 			placeEntities();
