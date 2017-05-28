@@ -136,25 +136,34 @@ public class TileMap {
 		return !tile.equals(Tile.EMPTY) && !tile.equals(Tile.WALL);
 	}
 	
+	public List<Point> getAdjTilePoints(Point pos) {
+		List<Point> nextPoints = new ArrayList<>();
+		
+		for (Direction dir : Direction.values()) {
+			Point next = pos.move(dir);
+			if (isValidEntityPos(next))
+				nextPoints.add(next);
+		}
+		
+		return nextPoints;
+	}
+	
 	/**
 	 * Determine if every floor on the map is reachable.
 	 * @return true if the map is path connected
 	 */
 	public boolean isPathConnected() {
 		List<Point> floorPositions = getFloorPositions();
-		
 		HashSet<Point> visited = new HashSet<>();
 		Queue<Point> queue = new ArrayDeque<>();
-		queue.add(floorPositions.get(0));
 		
+		queue.add(floorPositions.get(0));
 		while (!queue.isEmpty()) {
 			Point curr = queue.poll();
 			if (visited.contains(curr)) continue;
 			
 			visited.add(curr);
-			for (Direction dir : Direction.values()) {
-				Point next = curr.move(dir);
-				
+			for (Point next : getAdjTilePoints(curr)) {
 				if (!isValidEntityPos(next)) continue;
 				if (!visited.contains(next)) queue.add(next);
 			}
