@@ -3,7 +3,6 @@ package com.Model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.List;
 /**
  * 2D fixed coordinate grid of tiles. The top left of the grid is located at (0, 0).
@@ -12,7 +11,6 @@ import java.util.List;
  * keeps track of the locations of the goal tiles in the map.
  */
 public class TileMap {
-	private static final Random generator = new Random();
 	private final List<Point> goals;
 	private final List<Tile> tiles;
 	
@@ -70,6 +68,27 @@ public class TileMap {
 	 */
 	public int getHeight() {
 		return height;
+	}
+	
+	/**
+	 * Get a list of all the floor positions in the map.
+	 * @return list of points
+	 */
+	public List<Point> getFloorPositions() {
+		List<Point> positions = new ArrayList<>();
+		
+		for (int y = 0; y < height; ++y) {
+			for (int x  = 0; x < width; ++x) {
+				Tile tile = tiles.get(x + y*width);
+				
+				if (tile.equals(Tile.FLOOR)) {
+					Point pos = Point.at(x, y);
+					positions.add(pos);
+				}
+			}
+		}
+		
+		return positions;
 	}
 	
 	/**
