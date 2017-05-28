@@ -55,7 +55,7 @@ public class AStarSearch<T> {
 				}
 			}
 			
-			if (open.size() > 1000) {
+			if (open.size() > 5000) {
 				this.endNode = new Node<>(initState);
 				return;
 			}
