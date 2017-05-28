@@ -10,72 +10,81 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Factory class responsible for creating new tile maps,
- * through random procedural generation methods.
- * @author Samir Mustavi
- * @author Thomas Daniell
+ * Factory class responsible for creating new game boards, both by reading
+ * input map files and through random procedural generation methods.
+ * @author SamirMustavi
+ * @author ThomasDaniell
  */
-public class BoardGeneratorOld {
+public class LayoutGenerator {
 	private static final Random generator = new Random();
-	private static final int MAX_GOALS = 10;
 	private Template[] templates;
 	
-	public BoardGeneratorOld() {
-		templates = new Template[17];
-		
-		for (int i = 0; i < 17; i++) {
-			templates[i] = new Template(getArray(i+1));
-		}
-	}
-	
-	public static TileMap genTileCollection() {
-		BoardGeneratorOld gen = new BoardGeneratorOld();
-		char[][] emptyBoard = gen.emptyBoard(GameConstants.MAX_MAP_HEIGHT, 
-				GameConstants.MAX_MAP_WIDTH);
-		
-		
-		List<Point> floorList = new ArrayList<>();
-		for (int i = 0; i < GameConstants.MAX_MAP_HEIGHT; ++i) {
-			for (int j = 0; j < GameConstants.MAX_MAP_WIDTH; ++j) {
-				if (emptyBoard[i][j] == 'F') {
-					floorList.add(Point.at(j, i));
-				}
-			}
+	public static TileMap genTileMap(int numGoals) {
+		LayoutGenerator boardGen = new LayoutGenerator();
+		char[][] game = boardGen.emptyBoard(20, 20);
+		while (boardGen.isHugeFloorSpace(game,20,20)) {
+			game = boardGen.emptyBoard(20,20);
 		}
 		
-		int numGoals = generator.nextInt(MAX_GOALS) + 1;
-		Collections.shuffle(floorList);
-			
-		for (int i = 0; i < numGoals; ++i) {
-			Point pos = floorList.get(i);
-			emptyBoard[pos.getY()][pos.getX()] = 'G';
-		}
+		placeRandomGoals(numGoals, game);
 		
 		List<Tile> tiles = new ArrayList<>();
-		for (int i = 0; i < GameConstants.MAX_MAP_HEIGHT; ++i) {
-			for (int j = 0; j < GameConstants.MAX_MAP_WIDTH; ++j) {
-				char symbol = emptyBoard[i][j];
+		int height = game[0].length;
+		int width = game.length;
+		
+		for (int y = 0; y < height; ++y) {
+			for (int x = 0; x < width; ++x) {
+				char symbol = game[y][x];
 				Tile tile;
 				
 				switch (symbol) {
-					case 'E':
 					case 'W':
+					case 'E':
 						tile = Tile.WALL;
+						break;
 					case 'G':
 						tile = Tile.GOAL;
+						break;
 					case 'F':
 						tile = Tile.FLOOR;
+						break;
 					default:
-						tile = Tile.EMPTY;	
+						tile = Tile.WALL;	
 				}
 				
 				tiles.add(tile);
 			}
 		}
 		
-		TileMap map = new TileMap(tiles, GameConstants.MAX_MAP_WIDTH, 
-				GameConstants.MAX_MAP_HEIGHT);
-		return map;
+		return new TileMap(tiles, width, height);
+	}
+	
+	private static void placeRandomGoals(int numGoals, char[][] emptyBoard) {
+		List<Point> floorList = new ArrayList<>();
+		int width = emptyBoard[0].length;
+		int height = emptyBoard.length;
+		
+		for (int y = 0; y < height; ++y) {
+			for (int x = 0; x < width; ++x) {
+				if (emptyBoard[y][x] == 'F')
+					floorList.add(Point.at(x, y));
+			}
+		}
+		
+		Collections.shuffle(floorList);
+		for (int i = 0; i < numGoals; ++i) {
+			Point pos = floorList.get(i);
+			emptyBoard[pos.getY()][pos.getX()] = 'G';
+		}
+	}
+	
+	
+	public LayoutGenerator() {
+		this.templates = new Template[25];
+		int i;
+		for (i = 0; i < 25; i++) {
+			templates[i] = new Template(getArray(i+1));
+		}
 	}
 	
 	/**
@@ -86,31 +95,34 @@ public class BoardGeneratorOld {
 	 */
 	public char[][] emptyBoard(int height, int width) {
 		char[][] board = new char[height][width];
-		for (int i = 0; i < height; ++i) {
-			for (int j = 0; j < width; ++j) {
+		int i,j;
+		for (i = 0; i < height; i++) {
+			for (j = 0; j < width; j++) {
 				board[i][j] = 'E';
 			}
 		}
-		
-		int i = 2;
-		int j = 2;
+		i = 2;
+		j = 2;
 		char[][] tempArray = null;
 		Template t = null;
 		
-		while (i < height - 4) {
-			t = templates[generator.nextInt(17)];
+		while (i < height - 3) {
+			t = templates[generator.nextInt(25)];
 			t.modifyTemplate(generator);
-			
 			tempArray = t.getTemplateMap();
 			if (!properOverlap(board,tempArray,i,j)) continue;
 			board = tempToBoard(board,tempArray,i,j);
 			j += 3;
-			if (j < width - 4) continue;
+			if (j < width - 3) continue;
 			j = 2;
 			i += 3;
 		}
 		
 		return board;
+	}
+	
+	public Random getRand() {
+		return generator;
 	}
 	
 	/**
@@ -122,7 +134,7 @@ public class BoardGeneratorOld {
 	 * @param j - the horizontal index of the board to place the template
 	 * @return true if the template can be placed on the board with no conflicting overlaps, false otherwise
 	 */
-	private static boolean properOverlap(char[][] array, char[][] t, int i, int j) {
+	private boolean properOverlap(char[][] array, char[][] t, int i, int j) {
 		int x1 = 0;
 		int y1 = 0;
 		int x2;
@@ -134,8 +146,8 @@ public class BoardGeneratorOld {
 				}
 				y1++;
 			}
-			y1 = 0;
 			x1++;
+			y1 = 0;
 		}
 		return true;
 	}
@@ -148,7 +160,7 @@ public class BoardGeneratorOld {
 	 * @param j - the horizontal index of the board to place the template
 	 * @return the same board with the template added on
 	 */
-	private static char[][] tempToBoard(char[][] array, char[][] t, int i, int j) {
+	private char[][] tempToBoard(char[][] array, char[][] t, int i, int j) {
 		int x1 = 0;
 		int y1 = 0;
 		int x2;
@@ -158,8 +170,8 @@ public class BoardGeneratorOld {
 				if ((t[x1][y1] != 'E') && (array[x2][y2] == 'E')) array[x2][y2] = t[x1][y1];
 				y1++;
 			}
-			y1 = 0;
 			x1++;
+			y1 = 0;
 		}
 		return array;
 	}
@@ -173,14 +185,15 @@ public class BoardGeneratorOld {
 		String s = "./resources/Templates/t" + index + ".txt";
 		Scanner sc = null;
 	    char array[][] = new char[5][5];
-	    
-	    try {
+	    try
+	    {
 	        sc = new Scanner(new FileReader(s));
 		    String curr = null;
 		    String[] c = null;
 		    int i,j = 0;
 		    
-		    while ((sc.hasNextLine()) || (j < 5)) {    
+		    while ((sc.hasNextLine()) || (j < 5)) {
+		    
 		    	curr = sc.nextLine();
 		    	c = curr.split(" ");
 		    	
@@ -190,11 +203,14 @@ public class BoardGeneratorOld {
 		    	j++;
 		    }
 
-	    } catch (FileNotFoundException e) {
-	    	// do nothing
-	    } finally {
-	        if (sc != null) sc.close();
 	    }
+	    catch (FileNotFoundException e) {}
+
+	    finally
+	    {
+	        if (sc != null) sc.close();
+
+	    } 
 	    
 		return array;
 	}
@@ -208,8 +224,8 @@ public class BoardGeneratorOld {
 	 */
 	public boolean isHugeFloorSpace(char[][] emptyMap, int height, int width) {
 		int i,j;
-		for (i = 0; i < height-4; i++) {
-			for (j = 0; j < width-4; j++) {
+		for (i = 0; i < height-3; i++) {
+			for (j = 0; j < width-3; j++) {
 				if (emptyMap[i][j] == 'F') {
 					if ((emptyMap[i+1][j] == 'F') && (emptyMap[i+2][j] == 'F') &&
 						(emptyMap[i][j+1] == 'F') && (emptyMap[i+1][j+1] == 'F') &&
@@ -229,5 +245,19 @@ public class BoardGeneratorOld {
 		}
 		
 		return false;
+	}
+
+	private void printBoard(char[][] game,int h, int w) {
+		int i,j;
+		char x;
+		for (i = 0; i < h; i++) {
+			for (j = 0; j < w; j++) {
+				if (game[i][j] == 'F') x = ' ';
+				else x = '#';
+				System.out.printf("%c%c",x,x);
+			}
+			System.out.println("");
+		}
+		System.out.println("");
 	}
 }
