@@ -1,20 +1,10 @@
 package com.Model;
 
-import java.util.Arrays;
-
 /**
  * Enumeration to represent direction mainly used to indicate a player's move.
  */
 public enum Direction {
 	UP, DOWN, LEFT, RIGHT;
-	
-	/**
-	 * Get a collection of all the directions.
-	 * @return collection of directions
-	 */
-	public static Iterable<Direction> allDirections() {
-		return Arrays.asList(Direction.values());
-	}
 	
 	/**
 	 * Determine the direction of movement from an action.

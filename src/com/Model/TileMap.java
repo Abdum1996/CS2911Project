@@ -152,7 +152,7 @@ public class TileMap {
 			if (visited.contains(curr)) continue;
 			
 			visited.add(curr);
-			for (Direction dir : Direction.allDirections()) {
+			for (Direction dir : Direction.values()) {
 				Point next = curr.move(dir);
 				
 				if (!isValidEntityPos(next)) continue;
