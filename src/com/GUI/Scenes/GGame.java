@@ -177,6 +177,28 @@ public class GGame extends GScene implements KeyListener, ActionListener {
         pauseMenu.add(pauseScrResumeBtn);
         pauseMenu.add(pauseScrRQuitBtn);
         
+
+        pauseMenu = new JPanel();
+        //pauseMenu.setBackground(Color.BLACK);
+        pauseMenu.setLayout(new BoxLayout(pauseMenu, BoxLayout.PAGE_AXIS));
+        pauseMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pauseScrLabel = new JLabel("Game Paused");
+        pauseScrLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // center the stuff
+        pauseScrResumeBtn = new JButton("Resume");
+        pauseScrResumeBtn.addActionListener((ActionEvent ae) -> {
+            resumeGame();
+        });
+        pauseScrResumeBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pauseScrRQuitBtn = new JButton("Quit To Main Menu");
+        pauseScrRQuitBtn.addActionListener((ActionEvent ae) -> {
+            this.sceneManager.setScene(SceneManager.MAIN_MENU_ID, new GMainMenu(sceneManager, imgMan));
+        });
+        pauseScrRQuitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        pauseMenu.add(pauseScrLabel);
+        pauseMenu.add(pauseScrResumeBtn);
+        pauseMenu.add(pauseScrRQuitBtn);
+        
 //        for(Action a : board.solve())
 //        	System.out.println(a);
     }
@@ -199,15 +221,21 @@ public class GGame extends GScene implements KeyListener, ActionListener {
      */
     private void pauseGame() {
 <<<<<<< HEAD
+<<<<<<< HEAD
     	sceneManager.setLayout(new BorderLayout());
         sceneManager.setScene(new GPauseMenu(sceneManager, imgMan, level));
         sceneManager.remove(controlPanel);
 =======
+=======
+>>>>>>> parent of 589af45... cleaned GGame a bit, added photos to main menu
 //        this.add(pauseScrLabel);
 //        this.add(pauseScrResumeBtn);
 //        this.add(pauseScrRQuitBtn);
         sceneManager.setScene(SceneManager.PAUSE_ID, new GPauseMenu(sceneManager, imgMan, board));
 //        repaint();
+<<<<<<< HEAD
+>>>>>>> parent of 589af45... cleaned GGame a bit, added photos to main menu
+=======
 >>>>>>> parent of 589af45... cleaned GGame a bit, added photos to main menu
         sceneManager.setVisible(true); // refresh at the level JFrame
 

@@ -49,6 +49,7 @@ public class GMainMenu extends GScene {
             playSound(new File("./sound_files/gamestart.wav"));
             this.sceneManager.setScene(new GGame(sceneManager, imgMan, new SokobanLevel(Difficulty.EASY)));
         });
+<<<<<<< HEAD
         JButton btnNorm = new ImageButton("./resources/normalbutton.png");
         btnNorm.addActionListener((ActionEvent e) -> {
             playSound(new File("./sound_files/gamestart.wav"));
@@ -64,6 +65,8 @@ public class GMainMenu extends GScene {
         btnCredits.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             sceneManager.setScene(new GCredits(sceneManager, imgMan));
         });
+=======
+>>>>>>> parent of 589af45... cleaned GGame a bit, added photos to main menu
         btnHelp = new JButton("Help");
         btnHelp.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             sceneManager.setScene(new GHelp(sceneManager, imgMan));
@@ -74,6 +77,7 @@ public class GMainMenu extends GScene {
         btnExit.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             System.exit(0);
         });
+<<<<<<< HEAD
         btnEz.setAlignmentY(CENTER_ALIGNMENT);
         btnEz.setAlignmentX(CENTER_ALIGNMENT);
         btnNorm.setAlignmentY(CENTER_ALIGNMENT);
@@ -95,6 +99,8 @@ public class GMainMenu extends GScene {
         g.clearRect(0, 0, getWidth(), getHeight() );
     	g.drawImage(bkgImg, 0, 0, null);
 =======
+=======
+>>>>>>> parent of 589af45... cleaned GGame a bit, added photos to main menu
         btnCredits = new JButton("Credits");
         btnCredits.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             System.out.println("Credits");
