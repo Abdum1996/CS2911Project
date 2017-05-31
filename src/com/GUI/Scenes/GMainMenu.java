@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-@SuppressWarnings("serial")
 public class GMainMenu extends GScene {
     /**
      * Holds the button to get the help screen
@@ -65,11 +64,11 @@ public class GMainMenu extends GScene {
         btnCredits.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             sceneManager.setScene(new GCredits(sceneManager, imgMan));
         });
-        
-        btnHelp = new ImageButton("./resources/helpbutton.png");
+        btnHelp = new JButton("Help");
         btnHelp.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
             sceneManager.setScene(new GHelp(sceneManager, imgMan));
         });
+<<<<<<< HEAD
         
         btnExit = new ImageButton("./resources/exitbutton.png");
         btnExit.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
@@ -95,5 +94,15 @@ public class GMainMenu extends GScene {
     	super.paintComponent(g);
         g.clearRect(0, 0, getWidth(), getHeight() );
     	g.drawImage(bkgImg, 0, 0, null);
+=======
+        btnCredits = new JButton("Credits");
+        btnCredits.addActionListener((ActionEvent e) -> { // add a lambda function to take care of callback
+            System.out.println("Credits");
+        });
+
+        this.add(btnStartGame);
+        this.add(btnHelp);
+        this.add(btnCredits);
+>>>>>>> parent of 589af45... cleaned GGame a bit, added photos to main menu
     }
 }
